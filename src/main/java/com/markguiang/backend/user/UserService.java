@@ -1,19 +1,27 @@
 package com.markguiang.backend.user;
 
+import com.markguiang.backend.exceptions.UniqueConstraintViolationException;
+import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserService {
-    //in memory for now
-    List<User> users;
+    public final UserRepository userRepository;
 
-    public List<User> findAll() {
-        return users;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
-    public Boolean addUser(User user) {
-        users.add(user);
-        return true;
+    public User registerUser(@Valid User user) {
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException ex) {
+            if (userRepository.existsByEmail(user.getEmail())) {
+                throw new UniqueConstraintViolationException(user.getEmail());
+            }
+        }
+        return user;
     }
 }

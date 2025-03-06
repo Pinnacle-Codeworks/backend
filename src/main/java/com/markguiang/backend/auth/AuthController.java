@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    private UserService userService;
+    private final UserService userService;
 
     public AuthController(UserService userService) {
         this.userService = userService;
     }
 
-    @PostMapping("/")
-    public Boolean login(User user) {
-        return userService.addUser(user);
+    @PostMapping("/user")
+    public User registerUser(@RequestBody User user) {
+        return this.userService.registerUser(user);
     }
 }
