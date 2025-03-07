@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
-import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,12 +21,12 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
-    private final SecurityContextRepository securityContextRepository;
+    private final DelegatingSecurityContextRepository delegatingSecurityContextRepository;
 
-    public AuthController(UserService userService, AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository) {
+    public AuthController(UserService userService, AuthenticationManager authenticationManager, DelegatingSecurityContextRepository delegatingSecurityContextRepository) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
-        this.securityContextRepository = securityContextRepository;
+        this.delegatingSecurityContextRepository = delegatingSecurityContextRepository;
     }
 
     @GetMapping("/user")
@@ -37,7 +37,7 @@ public class AuthController {
         SecurityContext securityContext = securityContextHolderStrategy.createEmptyContext();
         securityContext.setAuthentication(authenticationResponse);
         this.securityContextHolderStrategy.setContext(securityContext);
-        this.securityContextRepository.saveContext(securityContext, request, response);
+        this.delegatingSecurityContextRepository.saveContext(securityContext, request, response);
         return ResponseEntity.status(HttpStatus.OK).body("Successfully logged in.");
     }
 
