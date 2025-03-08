@@ -1,0 +1,31 @@
+type: http_request
+model: http_request
+id: rq_jLHVTGnMvs
+createdAt: 2025-03-07T14:08:56.644916
+updatedAt: 2025-03-08T04:47:57.662381
+workspaceId: wk_Ba7dNfiXAF
+folderId: fl_ZVv24nNL9p
+authentication: {}
+authenticationType: null
+body:
+  text: ''
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: prdmGt3vkG
+- enabled: true
+  name: Authorization
+  value: Basic bWFoaWtnb3Q6cGFz
+  id: nXCRNTMM5a
+- enabled: true
+  name: ''
+  value: ''
+  id: vS09nKUptY
+method: GET
+name: login
+sortPriority: 1000.0
+url: http://localhost:8080/auth/user
+urlParameters: []

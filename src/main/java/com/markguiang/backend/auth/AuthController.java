@@ -2,15 +2,64 @@ package com.markguiang.backend.auth;
 
 import com.markguiang.backend.user.User;
 import com.markguiang.backend.user.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextHolderStrategy;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
     private final UserService userService;
+    private final AuthenticationManager authenticationManager;
+    private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
+    private final DelegatingSecurityContextRepository delegatingSecurityContextRepository;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, AuthenticationManager authenticationManager, DelegatingSecurityContextRepository delegatingSecurityContextRepository) {
         this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.delegatingSecurityContextRepository = delegatingSecurityContextRepository;
+    }
+
+    @GetMapping("/user")
+    public ResponseEntity<String> loginUser(HttpServletRequest request , HttpServletResponse response) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Basic ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Missing or invalid Authorization header");
+        }
+
+        String base64Credentials = authHeader.substring("Basic ".length());
+        byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
+        String credentials = new String(decodedBytes, StandardCharsets.UTF_8);
+
+        String[] values = credentials.split(":", 2);
+        if (values.length != 2) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid Authorization header format");
+        }
+        String username = values[0];
+        String password = values[1];
+
+        Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(username, password);
+        Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
+
+        SecurityContext securityContext = securityContextHolderStrategy.createEmptyContext();
+        securityContext.setAuthentication(authenticationResponse);
+        this.securityContextHolderStrategy.setContext(securityContext);
+        this.delegatingSecurityContextRepository.saveContext(securityContext, request, response);
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully logged in.");
     }
 
     @PostMapping("/user")

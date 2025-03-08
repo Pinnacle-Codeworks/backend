@@ -3,23 +3,33 @@ package com.markguiang.backend.user;
 import com.markguiang.backend.exceptions.UniqueConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserService {
     public final UserRepository userRepository;
+    public final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
     public User registerUser(@Valid User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
             return userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
             if (userRepository.existsByEmail(user.getEmail())) {
                 throw new UniqueConstraintViolationException(user.getEmail());
+            }
+            if (userRepository.existsByUsername(user.getUsername())) {
+                throw new UniqueConstraintViolationException(user.getUsername());
             }
         }
         return user;

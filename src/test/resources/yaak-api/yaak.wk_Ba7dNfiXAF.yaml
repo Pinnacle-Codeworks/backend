@@ -1,0 +1,10 @@
+type: workspace
+model: workspace
+id: wk_Ba7dNfiXAF
+createdAt: 2025-03-07T14:08:20.795452
+updatedAt: 2025-03-08T02:53:31
+name: api-calls
+description: ''
+settingValidateCertificates: true
+settingFollowRedirects: true
+settingRequestTimeout: 0

@@ -1,0 +1,18 @@
+type: http_request
+model: http_request
+id: rq_GudhDtyGyZ
+createdAt: 2025-03-07T14:08:39.860609
+updatedAt: 2025-03-08T02:56:05.017895
+workspaceId: wk_Ba7dNfiXAF
+folderId: null
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: authenticated test
+sortPriority: 2000.0
+url: http://localhost:8080/hello/
+urlParameters: []

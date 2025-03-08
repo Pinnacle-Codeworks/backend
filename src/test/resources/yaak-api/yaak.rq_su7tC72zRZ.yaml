@@ -1,0 +1,30 @@
+type: http_request
+model: http_request
+id: rq_su7tC72zRZ
+createdAt: 2025-03-07T14:09:28.466956
+updatedAt: 2025-03-08T02:55:58.591558
+workspaceId: wk_Ba7dNfiXAF
+folderId: fl_ZVv24nNL9p
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "firstName": "Mark",
+      "lastName": "Guiang",
+      "username": "mahikgot",
+      "email": "mahikot@gnmsail.com",
+      "password": "pas"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: zFz5ZTByVj
+method: POST
+name: register
+sortPriority: 0.0
+url: http://localhost:8080/auth/user
+urlParameters: []

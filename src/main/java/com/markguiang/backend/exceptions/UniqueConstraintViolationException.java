@@ -5,6 +5,6 @@ import jakarta.validation.ValidationException;
 public class UniqueConstraintViolationException extends ValidationException {
 
     public UniqueConstraintViolationException(String uniqueField) {
-        super(uniqueField + " should be unique.");
+        super(uniqueField + " is already in use.");
     }
 }
