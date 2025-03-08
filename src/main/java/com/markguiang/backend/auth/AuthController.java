@@ -15,6 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -30,8 +33,26 @@ public class AuthController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<String> loginUser(@RequestBody User user, HttpServletRequest request , HttpServletResponse response) {
-        Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(user.getUsername(), user.getPassword());
+    public ResponseEntity<String> loginUser(HttpServletRequest request , HttpServletResponse response) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Basic ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Missing or invalid Authorization header");
+        }
+
+        String base64Credentials = authHeader.substring("Basic ".length());
+        byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
+        String credentials = new String(decodedBytes, StandardCharsets.UTF_8);
+
+        String[] values = credentials.split(":", 2);
+        if (values.length != 2) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Invalid Authorization header format");
+        }
+        String username = values[0];
+        String password = values[1];
+
+        Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(username, password);
         Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
 
         SecurityContext securityContext = securityContextHolderStrategy.createEmptyContext();
