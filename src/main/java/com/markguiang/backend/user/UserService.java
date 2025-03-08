@@ -21,8 +21,8 @@ public class UserService {
     }
 
     public User registerUser(@Valid User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
         try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
             if (userRepository.existsByEmail(user.getEmail())) {

@@ -1,5 +1,6 @@
 package com.markguiang.backend.user;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.CredentialsContainer;
@@ -25,6 +26,7 @@ public class User implements UserDetails, CredentialsContainer {
     @Column(unique = true)
     @NotNull
     private String email;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
     private String password;
 
