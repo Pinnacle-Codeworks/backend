@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,10 +27,17 @@ public class RestResponseEntityExceptionHandler
         return handleExceptionInternal(ex, ex.getMessage(),
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
+
     @ExceptionHandler(value = { AuthorizationDeniedException.class })
     protected ResponseEntity<Object> handleAuthorizationDeniedException (RuntimeException ex, WebRequest request) {
         String message = "Not allowed";
         return handleExceptionInternal(ex, message,
                 new HttpHeaders(), HttpStatus.FORBIDDEN, request);
+    }
+
+    @ExceptionHandler(value = { AuthenticationCredentialsNotFoundException.class })
+    protected ResponseEntity<Object> handleAuthenticationException (RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(),
+                new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
     }
 }

@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,23 +40,9 @@ public class AuthenticationController {
 
     @GetMapping("/user")
     public ResponseEntity<String> loginUser(HttpServletRequest request , HttpServletResponse response) {
-        String authHeader = request.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Basic ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("Missing or invalid Authorization header");
-        }
-
-        String base64Credentials = authHeader.substring("Basic ".length());
-        byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
-        String credentials = new String(decodedBytes, StandardCharsets.UTF_8);
-
-        String[] values = credentials.split(":", 2);
-        if (values.length != 2) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Invalid Authorization header format");
-        }
-        String username = values[0];
-        String password = values[1];
+        String[] credentials = getCredentialsFromRequest(request);
+        String username = credentials[0];
+        String password = credentials[1];
 
         Authentication authenticationRequest = UsernamePasswordAuthenticationToken.unauthenticated(username, password);
         Authentication authenticationResponse = this.authenticationManager.authenticate(authenticationRequest);
@@ -72,5 +59,23 @@ public class AuthenticationController {
         Role role = roleService.getOrCreateUserRole("user");
         user.setRoles(List.of(role));
         return this.userService.registerUser(user);
+    }
+
+    private String[] getCredentialsFromRequest(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Basic ")) {
+            throw new AuthenticationCredentialsNotFoundException("Missing or invalid Authorization header");
+        }
+
+        String base64Credentials = authHeader.substring("Basic ".length());
+        byte[] decodedBytes = Base64.getDecoder().decode(base64Credentials);
+        String credentials = new String(decodedBytes, StandardCharsets.UTF_8);
+
+        String[] values = credentials.split(":", 2);
+        if (values.length != 2) {
+            throw new AuthenticationCredentialsNotFoundException("Missing or invalid Authorization header");
+        }
+
+        return values;
     }
 }
