@@ -1,18 +1,16 @@
 package com.markguiang.backend.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.markguiang.backend.auth.role.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.security.core.CredentialsContainer;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name="user_")
-public class User implements UserDetails, CredentialsContainer {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -29,6 +27,9 @@ public class User implements UserDetails, CredentialsContainer {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull
     private String password;
+    @JsonIgnore
+    @OneToMany
+    private List<Role> roles;
 
     public Long getUserId() {
         return this.userId;
@@ -66,12 +67,10 @@ public class User implements UserDetails, CredentialsContainer {
     public void setEmail(String email) {
         this.email = email.toLowerCase();
     }
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+    public List<Role> getRoles() {
+        return roles;
     }
-    @Override
-    public void eraseCredentials() {
-        this.password = null;
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
