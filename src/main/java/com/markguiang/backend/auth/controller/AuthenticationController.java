@@ -15,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,12 +29,14 @@ public class AuthenticationController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
+    private final SecurityContextLogoutHandler securityContextLogoutHandler;
     private final DelegatingSecurityContextRepository delegatingSecurityContextRepository;
     private final RoleService roleService;
 
-    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService) {
+    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, SecurityContextLogoutHandler securityContextLogoutHandler, DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
+        this.securityContextLogoutHandler = securityContextLogoutHandler;
         this.delegatingSecurityContextRepository = delegatingSecurityContextRepository;
         this.roleService = roleService;
     }
@@ -52,6 +55,12 @@ public class AuthenticationController {
         this.securityContextHolderStrategy.setContext(securityContext);
         this.delegatingSecurityContextRepository.saveContext(securityContext, request, response);
         return ResponseEntity.status(HttpStatus.OK).body("Successfully logged in.");
+    }
+
+    @DeleteMapping("/user")
+    public ResponseEntity<String> logoutUser(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
+        this.securityContextLogoutHandler.logout(request, response, authentication);
+        return ResponseEntity.status(HttpStatus.OK).body("Successfully logged out.");
     }
 
     @PostMapping("/user")
