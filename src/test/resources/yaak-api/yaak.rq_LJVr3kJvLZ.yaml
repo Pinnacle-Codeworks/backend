@@ -1,8 +1,8 @@
 type: http_request
 model: http_request
-id: rq_GudhDtyGyZ
-createdAt: 2025-03-07T14:08:39.860609
-updatedAt: 2025-03-09T09:43:53.567522
+id: rq_LJVr3kJvLZ
+createdAt: 2025-03-09T08:58:42.111192
+updatedAt: 2025-03-09T09:42:17.626549
 workspaceId: wk_Ba7dNfiXAF
 folderId: null
 authentication: {}
@@ -12,7 +12,7 @@ bodyType: null
 description: ''
 headers: []
 method: GET
-name: authenticated test
+name: authorized test
 sortPriority: 2000.0
-url: http://localhost:8080/hello/
+url: http://localhost:8080/hello/read
 urlParameters: []

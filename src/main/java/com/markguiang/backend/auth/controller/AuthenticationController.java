@@ -1,5 +1,7 @@
-package com.markguiang.backend.auth;
+package com.markguiang.backend.auth.controller;
 
+import com.markguiang.backend.auth.role.Role;
+import com.markguiang.backend.auth.role.RoleService;
 import com.markguiang.backend.user.User;
 import com.markguiang.backend.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,19 +19,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthenticationController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
     private final DelegatingSecurityContextRepository delegatingSecurityContextRepository;
+    private final RoleService roleService;
 
-    public AuthController(UserService userService, AuthenticationManager authenticationManager, DelegatingSecurityContextRepository delegatingSecurityContextRepository) {
+    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.delegatingSecurityContextRepository = delegatingSecurityContextRepository;
+        this.roleService = roleService;
     }
 
     @GetMapping("/user")
@@ -64,6 +69,8 @@ public class AuthController {
 
     @PostMapping("/user")
     public User registerUser(@RequestBody User user) {
+        Role role = roleService.getOrCreateUserRole("user");
+        user.setRoles(List.of(role));
         return this.userService.registerUser(user);
     }
 }
