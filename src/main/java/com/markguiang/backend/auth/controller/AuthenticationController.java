@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
@@ -68,6 +69,11 @@ public class AuthenticationController {
         Role role = roleService.getOrCreateUserRole("user");
         user.setRoles(List.of(role));
         return this.userService.registerUser(user);
+    }
+
+    @GetMapping("/csrf")
+    public CsrfToken csrf(CsrfToken csrfToken) {
+        return csrfToken;
     }
 
     private String[] getCredentialsFromRequest(HttpServletRequest request) {
