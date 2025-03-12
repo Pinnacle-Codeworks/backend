@@ -43,7 +43,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<String> loginUser(HttpServletRequest request , HttpServletResponse response) {
+    public ResponseEntity<String> loginUser(HttpServletRequest request , HttpServletResponse response, CsrfToken csrfToken) {
         String[] credentials = getCredentialsFromRequest(request);
         String username = credentials[0];
         String password = credentials[1];
@@ -55,6 +55,8 @@ public class AuthenticationController {
         securityContext.setAuthentication(authenticationResponse);
         this.securityContextHolderStrategy.setContext(securityContext);
         this.delegatingSecurityContextRepository.saveContext(securityContext, request, response);
+
+        response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
         return ResponseEntity.status(HttpStatus.OK).body("Successfully logged in.");
     }
 
@@ -69,11 +71,6 @@ public class AuthenticationController {
         Role role = roleService.getOrCreateUserRole("user");
         user.setRoles(List.of(role));
         return this.userService.registerUser(user);
-    }
-
-    @GetMapping("/csrf")
-    public CsrfToken csrf(CsrfToken csrfToken) {
-        return csrfToken;
     }
 
     private String[] getCredentialsFromRequest(HttpServletRequest request) {

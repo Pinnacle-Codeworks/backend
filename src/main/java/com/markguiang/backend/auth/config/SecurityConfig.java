@@ -33,6 +33,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .csrf((csrf) -> csrf
                         .csrfTokenRequestHandler(requestHandler)
+                        .ignoringRequestMatchers("/auth/user")
                 )
                 .securityContext((securityContext) -> securityContext
                         .securityContextRepository(new DelegatingSecurityContextRepository(
