@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_jLHVTGnMvs
 createdAt: 2025-03-07T14:08:56.644916
-updatedAt: 2025-03-08T04:47:57.662381
+updatedAt: 2025-03-12T10:22:50.192723
 workspaceId: wk_Ba7dNfiXAF
 folderId: fl_ZVv24nNL9p
 authentication: {}
@@ -18,12 +18,12 @@ headers:
   id: prdmGt3vkG
 - enabled: true
   name: Authorization
-  value: Basic bWFoaWtnb3Q6cGFz
+  value: Basic bWFoc3NzaWtnb3Q6cGFzcw==
   id: nXCRNTMM5a
 - enabled: true
   name: ''
   value: ''
-  id: vS09nKUptY
+  id: 886qDSfeMM
 method: GET
 name: login
 sortPriority: 1000.0

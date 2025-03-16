@@ -1,0 +1,18 @@
+type: http_request
+model: http_request
+id: rq_LJVr3kJvLZ
+createdAt: 2025-03-09T08:58:42.111192
+updatedAt: 2025-03-12T10:24:40.934786
+workspaceId: wk_Ba7dNfiXAF
+folderId: null
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers: []
+method: GET
+name: authorized test
+sortPriority: 1000.0
+url: http://localhost:8080/hello/read
+urlParameters: []

@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_GudhDtyGyZ
 createdAt: 2025-03-07T14:08:39.860609
-updatedAt: 2025-03-08T02:56:05.017895
+updatedAt: 2025-03-12T10:24:40.935138
 workspaceId: wk_Ba7dNfiXAF
 folderId: null
 authentication: {}
@@ -10,9 +10,25 @@ authenticationType: null
 body: {}
 bodyType: null
 description: ''
-headers: []
+headers:
+- enabled: true
+  name: X_XSRF_TOKEN
+  value: oY-8Dvp1yawLUs0zkDEIGFmKmZ2Su3h8Ljjv1Ozuvu0YfvxskriKasxN8J8mMKgKohw8eWi6tKSk3UlRSw3b5N_WjIgrRs9d
+  id: E8KxfTXnN8
+- enabled: true
+  name: ''
+  value: ''
+  id: JmZtfdUrKg
 method: GET
 name: authenticated test
 sortPriority: 2000.0
 url: http://localhost:8080/hello/
-urlParameters: []
+urlParameters:
+- enabled: false
+  name: _csrf
+  value: 86ac2616-aa76-40b8-86f4-5011b8c3572b
+  id: j6GNkBCGSQ
+- enabled: true
+  name: ''
+  value: ''
+  id: R9wAqNe3rN

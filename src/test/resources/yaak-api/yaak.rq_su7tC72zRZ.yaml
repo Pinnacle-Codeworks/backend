@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_su7tC72zRZ
 createdAt: 2025-03-07T14:09:28.466956
-updatedAt: 2025-03-08T02:55:58.591558
+updatedAt: 2025-03-09T15:47:14.947698
 workspaceId: wk_Ba7dNfiXAF
 folderId: fl_ZVv24nNL9p
 authentication: {}
@@ -12,9 +12,9 @@ body:
     {
       "firstName": "Mark",
       "lastName": "Guiang",
-      "username": "mahikgot",
-      "email": "mahikot@gnmsail.com",
-      "password": "pas"
+      "username": "mahsssikgot",
+      "email": "mahikosts@gnmssail.com",
+      "password": "pass"
     }
 bodyType: application/json
 description: ''
@@ -23,8 +23,28 @@ headers:
   name: Content-Type
   value: application/json
   id: zFz5ZTByVj
+- enabled: false
+  name: ''
+  value: ''
+  id: 5sibFuEw87
+- enabled: false
+  name: ''
+  value: ''
+  id: ASS58NcsUe
+- enabled: true
+  name: ''
+  value: ''
+  id: WCPEyinQJf
 method: POST
 name: register
 sortPriority: 0.0
 url: http://localhost:8080/auth/user
-urlParameters: []
+urlParameters:
+- enabled: false
+  name: _csrf
+  value: rs0Tu6b1kPhjqss15OHg6Rv55ekqSXEdAa6VZpv01riZS8V_zKtwjJTBpJxOmK1UgszUiCvKyIgfekgwOM_0UqyVs9utLfZM
+  id: gSGqChkx0t
+- enabled: true
+  name: ''
+  value: ''
+  id: dZuNuiFTpq
