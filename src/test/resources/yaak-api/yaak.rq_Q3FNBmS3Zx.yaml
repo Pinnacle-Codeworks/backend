@@ -1,0 +1,48 @@
+type: http_request
+model: http_request
+id: rq_Q3FNBmS3Zx
+createdAt: 2025-03-23T09:08:43.280264
+updatedAt: 2025-03-23T10:08:13.323005
+workspaceId: wk_Ba7dNfiXAF
+folderId: fl_gnReuKbd2r
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "name": "Spring Boot Workshop",
+      "description": "A workshop to learn Spring Boot.",
+      "dateTime": "2025-03-25T10:00:00",
+      "location": "New York",
+      "timetable": [
+        {
+          "startDate": "2025-03-25T10:00:00",
+          "endDate": "2025-03-25T12:00:00",
+          "location": "Room 101"
+        }
+      ]
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: 5pK2NSaWIp
+- enabled: true
+  name: ''
+  value: ''
+  id: 8xkMdmT89u
+method: POST
+name: create event
+sortPriority: 0.0
+url: http://localhost:8080/event
+urlParameters:
+- enabled: true
+  name: _csrf
+  value: 3gEC5bXu1rEe_2dpxMBAko_lJJZJRTyIM9Clspn8ssIV_pq7ujAxhIDa7tIzmQJZ8O10qrzUCfRwd1-lV-jBg_-e0_txyq6I
+  id: 9NkvWV9Fsc
+- enabled: true
+  name: ''
+  value: ''
+  id: hVDNrHbBbk

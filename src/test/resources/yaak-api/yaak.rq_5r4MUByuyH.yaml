@@ -2,9 +2,9 @@ type: http_request
 model: http_request
 id: rq_5r4MUByuyH
 createdAt: 2025-03-12T10:24:38.787302
-updatedAt: 2025-03-12T10:25:22.224507
+updatedAt: 2025-03-23T09:44:10.284576
 workspaceId: wk_Ba7dNfiXAF
-folderId: null
+folderId: fl_XYkWe36eqD
 authentication: {}
 authenticationType: null
 body: {}
@@ -12,15 +12,15 @@ bodyType: null
 description: ''
 headers: []
 method: POST
-name: ''
-sortPriority: 3000.0
+name: crsf test
+sortPriority: 2000.0
 url: http://localhost:8080/hello/csrfTest
 urlParameters:
 - enabled: true
   name: _csrf
-  value: 81Eh8p_KrppclSGK60oJkrxnSBDCs5Rf5Nxvf1lGWtSvxJnmkTcXyvz7nv9x8RDr2Wc9pIpeZSinhaNy1eUJHjggPLLJoq_U
+  value: uwVFHT41aHt7PLgmnE-JgeXmPzZxOxyhjPbsbbJ1ieCKktXZ3zR2fAsBUBhWWt0WqGK9udbXElRICX-M6M6IXNQX6NnupuHq
   id: C7c9Vb2shi
 - enabled: true
   name: ''
   value: ''
-  id: Gnd9aqrzAB
+  id: PscZxjQyCw
