@@ -2,18 +2,25 @@ package com.markguiang.backend.event.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.Calendar;
 import java.util.List;
 
 @Entity
+@Table(
+        uniqueConstraints=
+        @UniqueConstraint(columnNames={"company", "name"})
+)
 public class Event {
     @Id
     @JsonIgnore
     @Column(name = "event_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId;
-    @Column(unique = true)
+    @NotNull
+    private String company;
+    @NotNull
     private String name;
     private String description;
     private Calendar dateTime;
@@ -27,6 +34,12 @@ public class Event {
     }
     public void setEventId(Long eventId) {
         this.eventId = eventId;
+    }
+    public String getCompany() {
+        return company;
+    }
+    public void setCompany(String company) {
+        this.company = company;
     }
     public String getName() {
         return name;
