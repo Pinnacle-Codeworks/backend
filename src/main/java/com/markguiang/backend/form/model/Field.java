@@ -1,19 +1,19 @@
 package com.markguiang.backend.form.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.markguiang.backend.base.BaseEntity;
 import com.markguiang.backend.form.enum_.FieldType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class Field {
+public class Field implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fieldId;
 
     // foreignKeys
     @NotNull
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Column(updatable = false)
     private Long formId;
 
@@ -84,5 +84,11 @@ public class Field {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
+    }
+
+    @Override
+    public void clearIds() {
+        fieldId = null;
+        formId = null;
     }
 }

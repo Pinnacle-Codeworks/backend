@@ -69,6 +69,7 @@ public class AuthenticationController {
 
     @PostMapping("/user")
     public User registerUser(@RequestBody User user) {
+        user.clearIds();
         Role role = roleService.getOrCreateRole(RoleType.PARTICIPANT);
         user.setRoles(List.of(role));
         return this.userService.registerUser(user);

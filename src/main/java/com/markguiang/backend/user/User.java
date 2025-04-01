@@ -3,6 +3,7 @@ package com.markguiang.backend.user;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.markguiang.backend.auth.role.Role;
+import com.markguiang.backend.base.BaseEntity;
 import com.markguiang.backend.form.model.FormAnswers;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import java.util.Set;
 
 @Entity
 @Table(name="user_")
-public class User {
+public class User implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -111,5 +112,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public void clearIds() {
+        userId = null;
     }
 }

@@ -3,6 +3,7 @@ package com.markguiang.backend.event.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateKeyDeserializer;
+import com.markguiang.backend.base.BaseEntity;
 import com.markguiang.backend.form.model.Form;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-public class Event {
+public class Event implements BaseEntity {
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,5 +85,13 @@ public class Event {
     }
     public void setScheduleList(List<Schedule> scheduleList) {
         this.scheduleList = scheduleList;
+    }
+
+    @Override
+    public void clearIds() {
+        eventId = null;
+        for (Schedule schedule: scheduleList) {
+           schedule.clearIds();
+        }
     }
 }

@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_3kPBiaprZU
 createdAt: 2025-03-30T13:09:36.447280
-updatedAt: 2025-04-01T14:50:08.657522
+updatedAt: 2025-04-01T15:48:35.392079
 workspaceId: wk_Ba7dNfiXAF
 folderId: fl_25BS4j9YYd
 authentication: {}
@@ -12,7 +12,7 @@ body:
     {
       "companyId": 1,
       "eventId": 1,
-      "name": "Ssample Fo535rm",
+      "name": "Sample Form",
       "description": "A form for collecting data.",
       "updateDATE": "2025-03-31",
       "fieldList": [
@@ -51,9 +51,9 @@ url: http://localhost:8080/form
 urlParameters:
 - enabled: true
   name: _csrf
-  value: tyqQ9WixaMiFtF4XoiVUyWW2JnOpVd5xbvB7Xj8d5-wkMvM81EyokwvTW_yohm11kAhg_lSFCxGRM-1cXMgaZwl_ho8XBMQK
+  value: jYxvEVM17krQCkRI3q1GWv2ZFsn0p5hQXA9Dzlrs-JaHpgFVvLUOd2EH33n9M3N8uoByOZj9O_GVxKt9aWl392OKnKW0wmRt
   id: HeISeYvzZg
 - enabled: true
   name: ''
   value: ''
-  id: QbDeP3i7tD
+  id: Q4yCj9gKmG

@@ -1,6 +1,7 @@
 package com.markguiang.backend.form.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.markguiang.backend.base.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
@@ -11,10 +12,9 @@ import java.util.List;
 @Table(uniqueConstraints={
         @UniqueConstraint(columnNames = {"companyId", "eventId", "name"})
 })
-public class Form {
+public class Form implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long formId;
 
     // foreignKeys
@@ -102,5 +102,13 @@ public class Form {
 
     public void setFormAnswersList(List<FormAnswers> formAnswersList) {
         this.formAnswersList = formAnswersList;
+    }
+
+    @Override
+    public void clearIds() {
+        formId = null;
+        for (Field field: fieldList) {
+            field.clearIds();
+        }
     }
 }

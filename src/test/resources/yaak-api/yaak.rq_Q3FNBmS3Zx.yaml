@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_Q3FNBmS3Zx
 createdAt: 2025-03-23T09:08:43.280264
-updatedAt: 2025-03-23T10:08:13.323005
+updatedAt: 2025-04-01T15:49:16.877598
 workspaceId: wk_Ba7dNfiXAF
 folderId: fl_gnReuKbd2r
 authentication: {}
@@ -14,7 +14,7 @@ body:
       "description": "A workshop to learn Spring Boot.",
       "dateTime": "2025-03-25T10:00:00",
       "location": "New York",
-      "timetable": [
+      "scheduleList": [
         {
           "startDate": "2025-03-25T10:00:00",
           "endDate": "2025-03-25T12:00:00",
@@ -40,9 +40,9 @@ url: http://localhost:8080/event
 urlParameters:
 - enabled: true
   name: _csrf
-  value: 3gEC5bXu1rEe_2dpxMBAko_lJJZJRTyIM9Clspn8ssIV_pq7ujAxhIDa7tIzmQJZ8O10qrzUCfRwd1-lV-jBg_-e0_txyq6I
+  value: jYxvEVM17krQCkRI3q1GWv2ZFsn0p5hQXA9Dzlrs-JaHpgFVvLUOd2EH33n9M3N8uoByOZj9O_GVxKt9aWl392OKnKW0wmRt
   id: 9NkvWV9Fsc
 - enabled: true
   name: ''
   value: ''
-  id: hVDNrHbBbk
+  id: 7FTqtKkQ5p

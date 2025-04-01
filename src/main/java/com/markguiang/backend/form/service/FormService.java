@@ -58,6 +58,13 @@ public class FormService {
         Map<Long, Field> fieldMapDb = fieldListDb.stream()
                 .collect(Collectors.toMap(Field::getFieldId, Function.identity()));
         for (Field field: fieldList) {
+            if (field.getFieldId() == null) {
+                fieldListDb.add(field);
+                continue;
+            }
+            if (field.getFormId() == null || !field.getFormId().equals(form.getFormId())) {
+               throw new IllegalStateException("Field has different formId than Form");
+            }
             Field fieldDb = fieldMapDb.get(field.getFieldId());
             if (!fieldDb.getFieldType().equals(field.getFieldType())) {
                 throw new FieldMismatchException("Field Type");

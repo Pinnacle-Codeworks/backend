@@ -16,9 +16,14 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    //TODO issue where eventId can be set from request
     @PostMapping("")
-    public Event upsertEvent(@RequestBody Event event) {
+    public Event createEvent(@RequestBody Event event) {
+        event.clearIds();
+        return this.eventService.upsertEvent(event);
+    }
+
+    @PatchMapping("")
+    public Event updateEvent(@RequestBody Event event) {
         return this.eventService.upsertEvent(event);
     }
 }
