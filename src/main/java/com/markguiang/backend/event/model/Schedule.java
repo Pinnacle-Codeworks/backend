@@ -2,7 +2,6 @@ package com.markguiang.backend.event.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.Calendar;
 
@@ -15,8 +14,7 @@ public class Schedule {
     private Calendar endDate;
     private String location;
     @JsonIgnore
-    @Column(name = "owner_id")
-    private Long ownerId;
+    private Long eventId;
 
     public Long getScheduleId() {
         return scheduleId;
@@ -42,10 +40,10 @@ public class Schedule {
     public void setLocation(String location) {
         this.location = location;
     }
-    public Long getOwnerId() {
-        return ownerId;
+    public Long getEventId() {
+        return eventId;
     }
-    public void setOwnerId(Long ownerId) {
-        this.ownerId = ownerId;
+    public void setEventId(Long eventId) {
+        this.eventId = eventId;
     }
 }

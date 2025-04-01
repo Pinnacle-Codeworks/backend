@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_nHiw8qTcy2
 createdAt: 2025-03-09T16:02:45.136245
-updatedAt: 2025-03-09T16:02:52.073173
+updatedAt: 2025-03-30T18:15:47.744207
 workspaceId: wk_Ba7dNfiXAF
 folderId: fl_ZVv24nNL9p
 authentication: {}
@@ -12,7 +12,7 @@ bodyType: null
 description: ''
 headers: []
 method: DELETE
-name: ''
+name: logout
 sortPriority: 2000.0
 url: http://localhost:8080/auth/user
 urlParameters: []

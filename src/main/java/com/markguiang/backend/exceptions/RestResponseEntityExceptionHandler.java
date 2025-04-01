@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.NoSuchElementException;
+
 @ControllerAdvice
 public class RestResponseEntityExceptionHandler
         extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = { ConstraintViolationException.class })
     protected ResponseEntity<Object> handleGeneralConstraintViolation (RuntimeException ex, WebRequest request) {
-        String message = "Probably missing fields";
+        String message = "Violated entity constraints";
         return handleExceptionInternal(ex, message,
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
@@ -39,5 +41,18 @@ public class RestResponseEntityExceptionHandler
     protected ResponseEntity<Object> handleAuthenticationException (RuntimeException ex, WebRequest request) {
         return handleExceptionInternal(ex, ex.getMessage(),
                 new HttpHeaders(), HttpStatus.UNAUTHORIZED, request);
+    }
+
+    @ExceptionHandler(value = { NoSuchElementException.class })
+    protected ResponseEntity<Object> handleNoSuchElementException (RuntimeException ex, WebRequest request) {
+        String message = "The resource does not exist";
+        return handleExceptionInternal(ex, ex.getMessage(),
+                new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+    }
+
+    @ExceptionHandler(value = { FieldMismatchException.class, IllegalStateException.class })
+    protected ResponseEntity<Object> handleIDMismatchException (RuntimeException ex, WebRequest request) {
+        return handleExceptionInternal(ex, ex.getMessage(),
+                new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 }

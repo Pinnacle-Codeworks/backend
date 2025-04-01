@@ -1,27 +1,26 @@
 type: http_request
 model: http_request
-id: rq_jLHVTGnMvs
-createdAt: 2025-03-07T14:08:56.644916
-updatedAt: 2025-03-30T18:15:39.824565
+id: rq_aLfySQniJh
+createdAt: 2025-03-30T18:14:37.824635
+updatedAt: 2025-03-30T18:15:14.471639
 workspaceId: wk_Ba7dNfiXAF
 folderId: fl_ZVv24nNL9p
 authentication: {}
 authenticationType: null
-body:
-  text: ''
+body: {}
 bodyType: null
 description: ''
 headers:
 - enabled: true
   name: Authorization
-  value: Basic bWFoaWtnb3Q6bWFya3k=
-  id: nXCRNTMM5a
+  value: Basic YWRtaW46YWRtaW4=
+  id: sC60UDDCth
 - enabled: true
   name: ''
   value: ''
-  id: QIdyJnpZb0
+  id: ztcIzMcMdC
 method: GET
-name: login
-sortPriority: 1000.0
+name: admin login
+sortPriority: 1500.0
 url: http://localhost:8080/auth/user
 urlParameters: []

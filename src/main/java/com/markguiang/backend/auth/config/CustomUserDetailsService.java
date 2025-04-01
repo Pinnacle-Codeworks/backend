@@ -17,12 +17,12 @@ import java.util.List;
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserService userService;
-    private final Role userRole;
+    private final Role participantRole;
     private final Role adminRole;
 
-    public CustomUserDetailsService(UserService userService, Role userRole, Role adminRole) {
+    public CustomUserDetailsService(UserService userService, Role participantRole, Role adminRole) {
         this.userService = userService;
-        this.userRole = userRole;
+        this.participantRole = participantRole;
         this.adminRole = adminRole;
     }
 
@@ -39,7 +39,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private List<GrantedAuthority> getAuthoritiesFromRoles(List<Role> roles) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         for (Role role: roles) {
-            if (role.equals(userRole)) {
+            if (role.equals(participantRole)) {
                 authorities.add(new SimpleGrantedAuthority("permission:read"));
             } else if (role.equals(adminRole)) {
                 authorities.add(new SimpleGrantedAuthority("permission:read"));

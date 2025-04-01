@@ -2,10 +2,8 @@ package com.markguiang.backend.event;
 
 import com.markguiang.backend.event.model.Event;
 import com.markguiang.backend.event.service.EventService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -18,6 +16,7 @@ public class EventController {
         this.eventService = eventService;
     }
 
+    //TODO issue where eventId can be set from request
     @PostMapping("")
     public Event upsertEvent(@RequestBody Event event) {
         return this.eventService.upsertEvent(event);

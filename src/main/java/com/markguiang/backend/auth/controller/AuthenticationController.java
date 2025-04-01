@@ -1,5 +1,6 @@
 package com.markguiang.backend.auth.controller;
 
+import com.markguiang.backend.auth.config.enum_.RoleType;
 import com.markguiang.backend.auth.role.Role;
 import com.markguiang.backend.auth.role.RoleService;
 import com.markguiang.backend.user.User;
@@ -43,7 +44,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<String> loginUser(HttpServletRequest request , HttpServletResponse response, CsrfToken csrfToken) {
+    public User loginUser(HttpServletRequest request , HttpServletResponse response, CsrfToken csrfToken) {
         String[] credentials = getCredentialsFromRequest(request);
         String username = credentials[0];
         String password = credentials[1];
@@ -57,7 +58,7 @@ public class AuthenticationController {
         this.delegatingSecurityContextRepository.saveContext(securityContext, request, response);
 
         response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully logged in.");
+        return userService.getUserByUsername(username);
     }
 
     @DeleteMapping("/user")
@@ -68,7 +69,7 @@ public class AuthenticationController {
 
     @PostMapping("/user")
     public User registerUser(@RequestBody User user) {
-        Role role = roleService.getOrCreateUserRole("user");
+        Role role = roleService.getOrCreateRole(RoleType.PARTICIPANT);
         user.setRoles(List.of(role));
         return this.userService.registerUser(user);
     }

@@ -3,6 +3,7 @@ package com.markguiang.backend.event.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateKeyDeserializer;
+import com.markguiang.backend.form.model.Form;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -14,18 +15,11 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(
-        uniqueConstraints=
-        @UniqueConstraint(columnNames={"company", "name"})
-)
 public class Event {
     @Id
     @JsonIgnore
-    @Column(name = "event_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId;
-    @NotNull
-    private String company;
     @NotNull
     private String name;
     private String description;
@@ -36,20 +30,18 @@ public class Event {
     @JsonDeserialize(keyUsing = LocalDateKeyDeserializer.class)
     private Map<LocalDate, String> dateLocationMap;
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "owner_id", referencedColumnName = "event_id")
-    private List<Schedule> timetable;
+    @JoinColumn(name = "eventId")
+    private List<Schedule> scheduleList;
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "eventId")
+    private List<Form> formList;
+    private Long companyId;
 
     public Long getEventId() {
         return eventId;
     }
     public void setEventId(Long eventId) {
         this.eventId = eventId;
-    }
-    public String getCompany() {
-        return company;
-    }
-    public void setCompany(String company) {
-        this.company = company;
     }
     public String getName() {
         return name;
@@ -87,10 +79,10 @@ public class Event {
     public void setDateLocationMap(Map<LocalDate, String> dateLocationMap) {
         this.dateLocationMap = dateLocationMap;
     }
-    public List<Schedule> getTimetable() {
-        return timetable;
+    public List<Schedule> getScheduleList() {
+        return scheduleList;
     }
-    public void setTimetable(List<Schedule> timetable) {
-        this.timetable = timetable;
+    public void setScheduleList(List<Schedule> scheduleList) {
+        this.scheduleList = scheduleList;
     }
 }
