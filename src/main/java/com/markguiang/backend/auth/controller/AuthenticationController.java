@@ -57,7 +57,9 @@ public class AuthenticationController {
         this.securityContextHolderStrategy.setContext(securityContext);
         this.delegatingSecurityContextRepository.saveContext(securityContext, request, response);
 
-        response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
+        if (csrfToken != null) {
+            response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
+        }
         return userService.getUserByUsername(username);
     }
 
