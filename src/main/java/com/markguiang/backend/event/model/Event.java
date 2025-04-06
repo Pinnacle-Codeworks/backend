@@ -18,7 +18,6 @@ import java.util.Map;
 @Entity
 public class Event implements BaseEntity {
     @Id
-    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId;
     @NotNull
@@ -36,7 +35,6 @@ public class Event implements BaseEntity {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "eventId")
     private List<Form> formList;
-    //TODO implement setting this on create
     private Long companyId;
 
     public Long getEventId() {
@@ -91,8 +89,17 @@ public class Event implements BaseEntity {
     @Override
     public void clearIds() {
         eventId = null;
+        if (scheduleList == null) return;
         for (Schedule schedule: scheduleList) {
            schedule.clearIds();
         }
+    }
+
+    public Long getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(Long companyId) {
+        this.companyId = companyId;
     }
 }

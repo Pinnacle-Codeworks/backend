@@ -27,18 +27,14 @@ public class FormService {
     }
 
     public Form createForm(Form form) throws UniqueConstraintViolationException {
-        try {
-            Form form1 = formRepository.save(form);
+        Form form1 = formRepository.save(form);
 
-            List<Field> fieldList = form.getFieldList();
-            for (Field field: fieldList) {
-                field.setFormId(form.getFormId());
-            }
-            fieldRepository.saveAll(fieldList);
-            return form1;
-        } catch (DataIntegrityViolationException ex) {
-            throw new UniqueConstraintViolationException(form.getName());
+        List<Field> fieldList = form.getFieldList();
+        for (Field field: fieldList) {
+            field.setFormId(form.getFormId());
         }
+        fieldRepository.saveAll(fieldList);
+        return form1;
     }
 
     public Form editFormFields(Form form) throws NoSuchElementException, FieldMismatchException {

@@ -42,9 +42,5 @@ public class DevLoader {
         Role role = roleService.getOrCreateRole(RoleType.ADMIN);
         user.setRoles(List.of(role));
         userService.registerUser(user);
-
-        Event event = new Event();
-        event.setName("adminEvent");
-        eventService.upsertEvent(event);
     }
 }
