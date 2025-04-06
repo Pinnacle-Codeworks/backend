@@ -1,0 +1,67 @@
+type: http_request
+model: http_request
+id: rq_vm4Fyu4Cwz
+createdAt: 2025-03-30T14:38:41.847247
+updatedAt: 2025-04-06T09:27:59.735195
+workspaceId: wk_Ba7dNfiXAF
+folderId: fl_25BS4j9YYd
+authentication: {}
+authenticationType: null
+body:
+  text: |-
+    {
+      "formId": 1,
+      "companyId": 1,
+      "eventId": 1,
+      "name": "Sample Form updated",
+      "description": "A form for collecting data. updated",
+      "updateDATE": null,
+      "fieldList": [
+        {
+          "fieldId": 1,
+          "formId": 1,
+          "name": "First Name upated",
+          "fieldType": "TEXT",
+          "mandatory": false,
+          "order": 2
+        },
+        {
+          "fieldId": 2,
+          "formId": 1,
+          "name": "Email Address",
+          "fieldType": "NUMBER",
+          "mandatory": false,
+          "order": 1
+        },
+        {
+          "fieldId": 3,
+          "formId": 1,
+          "name": "age",
+          "fieldType": "NUMBER",
+          "mandatory": false,
+          "order": 1,
+          "deleted": true
+        }
+      ],
+      "formAnswersList": null
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: pUDSHImcgV
+method: PATCH
+name: EDIT FIELDS
+sortPriority: 1000.0
+url: http://localhost:8080/form
+urlParameters:
+- enabled: true
+  name: _csrf
+  value: D-kTJXizpikJHVdPVd4fp9FyNstLvkokrKXPwebfJ_QwiUg8PtByQ0qBlxokJGB7MfMrxLQWG_Mq3XkJmcP7-N-5Q8cD7S0E
+  id: gD6NApcHZz
+- enabled: true
+  name: ''
+  value: ''
+  id: JFNPgYjtni

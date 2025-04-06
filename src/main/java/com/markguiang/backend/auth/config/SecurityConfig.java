@@ -1,5 +1,6 @@
 package com.markguiang.backend.auth.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,18 +24,21 @@ import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler
 @EnableMethodSecurity
 public class SecurityConfig {
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        XorCsrfTokenRequestAttributeHandler requestHandler = new XorCsrfTokenRequestAttributeHandler();
-        requestHandler.setCsrfRequestAttributeName("_csrf");
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, @Value("${spring.profiles.active}") String activeProfile) throws Exception {
+        if ("dev".equals(activeProfile)) {
+            http.csrf().disable();
+        } else {
+            XorCsrfTokenRequestAttributeHandler requestHandler = new XorCsrfTokenRequestAttributeHandler();
+            requestHandler.setCsrfRequestAttributeName("_csrf");
+            http.csrf(csrf -> csrf
+                    .csrfTokenRequestHandler(requestHandler)
+                    .ignoringRequestMatchers("/auth/user"));
+        }
 
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/auth/**").permitAll()
                         .anyRequest().authenticated())
-                .csrf((csrf) -> csrf
-                        .csrfTokenRequestHandler(requestHandler)
-                        .ignoringRequestMatchers("/auth/user")
-                )
                 .securityContext((securityContext) -> securityContext
                         .securityContextRepository(new DelegatingSecurityContextRepository(
                                 new RequestAttributeSecurityContextRepository(),

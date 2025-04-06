@@ -2,9 +2,9 @@ type: folder
 model: folder
 id: fl_XYkWe36eqD
 createdAt: 2025-03-23T09:13:00.385277
-updatedAt: 2025-03-23T09:13:24.090285
+updatedAt: 2025-03-30T13:09:27.259173
 workspaceId: wk_Ba7dNfiXAF
 folderId: null
 name: tests
 description: ''
-sortPriority: 2500.0
+sortPriority: 1000.0

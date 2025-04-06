@@ -1,8 +1,10 @@
 package com.markguiang.backend.auth.controller;
 
+import com.markguiang.backend.auth.config.enum_.RoleType;
 import com.markguiang.backend.auth.role.Role;
 import com.markguiang.backend.auth.role.RoleService;
 import com.markguiang.backend.user.User;
+import com.markguiang.backend.user.UserContext;
 import com.markguiang.backend.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,17 +35,19 @@ public class AuthenticationController {
     private final SecurityContextLogoutHandler securityContextLogoutHandler;
     private final DelegatingSecurityContextRepository delegatingSecurityContextRepository;
     private final RoleService roleService;
+    private final UserContext userContext;
 
-    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, SecurityContextLogoutHandler securityContextLogoutHandler, DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService) {
+    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, SecurityContextLogoutHandler securityContextLogoutHandler, DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService,  UserContext userContext) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.securityContextLogoutHandler = securityContextLogoutHandler;
         this.delegatingSecurityContextRepository = delegatingSecurityContextRepository;
         this.roleService = roleService;
+        this.userContext = userContext;
     }
 
     @GetMapping("/user")
-    public ResponseEntity<String> loginUser(HttpServletRequest request , HttpServletResponse response, CsrfToken csrfToken) {
+    public User loginUser(HttpServletRequest request , HttpServletResponse response, CsrfToken csrfToken) {
         String[] credentials = getCredentialsFromRequest(request);
         String username = credentials[0];
         String password = credentials[1];
@@ -56,8 +60,11 @@ public class AuthenticationController {
         this.securityContextHolderStrategy.setContext(securityContext);
         this.delegatingSecurityContextRepository.saveContext(securityContext, request, response);
 
-        response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
-        return ResponseEntity.status(HttpStatus.OK).body("Successfully logged in.");
+        userContext.initialize();
+        if (csrfToken != null) {
+            response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
+        }
+        return userService.getUserByUsername(username);
     }
 
     @DeleteMapping("/user")
@@ -68,7 +75,8 @@ public class AuthenticationController {
 
     @PostMapping("/user")
     public User registerUser(@RequestBody User user) {
-        Role role = roleService.getOrCreateUserRole("user");
+        user.clearIds();
+        Role role = roleService.getOrCreateRole(RoleType.PARTICIPANT);
         user.setRoles(List.of(role));
         return this.userService.registerUser(user);
     }

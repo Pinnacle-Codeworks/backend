@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_su7tC72zRZ
 createdAt: 2025-03-07T14:09:28.466956
-updatedAt: 2025-03-17T17:58:05.474983
+updatedAt: 2025-03-30T18:09:46.308183
 workspaceId: wk_Ba7dNfiXAF
 folderId: fl_ZVv24nNL9p
 authentication: {}
@@ -12,9 +12,9 @@ body:
     {
       "firstName": "Mark",
       "lastName": "Guiang",
-      "username": "mahsssikgot",
+      "username": "mahikgot",
       "email": "mahikosts@gnmssail.com",
-      "password": "pass"
+      "password": "marky"
     }
 bodyType: application/json
 description: ''

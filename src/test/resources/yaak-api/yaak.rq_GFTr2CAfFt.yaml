@@ -1,8 +1,8 @@
 type: http_request
 model: http_request
-id: rq_Q3FNBmS3Zx
-createdAt: 2025-03-23T09:08:43.280264
-updatedAt: 2025-04-01T15:49:16.877598
+id: rq_GFTr2CAfFt
+createdAt: 2025-04-06T10:18:14.688557
+updatedAt: 2025-04-06T10:33:44.885086
 workspaceId: wk_Ba7dNfiXAF
 folderId: fl_gnReuKbd2r
 authentication: {}
@@ -10,17 +10,23 @@ authenticationType: null
 body:
   text: |-
     {
+      "eventId": 1,
       "name": "Spring Boot Workshop",
       "description": "A workshop to learn Spring Boot.",
-      "dateTime": "2025-03-25T10:00:00",
+      "dateTime": "2025-03-25T10:00:00.000+00:00",
       "location": "New York",
+      "hasMultipleLocation": null,
+      "dateLocationMap": null,
       "scheduleList": [
         {
-          "startDate": "2025-03-25T10:00:00",
-          "endDate": "2025-03-25T12:00:00",
-          "location": "Room 101"
+          "scheduleId": 1,
+          "eventId": 1,
+          "startDate": "2025-03-25T10:00:00.000+00:00",
+          "endDate": "2025-04-25T12:00:00.000+00:00",
+          "location": "Room 102"
         }
-      ]
+      ],
+      "companyId": 1
     }
 bodyType: application/json
 description: ''
@@ -33,9 +39,9 @@ headers:
   name: ''
   value: ''
   id: 8xkMdmT89u
-method: POST
-name: create event
-sortPriority: 0.0
+method: PATCH
+name: update event
+sortPriority: 0.001
 url: http://localhost:8080/event
 urlParameters:
 - enabled: true

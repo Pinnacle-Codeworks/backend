@@ -1,5 +1,6 @@
 package com.markguiang.backend.auth.config;
 
+import com.markguiang.backend.auth.config.enum_.RoleType;
 import com.markguiang.backend.auth.role.Role;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,16 +9,16 @@ import org.springframework.context.annotation.Configuration;
 public class RoleConfig {
 
     @Bean
-    public Role userRole() {
+    public Role participantRole() {
         Role role = new Role();
-        role.setName("user");
+        role.setRoleType(RoleType.PARTICIPANT);
         return role;
     }
 
     @Bean
     public Role adminRole() {
         Role role = new Role();
-        role.setName("admin");
+        role.setRoleType(RoleType.ADMIN);
         return role;
     }
 }

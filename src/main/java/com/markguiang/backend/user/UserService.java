@@ -20,6 +20,7 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    //TODO issue where the userId can be set from request
     public User registerUser(@Valid User user) {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));

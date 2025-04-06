@@ -1,0 +1,59 @@
+type: http_request
+model: http_request
+id: rq_3kPBiaprZU
+createdAt: 2025-03-30T13:09:36.447280
+updatedAt: 2025-04-06T08:49:39.628375
+workspaceId: wk_Ba7dNfiXAF
+folderId: fl_25BS4j9YYd
+authentication: {}
+authenticationType: null
+body:
+  text: |
+    {
+      "companyId": 1,
+      "eventId": 1,
+      "name": "Sample Form",
+      "description": "A form for collecting data.",
+      "updateDATE": "2025-03-31",
+      "fieldList": [
+        {
+          "name": "First Name",
+          "fieldType": "TEXT",
+          "mandatory": true,
+          "order": 1
+        },
+        {
+          "name": "Email Address",
+          "fieldType": "NUMBER",
+          "mandatory": false,
+          "order": 2
+        },
+        {
+          "name": "age",
+          "fieldType": "NUMBER",
+          "mandatory": false,
+          "order": 3,
+          "deleted": true
+        }
+      ]
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: 7zeIFXqeFU
+method: POST
+name: create
+sortPriority: 0.0
+url: http://localhost:8080/form
+urlParameters:
+- enabled: true
+  name: _csrf
+  value: jYxvEVM17krQCkRI3q1GWv2ZFsn0p5hQXA9Dzlrs-JaHpgFVvLUOd2EH33n9M3N8uoByOZj9O_GVxKt9aWl392OKnKW0wmRt
+  id: HeISeYvzZg
+- enabled: true
+  name: ''
+  value: ''
+  id: Q4yCj9gKmG
