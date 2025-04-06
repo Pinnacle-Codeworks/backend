@@ -70,7 +70,6 @@ public class FormService {
             fieldDb.setOrder(field.getOrder());
             fieldDb.setDeleted(field.getDeleted());
         }
-        fieldRepository.saveAll(fieldListDb);
         form.setFieldList(fieldListDb);
         formRepository.save(form);
         return form;
