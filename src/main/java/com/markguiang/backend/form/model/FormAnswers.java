@@ -1,5 +1,6 @@
 package com.markguiang.backend.form.model;
 
+import com.markguiang.backend.base.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -9,7 +10,7 @@ import java.util.List;
 @Table(uniqueConstraints={
         @UniqueConstraint(columnNames = {"userId", "formId"})
 })
-public class FormAnswers {
+public class FormAnswers implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long formAnswersId;
@@ -64,5 +65,14 @@ public class FormAnswers {
 
     public void setUpdateDATE(LocalDate updateDATE) {
         this.updateDATE = updateDATE;
+    }
+
+    @Override
+    public void clearIds() {
+        formAnswersId = null;
+        userId = null;
+        for (FieldAnswer fieldAnswer: fieldAnswerList) {
+            fieldAnswer.clearIds();
+        }
     }
 }

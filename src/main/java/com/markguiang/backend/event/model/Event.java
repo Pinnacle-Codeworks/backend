@@ -36,6 +36,7 @@ public class Event implements BaseEntity {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "eventId")
     private List<Form> formList;
+    //TODO implement setting this on create
     private Long companyId;
 
     public Long getEventId() {

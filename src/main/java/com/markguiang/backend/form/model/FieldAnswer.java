@@ -1,17 +1,19 @@
 package com.markguiang.backend.form.model;
 
+import com.markguiang.backend.base.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
-public class FieldAnswer {
+public class FieldAnswer implements BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long fieldAnswerId;
 
     // foreignKeys
     private Long formAnswersId;
+    private Long fieldId;
 
     // fields
     private Double doubleAnswer;
@@ -21,8 +23,6 @@ public class FieldAnswer {
     private Boolean booleanAnswer;
 
     // mappings
-    @ManyToOne
-    private Field field;
 
     public Long getFieldAnswerId() {
         return fieldAnswerId;
@@ -80,11 +80,17 @@ public class FieldAnswer {
         this.booleanAnswer = booleanAnswer;
     }
 
-    public Field getField() {
-        return field;
+    public Long getFieldId() {
+        return fieldId;
     }
 
-    public void setField(Field field) {
-        this.field = field;
+    public void setFieldId(Long fieldId) {
+        this.fieldId = fieldId;
+    }
+
+    @Override
+    public void clearIds() {
+        fieldAnswerId = null;
+        formAnswersId = null;
     }
 }

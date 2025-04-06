@@ -1,0 +1,46 @@
+type: http_request
+model: http_request
+id: rq_g9ZDhLGsow
+createdAt: 2025-04-06T08:49:37.861674
+updatedAt: 2025-04-06T09:25:08.761732
+workspaceId: wk_Ba7dNfiXAF
+folderId: fl_25BS4j9YYd
+authentication: {}
+authenticationType: null
+body:
+  text: |
+    {
+      "formId": 1002,
+      "userId": 501,
+      "fieldAnswerList": [
+        {
+          "fieldId": 2001,
+          "doubleAnswer": 10.5,
+          "stringAnswer": "Answer string 1",
+          "integerAnswer": 42,
+          "localDateAnswer": "2025-04-06",
+          "booleanAnswer": true
+        },
+        {
+          "fieldId": 2002,
+          "doubleAnswer": 20.5,
+          "stringAnswer": "Answer string 2",
+          "integerAnswer": 24,
+          "localDateAnswer": "2025-04-07",
+          "booleanAnswer": false
+        }
+      ],
+      "updateDATE": "2025-04-06"
+    }
+bodyType: application/json
+description: ''
+headers:
+- enabled: true
+  name: Content-Type
+  value: application/json
+  id: 6bP7udCxgJ
+method: POST
+name: ''
+sortPriority: 2000.0
+url: http://localhost:8080/form/answers
+urlParameters: []
