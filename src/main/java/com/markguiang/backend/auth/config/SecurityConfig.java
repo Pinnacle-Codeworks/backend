@@ -37,7 +37,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                         .anyRequest().authenticated())
                 .securityContext((securityContext) -> securityContext
                         .securityContextRepository(new DelegatingSecurityContextRepository(
