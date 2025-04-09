@@ -4,7 +4,6 @@ import com.markguiang.backend.event.dto.request.CreateEventDTO;
 import com.markguiang.backend.event.dto.request.UpdateEventDTO;
 import com.markguiang.backend.event.dto.response.EventResponseDTO;
 import com.markguiang.backend.event.mapper.EventMapper;
-import com.markguiang.backend.event.mapper.ScheduleMapper;
 import com.markguiang.backend.event.model.Event;
 import com.markguiang.backend.event.service.EventService;
 import jakarta.validation.Valid;
@@ -16,12 +15,10 @@ import org.springframework.web.bind.annotation.*;
 public class EventController {
     private final EventService eventService;
     private final EventMapper eventMapper;
-    private final ScheduleMapper scheduleMapper;
 
-    public EventController(EventService eventService, EventMapper eventMapper, ScheduleMapper scheduleMapper) {
+    public EventController(EventService eventService, EventMapper eventMapper) {
         this.eventService = eventService;
         this.eventMapper = eventMapper;
-        this.scheduleMapper = scheduleMapper;
     }
 
     @PreAuthorize("hasAuthority('permission:write')")
