@@ -7,6 +7,7 @@ import com.markguiang.backend.event.mapper.EventMapper;
 import com.markguiang.backend.event.mapper.ScheduleMapper;
 import com.markguiang.backend.event.model.Event;
 import com.markguiang.backend.event.service.EventService;
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,7 @@ public class EventController {
 
     @PreAuthorize("hasAuthority('permission:write')")
     @PatchMapping("")
-    public EventResponseDTO updateEvent(@RequestBody UpdateEventDTO updateEventDTO) {
+    public EventResponseDTO updateEvent(@Valid @RequestBody UpdateEventDTO updateEventDTO) {
         Event event = this.eventMapper.updateEventDTOtoEvent(updateEventDTO);
         Event eventResult =  this.eventService.updateEvent(event);
         return this.eventMapper.eventToEventResponseDTO(eventResult);

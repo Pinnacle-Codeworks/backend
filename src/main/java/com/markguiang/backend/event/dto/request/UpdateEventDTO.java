@@ -4,15 +4,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.markguiang.backend.event.dto.event.EventFieldsDTO;
 import com.markguiang.backend.event.dto.event.EventIdsDTO;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 public class UpdateEventDTO {
     @JsonUnwrapped
+    @Valid
+    @NotNull
     private EventIdsDTO eventIdsDTO;
     @JsonUnwrapped
+    @Valid
+    @NotNull
     private EventFieldsDTO eventFieldsDTO;
     @JsonProperty("scheduleList")
+    @Valid
+    @NotNull
     private List<UpdateScheduleDTO> updateScheduleDTOList;
 
     public EventIdsDTO getEventIdsDTO() {

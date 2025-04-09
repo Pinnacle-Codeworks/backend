@@ -1,4 +1,7 @@
 package com.markguiang.backend.event.dto.event;
 
-public record EventIdsDTO(Long eventId, Long companyId) {
+import jakarta.validation.constraints.NotNull;
+
+public record EventIdsDTO(@NotNull Long eventId,
+                          Long companyId) {
 }

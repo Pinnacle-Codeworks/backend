@@ -1,7 +1,11 @@
 package com.markguiang.backend.event.dto.schedule;
 
+import jakarta.validation.constraints.NotNull;
+
 public class ScheduleIdsDTO {
+    @NotNull
     private Long scheduleId;
+    @NotNull
     private Long eventId;
 
     public Long getScheduleId() {
