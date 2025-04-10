@@ -1,19 +1,18 @@
 package com.markguiang.backend.event.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.markguiang.backend.base.BaseEntity;
 import jakarta.persistence.*;
 
 import java.util.Calendar;
 
 @Entity
-public class Schedule implements BaseEntity {
+public class Schedule {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long scheduleId;
 
     // foreignKeys
-    private Long eventId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Event event;
 
     // fields
     private Calendar startDate;
@@ -52,17 +51,11 @@ public class Schedule implements BaseEntity {
         this.location = location;
     }
 
-    public Long getEventId() {
-        return eventId;
+    public Event getEvent() {
+        return event;
     }
 
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
-    }
-
-    @Override
-    public void clearIds() {
-        scheduleId = null;
-        eventId = null;
+    public void setEvent(Event event) {
+        this.event = event;
     }
 }
