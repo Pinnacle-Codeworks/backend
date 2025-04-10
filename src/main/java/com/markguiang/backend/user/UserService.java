@@ -1,7 +1,6 @@
 package com.markguiang.backend.user;
 
 import com.markguiang.backend.exceptions.UniqueConstraintViolationException;
-import jakarta.validation.Valid;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,7 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
-    //TODO issue where the userId can be set from request
-    public User registerUser(@Valid User user) {
+    public User registerUser(User user) {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);

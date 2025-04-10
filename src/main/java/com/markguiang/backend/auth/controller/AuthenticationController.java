@@ -1,6 +1,10 @@
 package com.markguiang.backend.auth.controller;
 
 import com.markguiang.backend.auth.config.enum_.RoleType;
+import com.markguiang.backend.auth.dto.mapper.UserMapper;
+import com.markguiang.backend.auth.dto.request.RegisterUserDTO;
+import com.markguiang.backend.auth.dto.response.LoginResponseDTO;
+import com.markguiang.backend.auth.dto.response.UserResponseDTO;
 import com.markguiang.backend.auth.role.Role;
 import com.markguiang.backend.auth.role.RoleService;
 import com.markguiang.backend.user.User;
@@ -8,6 +12,7 @@ import com.markguiang.backend.user.UserContext;
 import com.markguiang.backend.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -36,18 +41,20 @@ public class AuthenticationController {
     private final DelegatingSecurityContextRepository delegatingSecurityContextRepository;
     private final RoleService roleService;
     private final UserContext userContext;
+    private final UserMapper userMapper;
 
-    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, SecurityContextLogoutHandler securityContextLogoutHandler, DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService,  UserContext userContext) {
+    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, SecurityContextLogoutHandler securityContextLogoutHandler, DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService,  UserContext userContext, UserMapper userMapper) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.securityContextLogoutHandler = securityContextLogoutHandler;
         this.delegatingSecurityContextRepository = delegatingSecurityContextRepository;
         this.roleService = roleService;
         this.userContext = userContext;
+        this.userMapper = userMapper;
     }
 
     @GetMapping("/user")
-    public User loginUser(HttpServletRequest request , HttpServletResponse response, CsrfToken csrfToken) {
+    public LoginResponseDTO loginUser(HttpServletRequest request, HttpServletResponse response, CsrfToken csrfToken) {
         String[] credentials = getCredentialsFromRequest(request);
         String username = credentials[0];
         String password = credentials[1];
@@ -61,10 +68,13 @@ public class AuthenticationController {
         this.delegatingSecurityContextRepository.saveContext(securityContext, request, response);
 
         userContext.initialize();
+        User userResult = userService.getUserByUsername(username);
+
         if (csrfToken != null) {
             response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
+            return this.userMapper.userToLoginResponseDTO(userResult, csrfToken.getToken());
         }
-        return userService.getUserByUsername(username);
+        return this.userMapper.userToLoginResponseDTO(userResult, "");
     }
 
     @DeleteMapping("/user")
@@ -74,11 +84,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/user")
-    public User registerUser(@RequestBody User user) {
-        user.clearIds();
+    public UserResponseDTO registerUser(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
+        User user = this.userMapper.registerUserDTOtoUser(registerUserDTO);
         Role role = roleService.getOrCreateRole(RoleType.PARTICIPANT);
         user.setRoles(List.of(role));
-        return this.userService.registerUser(user);
+        User userResult = this.userService.registerUser(user);
+        return this.userMapper.userToUserResponseDTO(userResult);
     }
 
     private String[] getCredentialsFromRequest(HttpServletRequest request) {

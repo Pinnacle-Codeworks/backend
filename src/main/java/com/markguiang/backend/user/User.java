@@ -1,19 +1,15 @@
 package com.markguiang.backend.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.markguiang.backend.auth.role.Role;
-import com.markguiang.backend.base.BaseEntity;
 import com.markguiang.backend.form.model.FormAnswers;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name="user_")
-public class User implements BaseEntity {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -22,10 +18,8 @@ public class User implements BaseEntity {
     private Long companyId;
 
     //mappings
-    @JsonIgnore
-    @OneToMany
+    @ManyToMany
     private List<Role> roles;
-    @JsonIgnore
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
     private Set<FormAnswers> formAnswersSet;
 
@@ -33,13 +27,9 @@ public class User implements BaseEntity {
     private String firstName;
     private String lastName;
     @Column(unique = true)
-    @NotNull
     private String username;
     @Column(unique = true)
-    @NotNull
     private String email;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotNull
     private String password;
 
     public Long getUserId() {
@@ -112,10 +102,5 @@ public class User implements BaseEntity {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public void clearIds() {
-        userId = null;
     }
 }

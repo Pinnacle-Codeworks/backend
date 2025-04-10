@@ -2,7 +2,6 @@ package com.markguiang.backend.auth.role;
 
 import com.markguiang.backend.auth.config.enum_.RoleType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.Objects;
 
@@ -12,22 +11,24 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long roleId;
-    @NotNull
     @Column(unique = true)
     @Enumerated(EnumType.STRING)
     public RoleType roleType;
 
-    public Long getRoleId() {
-        return roleId;
-    }
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
     public RoleType getRoleType() {
         return roleType;
     }
+
     public void setRoleType(RoleType roleType) {
         this.roleType = roleType;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     @Override

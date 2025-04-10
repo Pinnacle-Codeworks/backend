@@ -1,19 +1,16 @@
 package com.markguiang.backend.event.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.markguiang.backend.annotation.ValidRequired;
 import com.markguiang.backend.event.dto.schedule.ScheduleFieldsDTO;
 import com.markguiang.backend.event.dto.schedule.ScheduleIdsDTO;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 public class UpdateScheduleDTO {
     @JsonUnwrapped
-    @Valid
-    @NotNull
+    @ValidRequired
     private ScheduleIdsDTO scheduleIdsDTO;
     @JsonUnwrapped
-    @Valid
-    @NotNull
+    @ValidRequired
     private ScheduleFieldsDTO scheduleFieldsDTO;
 
     public ScheduleIdsDTO getScheduleIdsDTO() {
