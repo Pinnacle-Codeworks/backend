@@ -10,6 +10,9 @@ import com.markguiang.backend.auth.role.RoleService;
 import com.markguiang.backend.user.User;
 import com.markguiang.backend.user.UserContext;
 import com.markguiang.backend.user.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -53,8 +56,13 @@ public class AuthenticationController {
         this.userMapper = userMapper;
     }
 
+    @Operation(
+            summary = "Login user",
+            description = "Requires Basic Authorization header (Base64 encoded 'username:password')",
+            security = @SecurityRequirement(name = "basicAuth")
+    )
     @GetMapping("/user")
-    public LoginResponseDTO loginUser(HttpServletRequest request, HttpServletResponse response, CsrfToken csrfToken) {
+    public LoginResponseDTO loginUser(HttpServletRequest request, HttpServletResponse response, @Parameter(hidden = true) CsrfToken csrfToken) {
         String[] credentials = getCredentialsFromRequest(request);
         String username = credentials[0];
         String password = credentials[1];
@@ -77,12 +85,24 @@ public class AuthenticationController {
         return this.userMapper.userToLoginResponseDTO(userResult, "");
     }
 
+    @Operation(
+            summary = "Logout user",
+            description = """
+        Logs out the currently authenticated user by invalidating their session and clearing the security context.
+        """
+    )
     @DeleteMapping("/user")
     public ResponseEntity<String> logoutUser(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
         this.securityContextLogoutHandler.logout(request, response, authentication);
         return ResponseEntity.status(HttpStatus.OK).body("Successfully logged out.");
     }
 
+    @Operation(
+            summary = "Register new user",
+            description = """
+        Registers a new user account with the role of PARTICIPANT.
+        """
+    )
     @PostMapping("/user")
     public UserResponseDTO registerUser(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
         User user = this.userMapper.registerUserDTOtoUser(registerUserDTO);
