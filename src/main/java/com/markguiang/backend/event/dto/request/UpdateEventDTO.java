@@ -2,25 +2,21 @@ package com.markguiang.backend.event.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.markguiang.backend.annotation.ValidRequired;
 import com.markguiang.backend.event.dto.event.EventFieldsDTO;
 import com.markguiang.backend.event.dto.event.EventIdsDTO;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 public class UpdateEventDTO {
     @JsonUnwrapped
-    @Valid
-    @NotNull
+    @ValidRequired
     private EventIdsDTO eventIdsDTO;
     @JsonUnwrapped
-    @Valid
-    @NotNull
+    @ValidRequired
     private EventFieldsDTO eventFieldsDTO;
     @JsonProperty("scheduleList")
-    @Valid
-    @NotNull
+    @ValidRequired
     private List<UpdateScheduleDTO> updateScheduleDTOList;
 
     public EventIdsDTO getEventIdsDTO() {

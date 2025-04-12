@@ -1,13 +1,21 @@
 package com.markguiang.backend.auth.controller;
 
 import com.markguiang.backend.auth.config.enum_.RoleType;
+import com.markguiang.backend.auth.dto.mapper.UserMapper;
+import com.markguiang.backend.auth.dto.request.RegisterUserDTO;
+import com.markguiang.backend.auth.dto.response.LoginResponseDTO;
+import com.markguiang.backend.auth.dto.response.UserResponseDTO;
 import com.markguiang.backend.auth.role.Role;
 import com.markguiang.backend.auth.role.RoleService;
 import com.markguiang.backend.user.User;
 import com.markguiang.backend.user.UserContext;
 import com.markguiang.backend.user.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -36,18 +44,25 @@ public class AuthenticationController {
     private final DelegatingSecurityContextRepository delegatingSecurityContextRepository;
     private final RoleService roleService;
     private final UserContext userContext;
+    private final UserMapper userMapper;
 
-    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, SecurityContextLogoutHandler securityContextLogoutHandler, DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService,  UserContext userContext) {
+    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, SecurityContextLogoutHandler securityContextLogoutHandler, DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService,  UserContext userContext, UserMapper userMapper) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.securityContextLogoutHandler = securityContextLogoutHandler;
         this.delegatingSecurityContextRepository = delegatingSecurityContextRepository;
         this.roleService = roleService;
         this.userContext = userContext;
+        this.userMapper = userMapper;
     }
 
+    @Operation(
+            summary = "Login user",
+            description = "Requires Basic Authorization header (Base64 encoded 'username:password')",
+            security = @SecurityRequirement(name = "basicAuth")
+    )
     @GetMapping("/user")
-    public User loginUser(HttpServletRequest request , HttpServletResponse response, CsrfToken csrfToken) {
+    public LoginResponseDTO loginUser(HttpServletRequest request, HttpServletResponse response, @Parameter(hidden = true) CsrfToken csrfToken) {
         String[] credentials = getCredentialsFromRequest(request);
         String username = credentials[0];
         String password = credentials[1];
@@ -61,24 +76,40 @@ public class AuthenticationController {
         this.delegatingSecurityContextRepository.saveContext(securityContext, request, response);
 
         userContext.initialize();
+        User userResult = userService.getUserByUsername(username);
+
         if (csrfToken != null) {
             response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
+            return this.userMapper.userToLoginResponseDTO(userResult, csrfToken.getToken());
         }
-        return userService.getUserByUsername(username);
+        return this.userMapper.userToLoginResponseDTO(userResult, "");
     }
 
+    @Operation(
+            summary = "Logout user",
+            description = """
+        Logs out the currently authenticated user by invalidating their session and clearing the security context.
+        """
+    )
     @DeleteMapping("/user")
     public ResponseEntity<String> logoutUser(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
         this.securityContextLogoutHandler.logout(request, response, authentication);
         return ResponseEntity.status(HttpStatus.OK).body("Successfully logged out.");
     }
 
+    @Operation(
+            summary = "Register new user",
+            description = """
+        Registers a new user account with the role of PARTICIPANT.
+        """
+    )
     @PostMapping("/user")
-    public User registerUser(@RequestBody User user) {
-        user.clearIds();
+    public UserResponseDTO registerUser(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
+        User user = this.userMapper.registerUserDTOtoUser(registerUserDTO);
         Role role = roleService.getOrCreateRole(RoleType.PARTICIPANT);
         user.setRoles(List.of(role));
-        return this.userService.registerUser(user);
+        User userResult = this.userService.registerUser(user);
+        return this.userMapper.userToUserResponseDTO(userResult);
     }
 
     private String[] getCredentialsFromRequest(HttpServletRequest request) {
