@@ -22,7 +22,6 @@ public class Field {
     private Boolean mandatory = false;
     @Column(name = "order_", nullable = false)
     private Integer order;
-    private Boolean deleted = false;
 
     public Long getFieldId() {
         return fieldId;
@@ -70,13 +69,5 @@ public class Field {
 
     public void setOrder(Integer order) {
         this.order = order;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
     }
 }

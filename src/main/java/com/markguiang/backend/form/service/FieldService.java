@@ -52,7 +52,6 @@ public class FieldService {
             fieldDb.setName(field.getName());
             fieldDb.setMandatory(field.getMandatory());
             fieldDb.setOrder(field.getOrder());
-            fieldDb.setDeleted(field.getDeleted());
         }
         return IterableUtils.toList(this.fieldRepository.saveAll(fieldListDb));
     }
