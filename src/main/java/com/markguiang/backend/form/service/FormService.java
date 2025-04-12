@@ -1,77 +1,55 @@
 package com.markguiang.backend.form.service;
 
-import com.markguiang.backend.exceptions.FieldMismatchException;
-import com.markguiang.backend.exceptions.UniqueConstraintViolationException;
+import com.markguiang.backend.event.model.Event;
+import com.markguiang.backend.event.service.EventService;
 import com.markguiang.backend.form.model.Field;
 import com.markguiang.backend.form.model.Form;
-import com.markguiang.backend.form.repository.FieldRepository;
 import com.markguiang.backend.form.repository.FormRepository;
-import org.springframework.dao.DataIntegrityViolationException;
+import com.markguiang.backend.user.UserContext;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class FormService {
     private final FormRepository formRepository;
-    private final FieldRepository fieldRepository;
+    private final FieldService fieldService;
+    private final EventService eventService;
+    private final UserContext userContext;
+    private FormService formService;
 
-    public FormService(FormRepository formRepository, FieldRepository fieldRepository) {
+    public FormService(FormRepository formRepository, FieldService fieldService, UserContext userContext, EventService eventService) {
         this.formRepository = formRepository;
-        this.fieldRepository = fieldRepository;
+        this.fieldService = fieldService;
+        this.eventService = eventService;
+        this.userContext = userContext;
     }
 
-    public Form createForm(Form form) throws UniqueConstraintViolationException {
-        Form form1 = formRepository.save(form);
-
-        List<Field> fieldList = form.getFieldList();
-        for (Field field: fieldList) {
-            field.setFormId(form.getFormId());
+    public Form createFormWithFieldList(Form form) {
+        Optional<Event> event = this.eventService.getEvent(form.getEventId());
+        if (event.isEmpty() || !event.get().getEventId().equals(form.getEventId())) {
+            throw new NoSuchElementException("Event not found");
         }
-        fieldRepository.saveAll(fieldList);
-        return form1;
+
+        form.setCompanyId(this.userContext.getUser().getCompanyId());
+        this.formRepository.save(form);
+
+        List<Field> fieldList = this.fieldService.createFieldList(form);
+        form.setFieldList(fieldList);
+
+        return form;
     }
 
-    public Form editFormFields(Form form) throws NoSuchElementException, FieldMismatchException {
-        Optional<Form> formDbOpt = formRepository.findById(form.getFormId());
-        if (formDbOpt.isEmpty()) {
-            throw new NoSuchElementException();
+    public Form updateFormWithFields(Form form) {
+        Optional<Form> formDb = this.formRepository.findById(form.getFormId());
+        if (formDb.isEmpty()) {
+            throw new NoSuchElementException("Form not found");
         }
-        Form formDb = formDbOpt.get();
-
-        List<Field> fieldListDb = formDb.getFieldList();
-        List<Field> fieldList = form.getFieldList();
-
-        if (fieldList.size() < fieldListDb.size()) {
-           throw new IllegalStateException("fieldList length should not be less than " + fieldListDb.size());
-        }
-
-        Map<Long, Field> fieldMapDb = fieldListDb.stream()
-                .collect(Collectors.toMap(Field::getFieldId, Function.identity()));
-        for (Field field: fieldList) {
-            if (field.getFieldId() == null) {
-                fieldListDb.add(field);
-                continue;
-            }
-            if (field.getFormId() == null || !field.getFormId().equals(form.getFormId())) {
-               throw new IllegalStateException("Field has different formId than Form");
-            }
-            Field fieldDb = fieldMapDb.get(field.getFieldId());
-            if (!fieldDb.getFieldType().equals(field.getFieldType())) {
-                throw new FieldMismatchException("Field Type");
-            }
-            fieldDb.setName(field.getName());
-            fieldDb.setMandatory(field.getMandatory());
-            fieldDb.setOrder(field.getOrder());
-            fieldDb.setDeleted(field.getDeleted());
-        }
-        form.setFieldList(fieldListDb);
-        formRepository.save(form);
+        List<Field> fieldList = this.fieldService.updateFieldList(form);
+        form.setFieldList(fieldList);
+        this.formRepository.save(form);
         return form;
     }
 }

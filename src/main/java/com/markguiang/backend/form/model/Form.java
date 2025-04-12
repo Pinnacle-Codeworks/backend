@@ -1,9 +1,6 @@
 package com.markguiang.backend.form.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.markguiang.backend.base.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,32 +9,26 @@ import java.util.List;
 @Table(uniqueConstraints={
         @UniqueConstraint(columnNames = {"companyId", "eventId", "name"})
 })
-public class Form implements BaseEntity {
+public class Form {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long formId;
 
     // foreignKeys
-    @Column(updatable = false)
-    @NotNull
+    @Column(updatable = false, nullable = false)
     private Long companyId;
-    @NotNull
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private Long eventId;
 
     // fields
-    @NotNull
+    @Column(nullable = false)
     private String name;
     private String description;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDate updateDATE; //TODO initialize
-    private Boolean deleted;
+    private LocalDate updateDATE = LocalDate.now();
 
-    // mappings
-    @OneToMany(mappedBy = "formId", orphanRemoval = true)
+    @Transient
     private List<Field> fieldList;
     @OneToMany(mappedBy = "formId", fetch = FetchType.LAZY)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private List<FormAnswers> formAnswersList;
 
     public Long getFormId() {
@@ -102,13 +93,5 @@ public class Form implements BaseEntity {
 
     public void setFormAnswersList(List<FormAnswers> formAnswersList) {
         this.formAnswersList = formAnswersList;
-    }
-
-    @Override
-    public void clearIds() {
-        formId = null;
-        for (Field field: fieldList) {
-            field.clearIds();
-        }
     }
 }
