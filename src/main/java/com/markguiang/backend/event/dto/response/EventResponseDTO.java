@@ -1,5 +1,7 @@
 package com.markguiang.backend.event.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
@@ -12,6 +14,7 @@ public class EventResponseDTO {
     private String location;
     private Boolean hasMultipleLocation;
     private Map<LocalDate, String> dateLocationMap;
+    @JsonProperty("scheduleList")
     private List<ScheduleResponseDTO> scheduleResponseDTOList;
 
     public Long getEventId() {

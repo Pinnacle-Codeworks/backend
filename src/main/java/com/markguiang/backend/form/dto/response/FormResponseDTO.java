@@ -1,5 +1,6 @@
 package com.markguiang.backend.form.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.markguiang.backend.form.enum_.FieldType;
 
 import java.util.List;
@@ -9,6 +10,7 @@ public class FormResponseDTO {
     private Long eventId;
     private String name;
     private String description;
+    @JsonProperty("fieldList")
     private List<FieldResponseDTO> fieldResponseDTOList;
 
     public Long getFormId() {
