@@ -18,7 +18,6 @@ public class FormService {
     private final FieldService fieldService;
     private final EventService eventService;
     private final UserContext userContext;
-    private FormService formService;
 
     public FormService(FormRepository formRepository, FieldService fieldService, UserContext userContext, EventService eventService) {
         this.formRepository = formRepository;
