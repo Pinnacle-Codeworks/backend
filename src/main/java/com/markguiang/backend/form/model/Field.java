@@ -1,34 +1,27 @@
 package com.markguiang.backend.form.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.markguiang.backend.base.BaseEntity;
 import com.markguiang.backend.form.enum_.FieldType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
-public class Field implements BaseEntity {
+public class Field {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long fieldId;
 
     // foreignKeys
-    @NotNull
-    @Column(updatable = false)
-    private Long formId;
+    @ManyToOne
+    private Form form;
 
     // fields
-    @NotNull
+    @Column(updatable = false, nullable = false)
     private String name;
     @Enumerated(EnumType.STRING)
-    @NotNull
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private FieldType fieldType;
     private Boolean mandatory = false;
-    @NotNull
-    @Column(name = "order_")
+    @Column(name = "order_", nullable = false)
     private Integer order;
-    private Boolean deleted = false;
 
     public Long getFieldId() {
         return fieldId;
@@ -38,12 +31,12 @@ public class Field implements BaseEntity {
         this.fieldId = fieldId;
     }
 
-    public Long getFormId() {
-        return formId;
+    public Form getForm() {
+        return form;
     }
 
-    public void setFormId(Long formId) {
-        this.formId = formId;
+    public void setForm(Form form) {
+        this.form = form;
     }
 
     public String getName() {
@@ -76,19 +69,5 @@ public class Field implements BaseEntity {
 
     public void setOrder(Integer order) {
         this.order = order;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
-
-    @Override
-    public void clearIds() {
-        fieldId = null;
-        formId = null;
     }
 }

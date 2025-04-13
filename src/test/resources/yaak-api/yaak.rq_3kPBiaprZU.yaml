@@ -2,7 +2,7 @@ type: http_request
 model: http_request
 id: rq_3kPBiaprZU
 createdAt: 2025-03-30T13:09:36.447280
-updatedAt: 2025-04-06T08:49:39.628375
+updatedAt: 2025-04-12T23:42:24.667057
 workspaceId: wk_Ba7dNfiXAF
 folderId: fl_25BS4j9YYd
 authentication: {}
@@ -10,11 +10,9 @@ authenticationType: null
 body:
   text: |
     {
-      "companyId": 1,
       "eventId": 1,
       "name": "Sample Form",
       "description": "A form for collecting data.",
-      "updateDATE": "2025-03-31",
       "fieldList": [
         {
           "name": "First Name",
