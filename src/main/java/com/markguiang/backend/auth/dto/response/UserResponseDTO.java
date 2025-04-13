@@ -1,40 +1,49 @@
 package com.markguiang.backend.auth.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.markguiang.backend.auth.dto.user.UserFieldsWithoutPasswordDTO;
-import com.markguiang.backend.auth.dto.user.UserIdsDTO;
-import com.markguiang.backend.auth.role.Role;
-
-import java.util.List;
-
 public class UserResponseDTO {
-    @JsonUnwrapped
-    private UserFieldsWithoutPasswordDTO userFieldsWithoutPasswordDTO;
-    @JsonUnwrapped
-    private UserIdsDTO userIdsDTO;
-    private List<Role> roles;
+    private Long userId;
+    private String username;
+    private String email;
+    private String firstName;
+    private String lastName;
 
-    public UserFieldsWithoutPasswordDTO getUserFieldsWithoutPasswordDTO() {
-        return userFieldsWithoutPasswordDTO;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUserFieldsWithoutPasswordDTO(UserFieldsWithoutPasswordDTO userFieldsWithoutPasswordDTO) {
-        this.userFieldsWithoutPasswordDTO = userFieldsWithoutPasswordDTO;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public UserIdsDTO getUserIdsDTO() {
-        return userIdsDTO;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserIdsDTO(UserIdsDTO userIdsDTO) {
-        this.userIdsDTO = userIdsDTO;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public List<Role> getRoles() {
-        return roles;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

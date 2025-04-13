@@ -1,18 +1,19 @@
 package com.markguiang.backend.form.model;
 
-import com.markguiang.backend.base.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
 @Entity
-public class FieldAnswer implements BaseEntity {
+public class FieldAnswer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long fieldAnswerId;
 
     // foreignKeys
+    @Column(updatable = false, nullable = false)
     private Long formAnswersId;
+    @Column(updatable = false, nullable = false)
     private Long fieldId;
 
     // fields
@@ -86,11 +87,5 @@ public class FieldAnswer implements BaseEntity {
 
     public void setFieldId(Long fieldId) {
         this.fieldId = fieldId;
-    }
-
-    @Override
-    public void clearIds() {
-        fieldAnswerId = null;
-        formAnswersId = null;
     }
 }

@@ -12,10 +12,13 @@ public class Schedule {
 
     // foreignKeys
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false, updatable = false)
     private Event event;
 
     // fields
+    @Column(nullable = false)
     private Calendar startDate;
+    @Column(nullable = false)
     private Calendar endDate;
     private String location;
 
