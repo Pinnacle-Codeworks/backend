@@ -1,7 +1,7 @@
 package com.markguiang.backend.form;
 
 import com.markguiang.backend.form.dto.request.AnswerFormDTO;
-import com.markguiang.backend.form.mapper.FormRequestMapper;
+import com.markguiang.backend.form.dto.mapper.FormRequestMapper;
 import com.markguiang.backend.form.model.FormAnswers;
 import com.markguiang.backend.form.service.FormAnswersService;
 import org.springframework.web.bind.annotation.PostMapping;

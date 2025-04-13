@@ -19,8 +19,7 @@ public class FormAnswers {
     private Long userId;
 
     // mappings
-    @OneToMany
-    @JoinColumn(name = "formAnswersId")
+    @Transient
     private List<FieldAnswer> fieldAnswerList;
 
     // fields

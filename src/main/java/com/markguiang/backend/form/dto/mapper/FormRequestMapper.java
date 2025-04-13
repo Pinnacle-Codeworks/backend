@@ -1,4 +1,4 @@
-package com.markguiang.backend.form.mapper;
+package com.markguiang.backend.form.dto.mapper;
 
 import com.markguiang.backend.form.dto.request.AnswerFormDTO;
 import com.markguiang.backend.form.dto.request.CreateFormDTO;

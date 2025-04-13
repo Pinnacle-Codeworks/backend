@@ -1,34 +1,28 @@
 package com.markguiang.backend.event.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.markguiang.backend.annotation.ValidRequired;
-import com.markguiang.backend.event.dto.event.EventFieldsDTO;
-import com.markguiang.backend.event.dto.schedule.ScheduleFieldsDTO;
+import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
-public class CreateEventDTO {
-    @JsonUnwrapped
-    @ValidRequired
-    private EventFieldsDTO eventFieldsDTO;
-    @JsonProperty("scheduleList")
-    @ValidRequired
-    private List<ScheduleFieldsDTO> scheduleFieldsDTOList;
-
-    public EventFieldsDTO getEventFieldsDTO() {
-        return eventFieldsDTO;
-    }
-
-    public void setEventFieldsDTO(EventFieldsDTO eventFieldsDTO) {
-        this.eventFieldsDTO = eventFieldsDTO;
-    }
-
-    public List<ScheduleFieldsDTO> getScheduleFieldsDTOList() {
-        return scheduleFieldsDTOList;
-    }
-
-    public void setScheduleFieldsDTOList(List<ScheduleFieldsDTO> scheduleFieldsDTOList) {
-        this.scheduleFieldsDTOList = scheduleFieldsDTOList;
-    }
+public record CreateEventDTO(
+        @NotNull String name,
+        String description,
+        Calendar dateTime,
+        String location,
+        Boolean hasMultipleLocation,
+        Map<LocalDate, String> dateLocationMap,
+        @JsonProperty("scheduleList")
+        @ValidRequired
+        List<CreateEventScheduleDTO> createEventScheduleDTOList
+) {
+    public record CreateEventScheduleDTO(
+            @NotNull Calendar startDate,
+            @NotNull Calendar endDate,
+            String location
+    ) {}
 }

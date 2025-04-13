@@ -19,6 +19,7 @@ public class Event {
     private Long eventId;
 
     // fields
+    @Column(nullable = false)
     private String name;
     private String description;
     private Calendar dateTime;

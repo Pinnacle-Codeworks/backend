@@ -11,6 +11,7 @@ public class Field {
 
     // foreignKeys
     @ManyToOne
+    @JoinColumn(updatable = false, nullable = false)
     private Form form;
 
     // fields

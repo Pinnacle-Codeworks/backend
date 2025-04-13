@@ -1,45 +1,30 @@
 package com.markguiang.backend.event.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.markguiang.backend.annotation.ValidRequired;
-import com.markguiang.backend.event.dto.event.EventFieldsDTO;
-import com.markguiang.backend.event.dto.event.EventIdsDTO;
+import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
-public class UpdateEventDTO {
-    @JsonUnwrapped
-    @ValidRequired
-    private EventIdsDTO eventIdsDTO;
-    @JsonUnwrapped
-    @ValidRequired
-    private EventFieldsDTO eventFieldsDTO;
-    @JsonProperty("scheduleList")
-    @ValidRequired
-    private List<UpdateScheduleDTO> updateScheduleDTOList;
-
-    public EventIdsDTO getEventIdsDTO() {
-        return eventIdsDTO;
-    }
-
-    public void setEventIdsDTO(EventIdsDTO eventIdsDTO) {
-        this.eventIdsDTO = eventIdsDTO;
-    }
-
-    public EventFieldsDTO getEventFieldsDTO() {
-        return eventFieldsDTO;
-    }
-
-    public void setEventFieldsDTO(EventFieldsDTO eventFieldsDTO) {
-        this.eventFieldsDTO = eventFieldsDTO;
-    }
-
-    public List<UpdateScheduleDTO> getUpdateScheduleDTOList() {
-        return updateScheduleDTOList;
-    }
-
-    public void setUpdateScheduleDTOList(List<UpdateScheduleDTO> updateScheduleDTOList) {
-        this.updateScheduleDTOList = updateScheduleDTOList;
-    }
+public record UpdateEventDTO(
+        @NotNull Long eventId,
+        @NotNull String name,
+        String description,
+        Calendar dateTime,
+        String location,
+        Boolean hasMultipleLocation,
+        Map<LocalDate, String> dateLocationMap,
+        @JsonProperty("scheduleList")
+        @ValidRequired
+        List<UpdateEventScheduleDTO> updateEventScheduleDTOList
+) {
+    public record UpdateEventScheduleDTO(
+            @NotNull Long scheduleId,
+            @NotNull Calendar startDate,
+            @NotNull Calendar endDate,
+            String location
+    ) {}
 }
