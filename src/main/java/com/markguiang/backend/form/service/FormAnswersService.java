@@ -24,7 +24,6 @@ public class FormAnswersService {
 
     @Transactional
     public FormAnswers answerForm(FormAnswers formAnswers) {
-        formAnswers.clearIds();
         formAnswers.setUserId(userContext.getUser().getUserId());
 
         FormAnswers formAnswersDb = formAnswersRepository.save(formAnswers);
