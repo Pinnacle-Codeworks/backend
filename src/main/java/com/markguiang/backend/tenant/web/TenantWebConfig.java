@@ -1,4 +1,4 @@
-package com.markguiang.backend.tenant;
+package com.markguiang.backend.tenant.web;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

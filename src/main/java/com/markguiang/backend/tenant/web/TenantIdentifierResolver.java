@@ -1,6 +1,8 @@
-package com.markguiang.backend.tenant;
+package com.markguiang.backend.tenant.web;
 
 import java.util.Map;
+
+import com.markguiang.backend.tenant.TenantContext;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;

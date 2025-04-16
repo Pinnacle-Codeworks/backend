@@ -1,5 +1,6 @@
-package com.markguiang.backend.tenant;
+package com.markguiang.backend.tenant.web;
 
+import com.markguiang.backend.tenant.TenantContext;
 import com.markguiang.backend.user.User;
 import com.markguiang.backend.user.UserContext;
 import jakarta.servlet.http.HttpServletRequest;
