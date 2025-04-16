@@ -1,10 +1,11 @@
 package com.markguiang.backend.form.model;
 
+import com.markguiang.backend.base.AbstractBaseEntity;
 import com.markguiang.backend.form.enum_.FieldType;
 import jakarta.persistence.*;
 
 @Entity
-public class Field {
+public class Field extends AbstractBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long fieldId;
@@ -17,10 +18,13 @@ public class Field {
     // fields
     @Column(updatable = false, nullable = false)
     private String name;
+
     @Enumerated(EnumType.STRING)
     @Column(updatable = false, nullable = false)
     private FieldType fieldType;
+
     private Boolean mandatory = false;
+
     @Column(name = "order_", nullable = false)
     private Integer order;
 

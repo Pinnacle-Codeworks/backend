@@ -2,6 +2,7 @@ package com.markguiang.backend.event.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateKeyDeserializer;
+import com.markguiang.backend.base.AbstractBaseEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -12,8 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"companyId", "name"})})
-public class Event {
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "tenantId", "name" }) })
+public class Event extends AbstractBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long eventId;
@@ -29,20 +30,9 @@ public class Event {
     @JsonDeserialize(keyUsing = LocalDateKeyDeserializer.class)
     private Map<LocalDate, String> dateLocationMap;
 
-    // foreign keys
-    private Long companyId;
-
     // children
     @Transient
     private List<Schedule> scheduleList;
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
 
     public Map<LocalDate, String> getDateLocationMap() {
         return dateLocationMap;

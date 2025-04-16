@@ -2,6 +2,7 @@ package com.markguiang.backend.auth.config;
 
 import com.markguiang.backend.auth.config.enum_.RoleType;
 import com.markguiang.backend.auth.role.Role;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 public class RoleConfig {
 
     @Bean
+    @Qualifier("participant")
     public Role participantRole() {
         Role role = new Role();
         role.setRoleType(RoleType.PARTICIPANT);
@@ -16,6 +18,7 @@ public class RoleConfig {
     }
 
     @Bean
+    @Qualifier("admin")
     public Role adminRole() {
         Role role = new Role();
         role.setRoleType(RoleType.ADMIN);

@@ -3,33 +3,36 @@ package com.markguiang.backend.user;
 import com.markguiang.backend.auth.role.Role;
 import com.markguiang.backend.form.model.FormAnswers;
 import jakarta.persistence.*;
-
 import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name="user_")
+@Table(name = "user_")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     // foreignKeys
-    private Long companyId;
+    private Long tenantId;
 
-    //mappings
+    // mappings
     @ManyToMany
     private List<Role> roles;
+
     @OneToMany(mappedBy = "userId", fetch = FetchType.LAZY)
     private Set<FormAnswers> formAnswersSet;
 
     // fields
     private String firstName;
     private String lastName;
+
     @Column(unique = true)
     private String username;
+
     @Column(unique = true)
     private String email;
+
     private String password;
 
     public Long getUserId() {
@@ -40,12 +43,12 @@ public class User {
         this.userId = userId;
     }
 
-    public Long getCompanyId() {
-        return companyId;
+    public Long getTenantId() {
+        return tenantId;
     }
 
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
+    public void setTenantId(Long tenantId) {
+        this.tenantId = tenantId;
     }
 
     public List<Role> getRoles() {

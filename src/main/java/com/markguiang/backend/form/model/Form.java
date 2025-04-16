@@ -1,33 +1,29 @@
 package com.markguiang.backend.form.model;
 
+import com.markguiang.backend.base.AbstractBaseEntity;
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(uniqueConstraints={
-        @UniqueConstraint(columnNames = {"companyId", "eventId", "name"})
-})
-public class Form {
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "eventId", "name" }) })
+public class Form extends AbstractBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long formId;
 
     // foreignKeys
     @Column(updatable = false, nullable = false)
-    private Long companyId;
-    @Column(updatable = false, nullable = false)
     private Long eventId;
 
     // fields
     @Column(nullable = false)
     private String name;
+
     private String description;
-    private LocalDate updateDATE = LocalDate.now();
 
     @Transient
     private List<Field> fieldList;
+
     @OneToMany(mappedBy = "formId", fetch = FetchType.LAZY)
     private List<FormAnswers> formAnswersList;
 
@@ -37,14 +33,6 @@ public class Form {
 
     public void setFormId(Long formId) {
         this.formId = formId;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
     }
 
     public Long getEventId() {
@@ -69,14 +57,6 @@ public class Form {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public LocalDate getUpdateDATE() {
-        return updateDATE;
-    }
-
-    public void setUpdateDATE(LocalDate updateDATE) {
-        this.updateDATE = updateDATE;
     }
 
     public List<Field> getFieldList() {
