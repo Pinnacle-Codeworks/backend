@@ -41,7 +41,7 @@ public class DevLoader {
         userService.registerUser(user);
 
         Tenant tenant2 = new Tenant();
-        tenant.setName("INFOR");
+        tenant2.setName("INFOR");
         tenantRepository.save(tenant2);
         User user2 = new User();
         user2.setUsername("admin2");
