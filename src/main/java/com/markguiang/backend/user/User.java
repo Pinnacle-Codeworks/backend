@@ -14,6 +14,7 @@ public class User {
     private Long userId;
 
     // foreignKeys
+    @Column(updatable = false, nullable = false)
     private Long tenantId;
 
     // mappings
@@ -27,12 +28,13 @@ public class User {
     private String firstName;
     private String lastName;
 
-    @Column(unique = true)
+    @Column(unique = true, updatable = false, nullable = false)
     private String username;
 
     @Column(unique = true)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
     public Long getUserId() {
