@@ -26,7 +26,7 @@ public class EventController {
 
     @PreAuthorize("hasAuthority('permission:write')")
     @PostMapping("")
-    public EventResponseDTO createEvent(@RequestBody CreateEventDTO createEventDTO) {
+    public EventResponseDTO createEvent(@Valid @RequestBody CreateEventDTO createEventDTO) {
         Event event = this.eventRequestMapper.createEventDTOtoEvent(createEventDTO);
         Event eventResult = this.eventService.createEventWithScheduleList(event);
         return this.eventResponseMapper.eventToEventResponseDTO(eventResult);
