@@ -4,5 +4,5 @@ import com.markguiang.backend.event.model.Event;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EventRepository extends JpaRepository<Event, Long> {
-    Boolean existsByNameAndCompanyId(String name, Long companyId);
+    Boolean existsByName(String name);
 }

@@ -7,6 +7,9 @@ import com.markguiang.backend.form.dto.mapper.FormRequestMapper;
 import com.markguiang.backend.form.dto.mapper.FormResponseMapper;
 import com.markguiang.backend.form.model.Form;
 import com.markguiang.backend.form.service.FormService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +20,8 @@ public class FormController {
     private final FormRequestMapper formRequestMapper;
     private final FormResponseMapper formResponseMapper;
 
-    public FormController(FormService formService, FormRequestMapper formRequestMapper, FormResponseMapper formResponseMapper) {
+    public FormController(FormService formService, FormRequestMapper formRequestMapper,
+            FormResponseMapper formResponseMapper) {
         this.formService = formService;
         this.formRequestMapper = formRequestMapper;
         this.formResponseMapper = formResponseMapper;
@@ -25,7 +29,7 @@ public class FormController {
 
     @PreAuthorize("hasAuthority('permission:write')")
     @PostMapping("")
-    public FormResponseDTO createForm(@RequestBody CreateFormDTO createFormDTO) {
+    public FormResponseDTO createForm(@Valid @RequestBody CreateFormDTO createFormDTO) {
         Form form = this.formRequestMapper.createFormDTOtoForm(createFormDTO);
         Form formResult = formService.createFormWithFieldList(form);
         return this.formResponseMapper.formToFormResponseDTO(formResult);
@@ -33,9 +37,9 @@ public class FormController {
 
     @PreAuthorize("hasAuthority('permission:write')")
     @PatchMapping("")
-    public FormResponseDTO updateForm(@RequestBody UpdateFormDTO updateFormDTO) {
-       Form form = this.formRequestMapper.updateFormDTOtoForm(updateFormDTO);
-       Form formResult = formService.updateFormWithFields(form);
-       return this.formResponseMapper.formToFormResponseDTO(formResult);
+    public FormResponseDTO updateForm(@Valid @RequestBody UpdateFormDTO updateFormDTO) {
+        Form form = this.formRequestMapper.updateFormDTOtoForm(updateFormDTO);
+        Form formResult = formService.updateFormWithFields(form);
+        return this.formResponseMapper.formToFormResponseDTO(formResult);
     }
 }

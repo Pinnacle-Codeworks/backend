@@ -3,41 +3,53 @@ package com.markguiang.backend;
 import com.markguiang.backend.auth.config.enum_.RoleType;
 import com.markguiang.backend.auth.role.Role;
 import com.markguiang.backend.auth.role.RoleService;
-import com.markguiang.backend.company.Company;
-import com.markguiang.backend.company.CompanyRepository;
-import com.markguiang.backend.event.service.EventService;
+import com.markguiang.backend.tenant.Tenant;
+import com.markguiang.backend.tenant.TenantRepository;
 import com.markguiang.backend.user.User;
 import com.markguiang.backend.user.UserService;
 import jakarta.annotation.PostConstruct;
+import java.util.List;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Profile("dev")
 public class DevLoader {
-    private final CompanyRepository companyRepository;
-    private final UserService  userService;
+    private final TenantRepository tenantRepository;
+    private final UserService userService;
     private final RoleService roleService;
-    private final EventService eventService;
 
-    public DevLoader(CompanyRepository companyRepository, UserService userService, RoleService roleService, EventService eventService) {
-        this.companyRepository = companyRepository;
+    public DevLoader(
+            TenantRepository tenantRepository, UserService userService, RoleService roleService) {
+        this.tenantRepository = tenantRepository;
         this.userService = userService;
         this.roleService = roleService;
-        this.eventService = eventService;
     }
+
     @PostConstruct
     private void setup() {
-        Company company = companyRepository.save(new Company("NOT_INFOR"));
+        Tenant tenant = new Tenant();
+        tenant.setName("NOT_INFOR");
+        tenantRepository.save(tenant);
         User user = new User();
         user.setUsername("admin");
         user.setEmail("admin@gmail.com");
         user.setPassword("admin");
-        user.setCompanyId(company.getCompanyId());
+        user.setTenantId(tenant.getTenantId());
         Role role = roleService.getOrCreateRole(RoleType.ADMIN);
         user.setRoles(List.of(role));
         userService.registerUser(user);
+
+        Tenant tenant2 = new Tenant();
+        tenant2.setName("INFOR");
+        tenantRepository.save(tenant2);
+        User user2 = new User();
+        user2.setUsername("admin2");
+        user2.setEmail("admin2@gmail.com");
+        user2.setPassword("admin");
+        user2.setTenantId(tenant2.getTenantId());
+        Role role2 = roleService.getOrCreateRole(RoleType.ADMIN);
+        user2.setRoles(List.of(role2));
+        userService.registerUser(user2);
     }
 }

@@ -1,11 +1,11 @@
 package com.markguiang.backend.event.model;
 
+import com.markguiang.backend.base.AbstractBaseEntity;
 import jakarta.persistence.*;
-
 import java.util.Calendar;
 
 @Entity
-public class Schedule {
+public class Schedule extends AbstractBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long scheduleId;
@@ -18,8 +18,10 @@ public class Schedule {
     // fields
     @Column(nullable = false)
     private Calendar startDate;
+
     @Column(nullable = false)
     private Calendar endDate;
+
     private String location;
 
     public Long getScheduleId() {

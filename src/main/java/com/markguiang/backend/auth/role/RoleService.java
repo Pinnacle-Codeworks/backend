@@ -1,6 +1,8 @@
 package com.markguiang.backend.auth.role;
 
 import com.markguiang.backend.auth.config.enum_.RoleType;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -9,7 +11,8 @@ public class RoleService {
     private final Role participantRole;
     private final Role adminRole;
 
-    public RoleService(RoleRepository roleRepository, Role participantRole, Role adminRole) {
+    public RoleService(RoleRepository roleRepository, @Qualifier("participant") Role participantRole,
+            @Qualifier("admin") Role adminRole) {
         this.roleRepository = roleRepository;
         this.participantRole = participantRole;
         this.adminRole = adminRole;
@@ -18,9 +21,9 @@ public class RoleService {
     public Role getOrCreateRole(RoleType roleType) {
         return switch (roleType) {
             case ADMIN ->
-                    roleRepository.findByRoleType(roleType).orElseGet(() -> roleRepository.save(adminRole));
+                roleRepository.findByRoleType(roleType).orElseGet(() -> roleRepository.save(adminRole));
             case PARTICIPANT ->
-                    roleRepository.findByRoleType(roleType).orElseGet(() -> roleRepository.save(participantRole));
+                roleRepository.findByRoleType(roleType).orElseGet(() -> roleRepository.save(participantRole));
         };
     }
 }

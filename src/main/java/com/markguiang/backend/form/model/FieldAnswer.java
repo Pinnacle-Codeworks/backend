@@ -1,11 +1,11 @@
 package com.markguiang.backend.form.model;
 
+import com.markguiang.backend.base.AbstractBaseEntity;
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
-public class FieldAnswer {
+public class FieldAnswer extends AbstractBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long fieldAnswerId;
@@ -13,6 +13,7 @@ public class FieldAnswer {
     // foreignKeys
     @Column(updatable = false, nullable = false)
     private Long formAnswersId;
+
     @Column(updatable = false, nullable = false)
     private Long fieldId;
 
@@ -22,8 +23,6 @@ public class FieldAnswer {
     private Integer integerAnswer;
     private LocalDate localDateAnswer;
     private Boolean booleanAnswer;
-
-    // mappings
 
     public Long getFieldAnswerId() {
         return fieldAnswerId;

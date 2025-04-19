@@ -6,11 +6,10 @@ import com.markguiang.backend.event.repository.EventRepository;
 import com.markguiang.backend.event.repository.ScheduleRepository;
 import com.markguiang.backend.exceptions.UniqueConstraintViolationException;
 import com.markguiang.backend.user.UserContext;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 
 @Service
 public class EventService {
@@ -19,23 +18,25 @@ public class EventService {
     public final UserContext userContext;
     public final ScheduleService scheduleService;
 
-    public EventService(EventRepository eventRepository, UserContext userContext, ScheduleRepository scheduleRepository, ScheduleService scheduleService) {
+    public EventService(
+            EventRepository eventRepository,
+            UserContext userContext,
+            ScheduleRepository scheduleRepository,
+            ScheduleService scheduleService) {
         this.eventRepository = eventRepository;
-        this.scheduleRepository =   scheduleRepository;
+        this.scheduleRepository = scheduleRepository;
         this.userContext = userContext;
         this.scheduleService = scheduleService;
     }
 
     public Event createEventWithScheduleList(Event event) {
         try {
-            //TODO intercept all model saves with companyid instaed of manual
-            event.setCompanyId(userContext.getUser().getCompanyId());
             eventRepository.save(event);
             List<Schedule> scheduleList = scheduleService.createScheduleList(event);
             event.setScheduleList(scheduleList);
             return event;
         } catch (DataIntegrityViolationException ex) {
-            if (eventRepository.existsByNameAndCompanyId(event.getName(), event.getCompanyId())) {
+            if (eventRepository.existsByName(event.getName())) {
                 throw new UniqueConstraintViolationException(event.getName());
             }
         }
@@ -49,11 +50,11 @@ public class EventService {
             event.setScheduleList(scheduleList);
             return event;
         } catch (DataIntegrityViolationException ex) {
-            if (eventRepository.existsByNameAndCompanyId(event.getName(), event.getCompanyId())) {
+            if (eventRepository.existsByName(event.getName())) {
                 throw new UniqueConstraintViolationException(event.getName());
             }
         }
-        //fix
+        // fix
         return null;
     }
 

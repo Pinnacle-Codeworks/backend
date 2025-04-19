@@ -40,32 +40,31 @@ import java.util.List;
 public class AuthenticationController {
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
+    private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
+            .getContextHolderStrategy();
     private final SecurityContextLogoutHandler securityContextLogoutHandler;
     private final DelegatingSecurityContextRepository delegatingSecurityContextRepository;
     private final RoleService roleService;
-    private final UserContext userContext;
     private final UserRequestMapper userRequestMapper;
     private final UserResponseMapper userResponseMapper;
 
-    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager, SecurityContextLogoutHandler securityContextLogoutHandler, DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService,  UserContext userContext, UserRequestMapper userRequestMapper, UserResponseMapper userResponseMapper) {
+    public AuthenticationController(UserService userService, AuthenticationManager authenticationManager,
+            SecurityContextLogoutHandler securityContextLogoutHandler,
+            DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService,
+            UserRequestMapper userRequestMapper, UserResponseMapper userResponseMapper) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.securityContextLogoutHandler = securityContextLogoutHandler;
         this.delegatingSecurityContextRepository = delegatingSecurityContextRepository;
         this.roleService = roleService;
-        this.userContext = userContext;
         this.userRequestMapper = userRequestMapper;
         this.userResponseMapper = userResponseMapper;
     }
 
-    @Operation(
-            summary = "Login user",
-            description = "Requires Basic Authorization header (Base64 encoded 'username:password')",
-            security = @SecurityRequirement(name = "basicAuth")
-    )
+    @Operation(summary = "Login user", description = "Requires Basic Authorization header (Base64 encoded 'username:password')", security = @SecurityRequirement(name = "basicAuth"))
     @GetMapping("/user")
-    public LoginResponseDTO loginUser(HttpServletRequest request, HttpServletResponse response, @Parameter(hidden = true) CsrfToken csrfToken) {
+    public LoginResponseDTO loginUser(HttpServletRequest request, HttpServletResponse response,
+            @Parameter(hidden = true) CsrfToken csrfToken) {
         String[] credentials = getCredentialsFromRequest(request);
         String username = credentials[0];
         String password = credentials[1];
@@ -78,7 +77,7 @@ public class AuthenticationController {
         this.securityContextHolderStrategy.setContext(securityContext);
         this.delegatingSecurityContextRepository.saveContext(securityContext, request, response);
 
-        userContext.initialize();
+        UserContext.setUserContext();
         User userResult = userService.getUserByUsername(username);
 
         if (csrfToken != null) {
@@ -88,24 +87,19 @@ public class AuthenticationController {
         return this.userResponseMapper.userToLoginResponseDTO(userResult, "");
     }
 
-    @Operation(
-            summary = "Logout user",
-            description = """
-        Logs out the currently authenticated user by invalidating their session and clearing the security context.
-        """
-    )
+    @Operation(summary = "Logout user", description = """
+               Logs out the currently authenticated user by invalidating their session and clearing the security context.
+            """)
     @DeleteMapping("/user")
-    public ResponseEntity<String> logoutUser(Authentication authentication, HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> logoutUser(Authentication authentication, HttpServletRequest request,
+            HttpServletResponse response) {
         this.securityContextLogoutHandler.logout(request, response, authentication);
         return ResponseEntity.status(HttpStatus.OK).body("Successfully logged out.");
     }
 
-    @Operation(
-            summary = "Register new user",
-            description = """
-        Registers a new user account with the role of PARTICIPANT.
-        """
-    )
+    @Operation(summary = "Register new user", description = """
+            Registers a new user account with the role of PARTICIPANT.
+            """)
     @PostMapping("/user")
     public UserResponseDTO registerUser(@Valid @RequestBody RegisterUserDTO registerUserDTO) {
         User user = this.userRequestMapper.registerUserDTOtoUser(registerUserDTO);

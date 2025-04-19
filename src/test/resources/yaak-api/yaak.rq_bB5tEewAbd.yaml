@@ -1,0 +1,26 @@
+type: http_request
+model: http_request
+id: rq_bB5tEewAbd
+createdAt: 2025-04-16T13:54:53.844393
+updatedAt: 2025-04-16T13:55:54.569370
+workspaceId: wk_Ba7dNfiXAF
+folderId: fl_ZVv24nNL9p
+authentication: {}
+authenticationType: null
+body: {}
+bodyType: null
+description: ''
+headers:
+- enabled: true
+  name: Authorization
+  value: Basic YWRtaW4yOmFkbWlu
+  id: sC60UDDCth
+- enabled: true
+  name: ''
+  value: ''
+  id: 6tU8vpgEtg
+method: GET
+name: admin2 login
+sortPriority: 1500.001
+url: http://localhost:8080/auth/user
+urlParameters: []

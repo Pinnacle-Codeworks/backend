@@ -1,15 +1,12 @@
 package com.markguiang.backend.form.model;
 
+import com.markguiang.backend.base.AbstractBaseEntity;
 import jakarta.persistence.*;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(uniqueConstraints={
-        @UniqueConstraint(columnNames = {"userId", "formId"})
-})
-public class FormAnswers {
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "userId", "formId" }) })
+public class FormAnswers extends AbstractBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long formAnswersId;
@@ -21,9 +18,6 @@ public class FormAnswers {
     // mappings
     @Transient
     private List<FieldAnswer> fieldAnswerList;
-
-    // fields
-    private LocalDate updateDATE;
 
     public Long getFormAnswersId() {
         return formAnswersId;
@@ -55,13 +49,5 @@ public class FormAnswers {
 
     public void setFieldAnswerList(List<FieldAnswer> fieldAnswerList) {
         this.fieldAnswerList = fieldAnswerList;
-    }
-
-    public LocalDate getUpdateDATE() {
-        return updateDATE;
-    }
-
-    public void setUpdateDATE(LocalDate updateDATE) {
-        this.updateDATE = updateDATE;
     }
 }

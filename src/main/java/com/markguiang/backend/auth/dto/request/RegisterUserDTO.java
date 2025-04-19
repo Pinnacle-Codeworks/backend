@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotNull;
 public record RegisterUserDTO(
         @NotNull String username,
         @NotNull String password,
+        @NotNull Long tenantId,
         String firstName,
         String lastName,
-        String email
-) {
+        String email) {
 }
