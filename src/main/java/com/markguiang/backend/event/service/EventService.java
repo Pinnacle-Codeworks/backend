@@ -6,10 +6,12 @@ import com.markguiang.backend.event.repository.EventRepository;
 import com.markguiang.backend.event.repository.ScheduleRepository;
 import com.markguiang.backend.exceptions.UniqueConstraintViolationException;
 import com.markguiang.backend.user.UserContext;
-import java.util.List;
-import java.util.Optional;
+import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EventService {
@@ -29,6 +31,7 @@ public class EventService {
         this.scheduleService = scheduleService;
     }
 
+    @Transactional
     public Event createEventWithScheduleList(Event event) {
         try {
             eventRepository.save(event);

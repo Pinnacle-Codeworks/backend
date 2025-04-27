@@ -2,18 +2,14 @@ package com.markguiang.backend.event.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 public class EventResponseDTO {
     private Long eventId;
     private String name;
-    private Calendar dateTime;
     private String location;
     private Boolean hasMultipleLocation;
-    private Map<LocalDate, String> dateLocationMap;
     @JsonProperty("scheduleList")
     private List<ScheduleResponseDTO> scheduleResponseDTOList;
 
@@ -33,14 +29,6 @@ public class EventResponseDTO {
         this.name = name;
     }
 
-    public Calendar getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(Calendar dateTime) {
-        this.dateTime = dateTime;
-    }
-
     public String getLocation() {
         return location;
     }
@@ -55,14 +43,6 @@ public class EventResponseDTO {
 
     public void setHasMultipleLocation(Boolean hasMultipleLocation) {
         this.hasMultipleLocation = hasMultipleLocation;
-    }
-
-    public Map<LocalDate, String> getDateLocationMap() {
-        return dateLocationMap;
-    }
-
-    public void setDateLocationMap(Map<LocalDate, String> dateLocationMap) {
-        this.dateLocationMap = dateLocationMap;
     }
 
     public List<ScheduleResponseDTO> getScheduleResponseDTOList() {
