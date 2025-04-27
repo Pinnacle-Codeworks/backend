@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"tenantId", "name"})})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"tenant_id", "name"})})
 public class Event extends AbstractBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
