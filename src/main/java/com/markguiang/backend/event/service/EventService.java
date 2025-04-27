@@ -4,7 +4,6 @@ import com.markguiang.backend.event.model.Event;
 import com.markguiang.backend.event.model.Schedule;
 import com.markguiang.backend.event.repository.EventRepository;
 import com.markguiang.backend.event.repository.ScheduleRepository;
-import com.markguiang.backend.exceptions.MissingFieldException;
 import com.markguiang.backend.exceptions.UniqueConstraintViolationException;
 import com.markguiang.backend.user.UserContext;
 import jakarta.transaction.Transactional;
@@ -37,13 +36,6 @@ public class EventService {
         try {
             eventRepository.save(event);
             List<Schedule> scheduleList = scheduleService.createScheduleList(event);
-            if (event.getScheduleList() != null) {
-                for (Schedule schedule : event.getScheduleList()) {
-                    if (schedule.getStartDate() == null || schedule.getEndDate() == null) {
-                        throw new MissingFieldException("Each schedule must have a startDate and endDate");
-                    }
-                }
-            }
             event.setScheduleList(scheduleList);
             return event;
         } catch (DataIntegrityViolationException ex) {

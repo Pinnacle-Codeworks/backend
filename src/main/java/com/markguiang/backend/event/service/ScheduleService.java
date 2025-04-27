@@ -3,13 +3,15 @@ package com.markguiang.backend.event.service;
 import com.markguiang.backend.event.model.Event;
 import com.markguiang.backend.event.model.Schedule;
 import com.markguiang.backend.event.repository.ScheduleRepository;
+import com.markguiang.backend.exceptions.MissingFieldException;
+import org.apache.commons.collections4.IterableUtils;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.apache.commons.collections4.IterableUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ScheduleService {
@@ -22,6 +24,9 @@ public class ScheduleService {
     public List<Schedule> createScheduleList(Event event) {
         List<Schedule> scheduleList = event.getScheduleList();
         for (Schedule schedule : scheduleList) {
+            if (schedule.getStartDate() == null || schedule.getEndDate() == null) {
+                throw new MissingFieldException("Each schedule must have a start and end date.");
+            }
             schedule.setEvent(event);
         }
         return IterableUtils.toList(this.scheduleRepository.saveAll(scheduleList));
