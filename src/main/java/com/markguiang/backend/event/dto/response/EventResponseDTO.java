@@ -8,6 +8,7 @@ import java.util.List;
 public class EventResponseDTO {
     private Long eventId;
     private String name;
+    private String description;
     private String location;
     private Boolean hasMultipleLocation;
     @JsonProperty("scheduleList")
@@ -29,6 +30,14 @@ public class EventResponseDTO {
         this.name = name;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    
     public String getLocation() {
         return location;
     }
