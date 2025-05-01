@@ -8,8 +8,15 @@ import com.markguiang.backend.event.dto.mapper.EventResponseMapper;
 import com.markguiang.backend.event.model.Event;
 import com.markguiang.backend.event.service.EventService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/event")
@@ -38,5 +45,24 @@ public class EventController {
         Event event = this.eventRequestMapper.updateEventDTOtoEvent(updateEventDTO);
         Event eventResult =  this.eventService.updateEvent(event);
         return this.eventResponseMapper.eventToEventResponseDTO(eventResult);
+    }
+
+    @GetMapping("/all")
+    public Page<EventResponseDTO> getAllEvent(
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String direction,
+            @RequestParam(defaultValue = "0") int page, // Default to page 0
+            @RequestParam(defaultValue = "10") int size // Default to 10 items per page
+    ) {
+        Page<Event> eventResult = this.eventService.getAllEvent(sortBy, direction, page, size);
+        return eventResult.map(eventResponseMapper::eventToEventResponseDTO);
+    }
+    
+    @GetMapping("")
+    public EventResponseDTO getEvent(@RequestParam long id) {
+        Optional<Event> eventResult = this.eventService.getEvent(id);
+        return this.eventResponseMapper.eventToEventResponseDTO(
+                eventResult.orElseThrow(() -> new RuntimeException("Event not found"))
+        );
     }
 }

@@ -1,0 +1,97 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-event-table
+      author: joshmonleon
+      preconditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: event
+      changes:
+        - createTable:
+            tableName: event
+            columns:
+              - column:
+                  name: event_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: tenant_id
+                  type: BIGINT
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: VARCHAR(1000)
+              - column:
+                  name: date_time
+                  type: TIMESTAMP
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+              - column:
+                  name: has_multiple_location
+                  type: BOOLEAN
+              - column:
+                  name: imgurl
+                  type: VARCHAR(500)
+              - column:
+                  name: date_location_map
+                  type: JSONB
+
+        - addUniqueConstraint:
+            columnNames: tenant_id, name
+            constraintName: uc_event_tenantid_name
+            tableName: event
+
+  - changeSet:
+      id: 002-create-schedule-table
+      author: joshmonleon
+      preconditions:
+        - onFail: MARK_RAN
+        - not:
+            - tableExists:
+                tableName: event
+      changes:
+        - createTable:
+            tableName: schedule
+            columns:
+              - column:
+                  name: schedule_id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: event_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: location
+                  type: VARCHAR(255)
+
+        - addForeignKeyConstraint:
+            baseTableName: schedule
+            baseColumnNames: event_id
+            referencedTableName: event
+            referencedColumnNames: event_id
+            constraintName: fk_schedule_event
+            onDelete: CASCADE

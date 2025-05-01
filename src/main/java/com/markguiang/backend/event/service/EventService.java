@@ -9,6 +9,11 @@ import com.markguiang.backend.user.UserContext;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -60,5 +65,17 @@ public class EventService {
 
     public Optional<Event> getEvent(Long eventId) {
         return eventRepository.findById(eventId);
+    }
+
+    public Page<Event> getAllEvent(@Nullable String sortBy, @Nullable String direction, int page, int size) {
+        Pageable pageable;
+        if (sortBy != null && !sortBy.isBlank()) {
+            Sort.Direction sortDirection =
+                    "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+            pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        } else {
+            pageable = PageRequest.of(page, size);
+        }
+        return eventRepository.findAll(pageable);
     }
 }

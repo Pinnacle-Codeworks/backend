@@ -3,6 +3,7 @@ package com.markguiang.backend.event.model;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateKeyDeserializer;
 import com.markguiang.backend.base.AbstractBaseEntity;
+import com.markguiang.backend.event.enum_.EventStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
@@ -26,6 +27,9 @@ public class Event extends AbstractBaseEntity {
     private Calendar dateTime;
     private String location;
     private Boolean hasMultipleLocation;
+    private String imgURL;
+    private EventStatus eventStatus;
+
     @JdbcTypeCode(SqlTypes.JSON)
     @JsonDeserialize(keyUsing = LocalDateKeyDeserializer.class)
     private Map<LocalDate, String> dateLocationMap;
@@ -96,5 +100,21 @@ public class Event extends AbstractBaseEntity {
 
     public void setScheduleList(List<Schedule> scheduleList) {
         this.scheduleList = scheduleList;
+    }
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
+    }
+
+    public EventStatus getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(EventStatus eventStatus) {
+        this.eventStatus = eventStatus;
     }
 }

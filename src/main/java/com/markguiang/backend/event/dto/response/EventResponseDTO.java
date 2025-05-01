@@ -1,6 +1,7 @@
 package com.markguiang.backend.event.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.markguiang.backend.event.enum_.EventStatus;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -14,6 +15,8 @@ public class EventResponseDTO {
     private String location;
     private Boolean hasMultipleLocation;
     private Map<LocalDate, String> dateLocationMap;
+    private String imgURL;
+    private EventStatus eventStatus;
     @JsonProperty("scheduleList")
     private List<ScheduleResponseDTO> scheduleResponseDTOList;
 
@@ -67,6 +70,22 @@ public class EventResponseDTO {
 
     public List<ScheduleResponseDTO> getScheduleResponseDTOList() {
         return scheduleResponseDTOList;
+    }
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
+    }
+
+    public EventStatus getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(EventStatus eventStatus) {
+        this.eventStatus = eventStatus;
     }
 
     public void setScheduleResponseDTOList(List<ScheduleResponseDTO> scheduleResponseDTOList) {
