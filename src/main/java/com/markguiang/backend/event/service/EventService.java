@@ -8,6 +8,10 @@ import com.markguiang.backend.exceptions.UniqueConstraintViolationException;
 import com.markguiang.backend.user.UserContext;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -63,5 +67,17 @@ public class EventService {
 
     public Optional<Event> getEvent(Long eventId) {
         return eventRepository.findById(eventId);
+    }
+
+    public Page<Event> getAllEvent(String sortBy, String direction, int page, int size) {
+        Pageable pageable;
+        if (sortBy != null && !sortBy.isBlank()) {
+            Sort.Direction sortDirection =
+                    "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+            pageable = PageRequest.of(page, size, Sort.by(sortDirection, sortBy));
+        } else {
+            pageable = PageRequest.of(page, size);
+        }
+        return eventRepository.findAll(pageable);
     }
 }

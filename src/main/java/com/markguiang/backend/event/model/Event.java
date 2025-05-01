@@ -1,6 +1,7 @@
 package com.markguiang.backend.event.model;
 
 import com.markguiang.backend.base.AbstractBaseEntity;
+import com.markguiang.backend.event.enum_.EventStatus;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -18,6 +19,8 @@ public class Event extends AbstractBaseEntity {
     private String description;
     private String location;
     private Boolean hasMultipleLocation;
+    private String imgURL;
+    private EventStatus eventStatus;
 
     // children
     @Transient
@@ -69,5 +72,21 @@ public class Event extends AbstractBaseEntity {
 
     public void setScheduleList(List<Schedule> scheduleList) {
         this.scheduleList = scheduleList;
+    }
+
+    public String getImgURL() {
+        return imgURL;
+    }
+
+    public void setImgURL(String imgURL) {
+        this.imgURL = imgURL;
+    }
+
+    public EventStatus getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(EventStatus eventStatus) {
+        this.eventStatus = eventStatus;
     }
 }

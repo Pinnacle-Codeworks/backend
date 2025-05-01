@@ -2,6 +2,7 @@ package com.markguiang.backend.event.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.markguiang.backend.annotation.ValidRequired;
+import com.markguiang.backend.event.enum_.EventStatus;
 import jakarta.validation.constraints.NotNull;
 
 import java.util.Calendar;
@@ -11,6 +12,9 @@ public record CreateEventDTO(
         @NotNull String name,
         String description,
         String location,
+
+        String imgURL,
+        EventStatus eventStatus,
         Boolean hasMultipleLocation,
         @JsonProperty("scheduleList")
         @ValidRequired
