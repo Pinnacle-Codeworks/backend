@@ -1,20 +1,13 @@
 package com.markguiang.backend.event.model;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateKeyDeserializer;
 import com.markguiang.backend.base.AbstractBaseEntity;
 import com.markguiang.backend.event.enum_.EventStatus;
 import jakarta.persistence.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
-import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "tenantId", "name" }) })
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"tenant_id", "name"})})
 public class Event extends AbstractBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +17,6 @@ public class Event extends AbstractBaseEntity {
     @Column(nullable = false)
     private String name;
     private String description;
-    private Calendar dateTime;
     private String location;
     private Boolean hasMultipleLocation;
     private String imgURL;
@@ -37,14 +29,6 @@ public class Event extends AbstractBaseEntity {
     // children
     @Transient
     private List<Schedule> scheduleList;
-
-    public Map<LocalDate, String> getDateLocationMap() {
-        return dateLocationMap;
-    }
-
-    public void setDateLocationMap(Map<LocalDate, String> dateLocationMap) {
-        this.dateLocationMap = dateLocationMap;
-    }
 
     public Boolean getHasMultipleLocation() {
         return hasMultipleLocation;
@@ -60,14 +44,6 @@ public class Event extends AbstractBaseEntity {
 
     public void setLocation(String location) {
         this.location = location;
-    }
-
-    public Calendar getDateTime() {
-        return dateTime;
-    }
-
-    public void setDateTime(Calendar dateTime) {
-        this.dateTime = dateTime;
     }
 
     public String getDescription() {
