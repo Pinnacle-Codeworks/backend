@@ -22,10 +22,6 @@ public class Event extends AbstractBaseEntity {
     private String imgURL;
     private EventStatus eventStatus;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @JsonDeserialize(keyUsing = LocalDateKeyDeserializer.class)
-    private Map<LocalDate, String> dateLocationMap;
-
     // children
     @Transient
     private List<Schedule> scheduleList;

@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -70,7 +69,7 @@ public class EventService {
         return eventRepository.findById(eventId);
     }
 
-    public Page<Event> getAllEvent(@Nullable String sortBy, @Nullable String direction, int page, int size) {
+    public Page<Event> getAllEvent(String sortBy, String direction, int page, int size) {
         Pageable pageable;
         if (sortBy != null && !sortBy.isBlank()) {
             Sort.Direction sortDirection =

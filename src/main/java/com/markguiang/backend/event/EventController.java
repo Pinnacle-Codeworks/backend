@@ -9,8 +9,10 @@ import com.markguiang.backend.event.model.Event;
 import com.markguiang.backend.event.service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -57,8 +59,11 @@ public class EventController {
     @GetMapping("")
     public EventResponseDTO getEvent(@RequestParam long id) {
         Optional<Event> eventResult = this.eventService.getEvent(id);
+
         return this.eventResponseMapper.eventToEventResponseDTO(
-                eventResult.orElseThrow(() -> new RuntimeException("Event not found"))
+                eventResult.orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found")
+                )
         );
     }
 }

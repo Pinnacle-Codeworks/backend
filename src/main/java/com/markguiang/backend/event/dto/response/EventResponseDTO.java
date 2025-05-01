@@ -12,7 +12,6 @@ public class EventResponseDTO {
     private String description;
     private String location;
     private Boolean hasMultipleLocation;
-    private Map<LocalDate, String> dateLocationMap;
     private String imgURL;
     private EventStatus eventStatus;
     @JsonProperty("scheduleList")

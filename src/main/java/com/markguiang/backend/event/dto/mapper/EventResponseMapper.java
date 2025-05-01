@@ -12,6 +12,5 @@ import java.util.List;
 public interface EventResponseMapper {
     @Mapping(source = "scheduleList", target = "scheduleResponseDTOList")
     EventResponseDTO eventToEventResponseDTO(Event event);
-
-    List<EventResponseDTO> eventsToListEventResponseDTO(List<Event> events);
+    
 }
