@@ -5,6 +5,7 @@ import com.markguiang.backend.event.model.Schedule;
 import com.markguiang.backend.event.repository.EventRepository;
 import com.markguiang.backend.event.repository.ScheduleRepository;
 import com.markguiang.backend.exceptions.UniqueConstraintViolationException;
+import com.markguiang.backend.lucene.service.LuceneIndexService;
 import com.markguiang.backend.user.UserContext;
 import jakarta.transaction.Transactional;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,29 +25,35 @@ public class EventService {
     public final ScheduleRepository scheduleRepository;
     public final UserContext userContext;
     public final ScheduleService scheduleService;
+    public final LuceneIndexService indexService;
 
     public EventService(
             EventRepository eventRepository,
             UserContext userContext,
             ScheduleRepository scheduleRepository,
-            ScheduleService scheduleService) {
+            ScheduleService scheduleService,
+            LuceneIndexService indexService) {
         this.eventRepository = eventRepository;
         this.scheduleRepository = scheduleRepository;
         this.userContext = userContext;
         this.scheduleService = scheduleService;
+        this.indexService = indexService;
     }
 
     @Transactional
     public Event createEventWithScheduleList(Event event) {
         try {
-            eventRepository.save(event);
-            List<Schedule> scheduleList = scheduleService.createScheduleList(event);
-            event.setScheduleList(scheduleList);
-            return event;
+            Event savedEvent = eventRepository.save(event);
+            indexService.indexEvent(savedEvent);
+            List<Schedule> scheduleList = scheduleService.createScheduleList(savedEvent);
+            savedEvent.setScheduleList(scheduleList);
+            return savedEvent;
         } catch (DataIntegrityViolationException ex) {
             if (eventRepository.existsByName(event.getName())) {
                 throw new UniqueConstraintViolationException(event.getName());
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }
