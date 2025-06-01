@@ -34,6 +34,7 @@ jobs:
     - name: Get latest version and bump
       id: versioning
       run: |
+        git fetch --tags
         latest_tag=$(git tag --sort=-v:refname | grep '^v' | head -n 1)
         echo "Latest tag: $latest_tag"
         if [[ -z "$latest_tag" ]]; then latest_tag="v0.0.0"; fi
