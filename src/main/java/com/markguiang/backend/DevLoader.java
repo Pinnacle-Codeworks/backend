@@ -28,28 +28,36 @@ public class DevLoader {
 
     @PostConstruct
     private void setup() {
-        Tenant tenant = new Tenant();
-        tenant.setName("NOT_INFOR");
-        tenantRepository.save(tenant);
-        User user = new User();
-        user.setUsername("admin");
-        user.setEmail("admin@gmail.com");
-        user.setPassword("admin");
-        user.setTenantId(tenant.getTenantId());
-        Role role = roleService.getOrCreateRole(RoleType.ADMIN);
-        user.setRoles(List.of(role));
-        userService.registerUser(user);
+        if (tenantRepository.count() == 0) {
+            Tenant tenant = new Tenant();
+            tenant.setName("NOT_INFOR");
+            tenantRepository.save(tenant);
 
-        Tenant tenant2 = new Tenant();
-        tenant2.setName("INFOR");
-        tenantRepository.save(tenant2);
-        User user2 = new User();
-        user2.setUsername("admin2");
-        user2.setEmail("admin2@gmail.com");
-        user2.setPassword("admin");
-        user2.setTenantId(tenant2.getTenantId());
-        Role role2 = roleService.getOrCreateRole(RoleType.ADMIN);
-        user2.setRoles(List.of(role2));
-        userService.registerUser(user2);
+            if (!userService.emailExists("admin@gmail.com")) {
+                User user = new User();
+                user.setUsername("admin");
+                user.setEmail("admin@gmail.com");
+                user.setPassword("admin");
+                user.setTenantId(tenant.getTenantId());
+                Role role = roleService.getOrCreateRole(RoleType.ADMIN);
+                user.setRoles(List.of(role));
+                userService.registerUser(user);
+            }
+
+            Tenant tenant2 = new Tenant();
+            tenant2.setName("INFOR");
+            tenantRepository.save(tenant2);
+
+            if (!userService.emailExists("admin2@gmail.com")) {
+                User user2 = new User();
+                user2.setUsername("admin2");
+                user2.setEmail("admin2@gmail.com");
+                user2.setPassword("admin");
+                user2.setTenantId(tenant2.getTenantId());
+                Role role2 = roleService.getOrCreateRole(RoleType.ADMIN);
+                user2.setRoles(List.of(role2));
+                userService.registerUser(user2);
+            }
+        }
     }
 }
