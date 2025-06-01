@@ -3,6 +3,8 @@ name: Build and Push Backend Image
 on:
   push:
     branches: [develop]
+    - name: Debug: List root folder
+      run: ls -la
     paths:
       - 'Backend/**'
       - '.github/workflows/deploy.yml'
