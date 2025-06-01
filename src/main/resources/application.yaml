@@ -7,9 +7,9 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/backendDB
-    username: sa
-    password: example
+    url: jdbc:postgresql://postgres:5432/backendDB
+    username: joshuakudo
+    password: Pogiko12
 
   jpa:
     generate-ddl: true
