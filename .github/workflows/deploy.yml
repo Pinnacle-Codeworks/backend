@@ -8,7 +8,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: EMS-Backend
-
+    outputs:
+      image_tag: ${{ steps.versioning.outputs.new_tag }}
+      
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
