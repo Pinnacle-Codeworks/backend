@@ -5,14 +5,18 @@ import java.util.Objects;
 import java.util.UUID;
 
 public abstract class IdentifiableDomainObject implements DomainObject {
-  private UUID ID;
+  private final UUID id;
 
   protected IdentifiableDomainObject() {
-    this.ID = Generators.timeBasedEpochGenerator().generate();
+    this.id = Generators.timeBasedEpochGenerator().generate();
   }
 
-  public UUID getID() {
-    return this.ID;
+  protected IdentifiableDomainObject(UUID id) {
+    this.id = id;
+  }
+
+  public UUID getId() {
+    return this.id;
   }
 
   @Override
@@ -22,11 +26,11 @@ public abstract class IdentifiableDomainObject implements DomainObject {
     if (o == null || getClass() != o.getClass())
       return false;
     IdentifiableDomainObject entity = (IdentifiableDomainObject) o;
-    return Objects.equals(ID, entity.getID());
+    return Objects.equals(id, entity.getId());
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(ID);
+    return Objects.hashCode(id);
   }
 }

@@ -5,7 +5,6 @@ import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.exceptions.DuplicateNameException;
 import com.markguiang.backend.event.exceptions.EventDoesNotExistException;
-import jakarta.transaction.Transactional;
 import java.util.UUID;
 
 public class EventService {
@@ -19,7 +18,6 @@ public class EventService {
     return er.findByID(eventID).orElseThrow(() -> new EventDoesNotExistException(eventID));
   }
 
-  @Transactional
   public UUID createEvent(Event event) {
     Boolean exists = er.existsByName(event.getName());
     if (exists) {
@@ -30,36 +28,32 @@ public class EventService {
     return ID;
   }
 
-  @Transactional
   public void addAgenda(UUID eventID, Agenda agenda) {
     Event event = getEventOrThrow(eventID);
 
-    event.addAgendaToDay(agenda);
-    er.save(event);
+    Day day = event.addAgendaToDay(agenda);
+    er.addAgenda(day.getId(), agenda);
   }
 
-  @Transactional
   public void removeAgenda(UUID eventID, Agenda agenda) {
     Event event = getEventOrThrow(eventID);
 
-    event.removeAgendaFromDay(agenda);
-    er.save(event);
+    Day day = event.removeAgendaFromDay(agenda);
+    er.removeAgenda(day.getId(), agenda);
   }
 
-  @Transactional
   public void updateAgenda(UUID eventID, Agenda agenda) {
     Event event = getEventOrThrow(eventID);
 
-    event.removeAgendaFromDay(agenda);
+    Day day = event.removeAgendaFromDay(agenda);
     event.addAgendaToDay(agenda);
-    er.save(event);
+    er.updateAgenda(day.getId(), agenda);
   }
 
-  @Transactional
   public void updateDay(UUID eventID, Day day) {
     Event event = getEventOrThrow(eventID);
 
     event.updateDay(day);
-    er.save(event);
+    er.updateDay(day);
   }
 }

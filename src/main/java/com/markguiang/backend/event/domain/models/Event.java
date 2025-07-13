@@ -5,9 +5,9 @@ import com.markguiang.backend.event.domain.utils.DateUtils;
 import com.markguiang.backend.event.exceptions.AgendasOnDifferentDateException;
 import com.markguiang.backend.event.exceptions.DaysOnSameDateException;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 // tenant-name unique constraint
 public class Event extends AggregateRoot {
@@ -20,6 +20,7 @@ public class Event extends AggregateRoot {
   private List<Day> days;
 
   public Event(
+      UUID id,
       String name,
       Boolean hasMultipleLocation,
       String description,
@@ -27,7 +28,7 @@ public class Event extends AggregateRoot {
       String imgURL,
       EventStatus eventStatus,
       List<Day> days) {
-    super();
+    super(id);
 
     setDescription(description);
     setLocation(location);
@@ -37,6 +38,24 @@ public class Event extends AggregateRoot {
     this.name = validateName(name);
     this.hasMultipleLocation = hasMultipleLocation;
     this.days = validateDays(days);
+  }
+
+  public Event(
+      String name,
+      Boolean hasMultipleLocation,
+      String description,
+      String location,
+      String imgURL,
+      EventStatus eventStatus) {
+    super();
+
+    setDescription(description);
+    setLocation(location);
+    setImgURL(imgURL);
+    setEventStatus(eventStatus);
+
+    this.name = validateName(name);
+    this.hasMultipleLocation = hasMultipleLocation;
   }
 
   public Day addAgendaToDay(Agenda agenda) {
@@ -61,15 +80,12 @@ public class Event extends AggregateRoot {
   }
 
   public void updateDay(Day day) {
-    List<Day> copy = new ArrayList<>(days);
-    for (int i = 0; i < copy.size(); i++) {
-      if (copy.get(i).getDate().equals(day.getDate())) {
-        copy.set(i, day);
-        break;
+    for (int i = 0; i < days.size(); i++) {
+      if (days.get(i).getDate().equals(day.getDate())) {
+        days.get(i).updateData(day.getLocation(), day.getDescription());
+        return;
       }
     }
-    validateDays(copy);
-    days = copy;
   }
 
   private String validateName(String name) {

@@ -14,21 +14,29 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 public class Day extends LocalEntity {
+  private String description;
   private String location;
   private final OffsetDateTime date;
   private final List<Agenda> agendas;
 
-  public Day(String location, OffsetDateTime date, List<Agenda> agendas) {
+  public Day(
+      UUID ID, String location, OffsetDateTime date, List<Agenda> agendas, String description) {
+    super(ID);
+    this.date = validateDate(date);
+    this.agendas = new ArrayList<>(validateAgendas(agendas));
+    this.location = location;
+    this.description = description;
+  }
+
+  public Day(String location, OffsetDateTime date, List<Agenda> agendas, String description) {
     super();
     this.date = validateDate(date);
     this.agendas = new ArrayList<>(validateAgendas(agendas));
     this.location = location;
-  }
-
-  public Day(String location, OffsetDateTime date) {
-    this(location, date, new ArrayList<>());
+    this.description = description;
   }
 
   public void addAgenda(Agenda agenda) {
@@ -53,16 +61,21 @@ public class Day extends LocalEntity {
     return location;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
   public OffsetDateTime getDate() {
     return date;
   }
 
+  public String getDescription() {
+    return description;
+  }
+
   public List<Agenda> getAgendas() {
     return Collections.unmodifiableList(agendas);
+  }
+
+  public void updateData(String location, String description) {
+    this.location = location;
+    this.description = description;
   }
 
   public static boolean allOnDifferentDates(List<Day> days) {
