@@ -1,9 +1,9 @@
 package com.markguiang.backend.event.domain.models;
 
 import com.markguiang.backend.base.AggregateRoot;
-import com.markguiang.backend.event.domain.utils.DateUtils;
 import com.markguiang.backend.event.exceptions.AgendasOnDifferentDateException;
 import com.markguiang.backend.event.exceptions.DaysOnSameDateException;
+import com.markguiang.backend.event.utils.DateUtils;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;

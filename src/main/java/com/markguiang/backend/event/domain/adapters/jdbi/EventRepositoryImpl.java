@@ -6,7 +6,6 @@ import com.markguiang.backend.event.domain.models.Agenda;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.domain.ports.EventRepository;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
@@ -23,27 +22,21 @@ public class EventRepositoryImpl implements EventRepository {
 
   @Override
   @Transactional
+  // List<Day> -> List<Agenda> not included
   public UUID save(Event event) {
     dao.insertEvent(event);
 
     for (Day day : event.getDays()) {
       dao.insertDay(
           day.getId(), event.getId(), day.getLocation(), day.getDate(), day.getDescription());
-
-      List<AgendaInsertDto> agendaDTOs = day.getAgendas().stream()
-          .map(
-              agenda -> new AgendaInsertDto(
-                  Generators.timeBasedEpochGenerator().generate(),
-                  day.getId(),
-                  agenda.getStartDate(),
-                  agenda.getEndDate(),
-                  agenda.getLocation()))
-          .toList();
-
-      dao.insertAgendas(agendaDTOs);
     }
 
     return event.getId();
+  }
+
+  @Override
+  public void update(Event event) {
+    dao.updateEvent(event);
   }
 
   @Override

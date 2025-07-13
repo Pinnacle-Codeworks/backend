@@ -1,4 +1,4 @@
-package com.markguiang.backend.event.domain.utils;
+package com.markguiang.backend.event.utils;
 
 import java.time.OffsetDateTime;
 

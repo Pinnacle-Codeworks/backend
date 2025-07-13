@@ -5,13 +5,11 @@ import com.markguiang.backend.event.domain.adapters.jdbi.mappers.EventReducer;
 import com.markguiang.backend.event.domain.adapters.jdbi.mappers.EventRow;
 import com.markguiang.backend.event.domain.models.Event;
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
-import org.jdbi.v3.sqlobject.statement.SqlBatch;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 import org.jdbi.v3.sqlobject.statement.UseRowReducer;
@@ -46,6 +44,18 @@ public interface EventDao {
   void insertEvent(@BindBean Event event);
 
   @SqlUpdate("""
+          UPDATE events
+          SET name = :name,
+              has_multiple_location = :hasMultipleLocation,
+              description = :description,
+              location = :location,
+              img_url = :imgURL,
+              status = :status
+          WHERE id = :id AND tenant_id = :tenantId
+      """)
+  void updateEvent(@BindBean Event event);
+
+  @SqlUpdate("""
           INSERT INTO days (id, tenant_id, event_id, location, date, description)
           VALUES (:id, :tenantId, :eventId, :location, :date, :description)
       """)
@@ -56,11 +66,11 @@ public interface EventDao {
       @Bind("date") OffsetDateTime date,
       @Bind("description") String description);
 
-  @SqlBatch("""
-          INSERT INTO agendas (id, tenant_id, day_id, start_date, end_date, location)
-          VALUES (:id, :tenantId, :dayId, :startDate, :endDate, :location)
-      """)
-  void insertAgendas(@BindBean List<AgendaInsertDto> agendas);
+  // @SqlBatch("""
+  // INSERT INTO agendas (id, tenant_id, day_id, start_date, end_date, location)
+  // VALUES (:id, :tenantId, :dayId, :startDate, :endDate, :location)
+  // """)
+  // void insertAgendas(@BindBean List<AgendaInsertDto> agendas);
 
   @SqlUpdate("""
           INSERT INTO agendas (id, tenant_id, day_id, start_date, end_date, location)

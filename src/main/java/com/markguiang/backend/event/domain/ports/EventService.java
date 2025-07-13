@@ -18,6 +18,10 @@ public class EventService {
     return er.findByID(eventID).orElseThrow(() -> new EventDoesNotExistException(eventID));
   }
 
+  public Event getEvent(UUID eventID) {
+    return getEventOrThrow(eventID);
+  }
+
   public UUID createEvent(Event event) {
     Boolean exists = er.existsByName(event.getName());
     if (exists) {
@@ -26,6 +30,12 @@ public class EventService {
 
     UUID ID = er.save(event);
     return ID;
+  }
+
+  public void updateEvent(Event event) {
+    getEventOrThrow(event.getId());
+
+    er.update(event);
   }
 
   public void addAgenda(UUID eventID, Agenda agenda) {
