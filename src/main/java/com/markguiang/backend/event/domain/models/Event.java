@@ -29,14 +29,13 @@ public class Event extends AggregateRoot {
       EventStatus eventStatus,
       List<Day> days) {
     super(id);
-
+    this.name = validateName(name);
+    this.hasMultipleLocation = hasMultipleLocation;
     setDescription(description);
     setLocation(location);
     setImgURL(imgURL);
     setEventStatus(eventStatus);
 
-    this.name = validateName(name);
-    this.hasMultipleLocation = hasMultipleLocation;
     this.days = validateDays(days);
   }
 
@@ -46,16 +45,9 @@ public class Event extends AggregateRoot {
       String description,
       String location,
       String imgURL,
-      EventStatus eventStatus) {
-    super();
-
-    setDescription(description);
-    setLocation(location);
-    setImgURL(imgURL);
-    setEventStatus(eventStatus);
-
-    this.name = validateName(name);
-    this.hasMultipleLocation = hasMultipleLocation;
+      EventStatus eventStatus,
+      List<Day> days) {
+    this(null, name, hasMultipleLocation, description, location, imgURL, eventStatus, days);
   }
 
   public Day addAgendaToDay(Agenda agenda) {

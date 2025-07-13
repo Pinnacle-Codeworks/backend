@@ -32,11 +32,7 @@ public class Day extends LocalEntity {
   }
 
   public Day(String location, OffsetDateTime date, List<Agenda> agendas, String description) {
-    super();
-    this.date = validateDate(date);
-    this.agendas = new ArrayList<>(validateAgendas(agendas));
-    this.location = location;
-    this.description = description;
+    this(null, location, date, agendas, description);
   }
 
   public void addAgenda(Agenda agenda) {

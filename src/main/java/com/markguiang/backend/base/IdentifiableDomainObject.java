@@ -7,11 +7,11 @@ import java.util.UUID;
 public abstract class IdentifiableDomainObject implements DomainObject {
   private final UUID id;
 
-  protected IdentifiableDomainObject() {
-    this.id = Generators.timeBasedEpochGenerator().generate();
-  }
-
   protected IdentifiableDomainObject(UUID id) {
+    if (id == null) {
+      this.id = Generators.timeBasedEpochGenerator().generate();
+      return;
+    }
     this.id = id;
   }
 

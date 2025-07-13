@@ -5,10 +5,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 public abstract class Entity extends IdentifiableDomainObject {
-  protected Entity() {
-    super();
-  }
-
   protected Entity(UUID ID) {
     super(ID);
   }
