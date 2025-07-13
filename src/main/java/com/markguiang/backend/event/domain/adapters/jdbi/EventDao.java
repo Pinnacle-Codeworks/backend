@@ -21,7 +21,7 @@ public interface EventDao {
 
   @SqlQuery("""
           SELECT EXISTS (
-            SELECT 1 FROM events WHERE name = :name
+            SELECT 1 FROM events WHERE name = :name AND tenant_id = :tenantId
           )
       """)
   boolean existsByName(@Bind("name") String name);
@@ -34,20 +34,20 @@ public interface EventDao {
           FROM events e
           LEFT JOIN days d ON d.event_id = e.id
           LEFT JOIN agendas a ON a.day_id = d.id
-          WHERE e.id = :id
+          WHERE e.id = :id AND e.tenant_id = :tenantId
       """)
   @UseRowReducer(EventReducer.class)
   Optional<Event> findEventAggregate(@Bind("id") UUID id);
 
   @SqlUpdate("""
-          INSERT INTO events (id, name, has_multiple_location, description, location, img_url, status)
-          VALUES (:id, :name, :hasMultipleLocation, :description, :location, :imgURL, :status)
+          INSERT INTO events (id, tenant_id, name, has_multiple_location, description, location, img_url, status)
+          VALUES (:id, :tenantId, :name, :hasMultipleLocation, :description, :location, :imgURL, :status)
       """)
   void insertEvent(@BindBean Event event);
 
   @SqlUpdate("""
-          INSERT INTO days (id, event_id, location, date, description)
-          VALUES (:id, :eventId, :location, :date, :description)
+          INSERT INTO days (id, tenant_id, event_id, location, date, description)
+          VALUES (:id, :tenantId, :eventId, :location, :date, :description)
       """)
   void insertDay(
       @Bind("id") UUID id,
@@ -57,22 +57,23 @@ public interface EventDao {
       @Bind("description") String description);
 
   @SqlBatch("""
-          INSERT INTO agendas (id, day_id, start_date, end_date, location)
-          VALUES (:id, :dayId, :startDate, :endDate, :location)
+          INSERT INTO agendas (id, tenant_id, day_id, start_date, end_date, location)
+          VALUES (:id, :tenantId, :dayId, :startDate, :endDate, :location)
       """)
   void insertAgendas(@BindBean List<AgendaInsertDto> agendas);
 
   @SqlUpdate("""
-          INSERT INTO agendas (id, day_id, start_date, end_date, location)
-          VALUES (:id, :dayId, :startDate, :endDate, :location)
+          INSERT INTO agendas (id, tenant_id, day_id, start_date, end_date, location)
+          VALUES (:id, :tenantId, :dayId, :startDate, :endDate, :location)
       """)
   void insertAgenda(@BindBean AgendaInsertDto agenda);
 
   @SqlUpdate("""
-             DELETE FROM agendas
-      WHERE day_id = :dayId
-      AND start_date = :startDate
-      AND end_date = :endDate
+          DELETE FROM agendas
+          WHERE day_id = :dayId
+          AND start_date = :startDate
+          AND end_date = :endDate
+          AND tenant_id = :tenantId
       """)
   void removeAgenda(
       @Bind("dayId") UUID dayId,
@@ -83,7 +84,7 @@ public interface EventDao {
           UPDATE days
           SET location = :location,
               description = :description
-          WHERE id = :id
+          WHERE id = :id AND tenant_id = :tenantId
       """)
   void updateDay(
       @Bind("id") UUID id,
