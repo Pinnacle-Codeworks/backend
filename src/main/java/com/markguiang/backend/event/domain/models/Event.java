@@ -1,12 +1,16 @@
 package com.markguiang.backend.event.domain.models;
 
 import com.markguiang.backend.base.AggregateRoot;
+import com.markguiang.backend.event.domain.utils.DateUtils;
+import com.markguiang.backend.event.exceptions.AgendasOnDifferentDateException;
 import com.markguiang.backend.event.exceptions.DaysOnSameDateException;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 // tenant-name unique constraint
-public class Event extends AggregateRoot<Long> {
+public class Event extends AggregateRoot {
   private final String name;
   private final Boolean hasMultipleLocation;
   private String description;
@@ -23,6 +27,8 @@ public class Event extends AggregateRoot<Long> {
       String imgURL,
       EventStatus eventStatus,
       List<Day> days) {
+    super();
+
     setDescription(description);
     setLocation(location);
     setImgURL(imgURL);
@@ -31,6 +37,39 @@ public class Event extends AggregateRoot<Long> {
     this.name = validateName(name);
     this.hasMultipleLocation = hasMultipleLocation;
     this.days = validateDays(days);
+  }
+
+  public Day addAgendaToDay(Agenda agenda) {
+    Day day = getDayWithDate(agenda.getStartDate());
+    day.addAgenda(agenda);
+    return day;
+  }
+
+  public Day removeAgendaFromDay(Agenda agenda) {
+    Day day = getDayWithDate(agenda.getStartDate());
+    day.removeAgenda(agenda);
+    return day;
+  }
+
+  private Day getDayWithDate(OffsetDateTime date) {
+    for (Day day : days) {
+      if (DateUtils.onSameDate(day.getDate(), date)) {
+        return day;
+      }
+    }
+    throw new AgendasOnDifferentDateException();
+  }
+
+  public void updateDay(Day day) {
+    List<Day> copy = new ArrayList<>(days);
+    for (int i = 0; i < copy.size(); i++) {
+      if (copy.get(i).getDate().equals(day.getDate())) {
+        copy.set(i, day);
+        break;
+      }
+    }
+    validateDays(copy);
+    days = copy;
   }
 
   private String validateName(String name) {

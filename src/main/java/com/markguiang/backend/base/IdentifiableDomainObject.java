@@ -1,11 +1,17 @@
 package com.markguiang.backend.base;
 
+import com.fasterxml.uuid.Generators;
 import java.util.Objects;
+import java.util.UUID;
 
-public abstract class IdentifiableDomainObject<IDType> implements DomainObject {
-  private IDType ID;
+public abstract class IdentifiableDomainObject implements DomainObject {
+  private UUID ID;
 
-  public IDType getID() {
+  protected IdentifiableDomainObject() {
+    this.ID = Generators.timeBasedEpochGenerator().generate();
+  }
+
+  public UUID getID() {
     return this.ID;
   }
 
@@ -15,7 +21,7 @@ public abstract class IdentifiableDomainObject<IDType> implements DomainObject {
       return true;
     if (o == null || getClass() != o.getClass())
       return false;
-    Entity<?> entity = (Entity<?>) o;
+    IdentifiableDomainObject entity = (IdentifiableDomainObject) o;
     return Objects.equals(ID, entity.getID());
   }
 

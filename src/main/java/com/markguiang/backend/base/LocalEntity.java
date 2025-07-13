@@ -1,4 +1,4 @@
 package com.markguiang.backend.base;
 
-public abstract class LocalEntity<IDType> extends Entity<IDType> {
+public abstract class LocalEntity extends Entity {
 }

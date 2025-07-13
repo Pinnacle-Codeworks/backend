@@ -1,7 +1,10 @@
 package com.markguiang.backend.base;
 
-public interface Repository<E extends Entity<IDType>, IDType> {
-  E save(E e);
+import java.util.Optional;
+import java.util.UUID;
 
-  E get(IDType ID);
+public interface Repository<E extends Entity> {
+  UUID save(E e);
+
+  Optional<E> findByID(UUID ID);
 }

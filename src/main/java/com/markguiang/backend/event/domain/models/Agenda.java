@@ -1,6 +1,7 @@
 package com.markguiang.backend.event.domain.models;
 
 import com.markguiang.backend.base.ValueObject;
+import com.markguiang.backend.event.domain.utils.DateUtils;
 import com.markguiang.backend.exceptions.InvalidDateRangeException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class Agenda implements ValueObject {
   private final String location;
 
   public Agenda(OffsetDateTime startDate, OffsetDateTime endDate, String location) {
+    super();
     validateDates(startDate, endDate);
 
     this.startDate = startDate;
@@ -44,8 +46,8 @@ public class Agenda implements ValueObject {
   // TODO add unit test
   public static boolean allOnDate(List<Agenda> agendaList, OffsetDateTime date) {
     for (Agenda agenda : agendaList) {
-      if (!agenda.getStartDate().toLocalDate().equals(date.toLocalDate())
-          || !agenda.getEndDate().toLocalDate().equals(date.toLocalDate())) {
+      if (!DateUtils.onSameDate(agenda.getStartDate(), date)
+          || !DateUtils.onSameDate(agenda.getEndDate(), date)) {
         return false;
       }
     }
