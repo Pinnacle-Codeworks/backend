@@ -7,8 +7,11 @@ import com.markguiang.backend.event.dto.mapper.EventRequestMapper;
 import com.markguiang.backend.event.dto.mapper.EventResponseMapper;
 import com.markguiang.backend.event.model.Event;
 import com.markguiang.backend.event.service.EventService;
+import com.markguiang.backend.lucene.service.LuceneSearchService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +25,13 @@ public class EventController {
     private final EventService eventService;
     private final EventRequestMapper eventRequestMapper;
     private final EventResponseMapper eventResponseMapper;
+    private final LuceneSearchService searchService;
 
-    public EventController(EventService eventService, EventRequestMapper eventRequestMapper, EventResponseMapper eventResponseMapper) {
+    public EventController(EventService eventService, EventRequestMapper eventRequestMapper, EventResponseMapper eventResponseMapper, LuceneSearchService searchService) {
         this.eventService = eventService;
         this.eventRequestMapper = eventRequestMapper;
         this.eventResponseMapper = eventResponseMapper;
+        this.searchService = searchService;
     }
 
     @PreAuthorize("hasAuthority('permission:write')")
@@ -65,5 +70,16 @@ public class EventController {
                         new ResponseStatusException(HttpStatus.NOT_FOUND, "Event not found")
                 )
         );
+    }
+
+    @GetMapping("/search")
+    public Page<EventResponseDTO> searchEvents(
+            @RequestParam String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) throws Exception {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> eventResults = searchService.eventSearch(query, pageable);
+        return eventResults.map(eventResponseMapper::eventToEventResponseDTO);
     }
 }
