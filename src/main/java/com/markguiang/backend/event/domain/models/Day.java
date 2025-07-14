@@ -76,7 +76,7 @@ public class Day extends LocalEntity {
 
   public static boolean allOnDifferentDates(List<Day> days) {
     if (days == null || days.isEmpty()) {
-      return false;
+      return true;
     }
     Set<LocalDate> uniqueDays = new HashSet<>();
     for (Day day : days) {
