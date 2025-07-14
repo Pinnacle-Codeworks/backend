@@ -5,11 +5,13 @@ import com.markguiang.backend.event.domain.adapters.jdbi.mappers.EventReducer;
 import com.markguiang.backend.event.domain.adapters.jdbi.mappers.EventRow;
 import com.markguiang.backend.event.domain.models.Event;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
+import org.jdbi.v3.sqlobject.customizer.Define;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 import org.jdbi.v3.sqlobject.statement.UseRowReducer;
@@ -36,6 +38,30 @@ public interface EventDao {
       """)
   @UseRowReducer(EventReducer.class)
   Optional<Event> findEventAggregate(@Bind("id") UUID id);
+
+  @SqlQuery("""
+          SELECT
+              e.id AS event_id,
+              e.name,
+              e.has_multiple_location,
+              e.description,
+              e.location,
+              e.img_url,
+              e.status
+          FROM events e
+          WHERE e.tenant_id = :tenantId
+          ORDER BY e.<sortColumn> <sortDirection>
+          LIMIT :size OFFSET :offset
+      """)
+  @UseRowReducer(EventReducer.class)
+  List<Event> findEventsWithPagination(
+      @Bind("size") int size,
+      @Bind("offset") int offset,
+      @Define("sortColumn") String sortColumn,
+      @Define("sortDirection") String sortDirection);
+
+  @SqlQuery("SELECT COUNT(*) FROM events e WHERE e.tenant_id = :tenantId")
+  int countEvents();
 
   @SqlUpdate("""
           INSERT INTO events (id, tenant_id, name, has_multiple_location, description, location, img_url, status)

@@ -6,6 +6,7 @@ import com.markguiang.backend.event.domain.models.Agenda;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.domain.ports.EventRepository;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;
@@ -18,6 +19,17 @@ public class EventRepositoryImpl implements EventRepository {
 
   public EventRepositoryImpl(EventDao dao) {
     this.dao = dao;
+  }
+
+  @Override
+  public List<Event> findEventsWithPagination(
+      int size, int offset, String sortColumn, String sortDirection) {
+    return dao.findEventsWithPagination(size, offset, sortColumn, sortDirection);
+  }
+
+  @Override
+  public int countEvents() {
+    return dao.countEvents();
   }
 
   @Override
