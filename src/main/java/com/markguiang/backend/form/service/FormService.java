@@ -1,50 +1,54 @@
 package com.markguiang.backend.form.service;
 
-import com.markguiang.backend.event.model.Event;
-import com.markguiang.backend.event.service.EventService;
+import com.markguiang.backend.event.domain.models.Event;
+import com.markguiang.backend.event.domain.ports.EventRepository;
+import com.markguiang.backend.event.domain.ports.EventService;
 import com.markguiang.backend.form.model.Field;
 import com.markguiang.backend.form.model.Form;
 import com.markguiang.backend.form.repository.FormRepository;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import org.springframework.stereotype.Service;
+import java.util.UUID;
 
 @Service
 public class FormService {
-    private final FormRepository formRepository;
-    private final FieldService fieldService;
-    private final EventService eventService;
+  private final FormRepository formRepository;
+  private final FieldService fieldService;
+  private final EventService eventService;
 
-    public FormService(
-            FormRepository formRepository, FieldService fieldService, EventService eventService) {
-        this.formRepository = formRepository;
-        this.fieldService = fieldService;
-        this.eventService = eventService;
+  public FormService(
+      FormRepository formRepository, FieldService fieldService, EventRepository eventRepository) {
+    this.formRepository = formRepository;
+    this.fieldService = fieldService;
+    this.eventService = new EventService(eventRepository);
+  }
+
+  // TODO: broken
+  public Form createFormWithFieldList(Form form) {
+    Event event = this.eventService.getEvent(UUID.fromString(form.getEventId().toString()));
+    if (!event.getId().equals(form.getEventId())) {
+      throw new NoSuchElementException("Event not found");
     }
 
-    public Form createFormWithFieldList(Form form) {
-        Optional<Event> event = this.eventService.getEvent(form.getEventId());
-        if (event.isEmpty() || !event.get().getEventId().equals(form.getEventId())) {
-            throw new NoSuchElementException("Event not found");
-        }
+    this.formRepository.save(form);
 
-        this.formRepository.save(form);
+    List<Field> fieldList = this.fieldService.createFieldList(form);
+    form.setFieldList(fieldList);
 
-        List<Field> fieldList = this.fieldService.createFieldList(form);
-        form.setFieldList(fieldList);
+    return form;
+  }
 
-        return form;
+  public Form updateFormWithFields(Form form) {
+    Optional<Form> formDb = this.formRepository.findById(form.getFormId());
+    if (formDb.isEmpty()) {
+      throw new NoSuchElementException("Form not found");
     }
-
-    public Form updateFormWithFields(Form form) {
-        Optional<Form> formDb = this.formRepository.findById(form.getFormId());
-        if (formDb.isEmpty()) {
-            throw new NoSuchElementException("Form not found");
-        }
-        List<Field> fieldList = this.fieldService.updateFieldList(form);
-        form.setFieldList(fieldList);
-        this.formRepository.save(form);
-        return form;
-    }
+    List<Field> fieldList = this.fieldService.updateFieldList(form);
+    form.setFieldList(fieldList);
+    this.formRepository.save(form);
+    return form;
+  }
 }
