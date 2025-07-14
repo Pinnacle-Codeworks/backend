@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,8 +44,8 @@ public class EventController {
     eventService.updateEvent(event);
   }
 
-  @GetMapping("/all")
-  public Page<EventResponseWithoutDaysDTO> getAllEvent(
+  @GetMapping("")
+  public Page<EventResponseWithoutDaysDTO> getEvents(
       @RequestParam(required = false) EventSortBy sortBy,
       @RequestParam(required = false) SortDirection direction,
       @RequestParam(defaultValue = "0") int page,
@@ -56,8 +57,8 @@ public class EventController {
     return events.map(event -> EventResponseWithoutDaysDTO.fromEvent(event));
   }
 
-  @GetMapping("")
-  public EventResponseDTO getEvent(@RequestParam UUID id) {
+  @GetMapping("/{id}")
+  public EventResponseDTO getEvent(@PathVariable UUID id) {
     Event event = this.eventService.getEvent(id);
     return EventResponseDTO.fromEvent(event);
   }
