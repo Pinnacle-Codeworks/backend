@@ -72,12 +72,12 @@ public class Event extends AggregateRoot {
   }
 
   public void updateDay(Day day) {
-    for (int i = 0; i < days.size(); i++) {
-      if (days.get(i).getDate().equals(day.getDate())) {
-        days.get(i).updateData(day.getLocation(), day.getDescription());
-        return;
+      for (Day value : days) {
+          if (value.getDate().equals(day.getDate())) {
+              value.updateData(day.getLocation(), day.getDescription());
+              return;
+          }
       }
-    }
   }
 
   private String validateName(String name) {
