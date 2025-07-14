@@ -6,6 +6,8 @@ import com.markguiang.backend.event.domain.models.Agenda;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.domain.ports.EventRepository;
+import com.markguiang.backend.tenant.TenantContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class EventRepositoryImpl implements EventRepository {
 
   private final EventDao dao;
+  private final Long tenantId = TenantContext.getTenantId();
 
   public EventRepositoryImpl(EventDao dao) {
     this.dao = dao;
@@ -25,23 +28,23 @@ public class EventRepositoryImpl implements EventRepository {
   @Override
   public List<Event> findEventsWithPagination(
       int size, int offset, String sortColumn, String sortDirection) {
-    return dao.findEventsWithPagination(size, offset, sortColumn, sortDirection);
+    return dao.findEventsWithPagination(tenantId, size, offset, sortColumn, sortDirection);
   }
 
   @Override
   public int countEvents() {
-    return dao.countEvents();
+    return dao.countEvents(tenantId);
   }
 
   @Override
   @Transactional
   // List<Day> -> List<Agenda> not included
   public UUID save(Event event) {
-    dao.insertEvent(event);
+    dao.insertEvent(tenantId, event);
 
     for (Day day : event.getDays()) {
       dao.insertDay(
-          day.getId(), event.getId(), day.getLocation(), day.getDate(), day.getDescription());
+          tenantId, day.getId(), event.getId(), day.getLocation(), day.getDate(), day.getDescription());
     }
 
     return event.getId();
@@ -49,17 +52,17 @@ public class EventRepositoryImpl implements EventRepository {
 
   @Override
   public void update(Event event) {
-    dao.updateEvent(event);
+    dao.updateEvent(tenantId, event);
   }
 
   @Override
   public Optional<Event> findByID(UUID id) {
-    return dao.findEventAggregate(id);
+    return dao.findEventAggregate(tenantId, id);
   }
 
   @Override
   public Boolean existsByName(String name) {
-    return dao.existsByName(name);
+    return dao.existsByName(tenantId, name);
   }
 
   @Override
@@ -70,12 +73,12 @@ public class EventRepositoryImpl implements EventRepository {
         agenda.getStartDate(),
         agenda.getEndDate(),
         agenda.getLocation());
-    dao.insertAgenda(agendaDTO);
+    dao.insertAgenda(tenantId, agendaDTO);
   }
 
   @Override
   public void removeAgenda(UUID dayId, Agenda agenda) {
-    dao.removeAgenda(dayId, agenda.getStartDate(), agenda.getEndDate());
+    dao.removeAgenda(tenantId, dayId, agenda.getStartDate(), agenda.getEndDate());
   }
 
   @Override
@@ -87,12 +90,12 @@ public class EventRepositoryImpl implements EventRepository {
         agenda.getStartDate(),
         agenda.getEndDate(),
         agenda.getLocation());
-    dao.removeAgenda(dayId, agendaDTO.getStartDate(), agendaDTO.getEndDate());
-    dao.insertAgenda(agendaDTO);
+    dao.removeAgenda(tenantId, dayId, agendaDTO.getStartDate(), agendaDTO.getEndDate());
+    dao.insertAgenda(tenantId, agendaDTO);
   }
 
   @Override
   public void updateDay(Day day) {
-    dao.updateDay(day.getId(), day.getLocation(), day.getDescription());
+    dao.updateDay(tenantId, day.getId(), day.getLocation(), day.getDescription());
   }
 }
