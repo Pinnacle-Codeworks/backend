@@ -7,7 +7,9 @@ import com.markguiang.backend.event.domain.models.Event;
 import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public record CreateEventDTO(
     @NotNull String name,
@@ -19,7 +21,7 @@ public record CreateEventDTO(
     @JsonProperty("days") @ValidRequired List<CreateEventDayDTO> days) {
 
   public static Event fromDTO(CreateEventDTO dto) {
-    List<Day> eventDays = dto.days().stream()
+    List<Day> eventDays = Optional.ofNullable(dto.days()).orElse(Collections.emptyList()).stream()
         .map(
             dayDTO -> new Day(
                 dayDTO.location(), dayDTO.date(), new ArrayList<>(), dayDTO.description()))

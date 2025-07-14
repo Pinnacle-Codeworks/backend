@@ -4,7 +4,10 @@ import com.markguiang.backend.event.domain.models.Agenda;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public record EventResponseDTO(
@@ -18,7 +21,15 @@ public record EventResponseDTO(
     List<DayDTO> days) {
 
   public static EventResponseDTO fromEvent(Event event) {
-    List<DayDTO> dayDTOs = event.getDays().stream().map(DayDTO::fromDay).toList();
+    List<DayDTO> eventDays = Optional.ofNullable(event.getDays()).orElse(Collections.emptyList()).stream()
+        .map(
+            day -> new DayDTO(
+                day.getId(),
+                day.getDate(),
+                day.getLocation(),
+                day.getDescription(),
+                new ArrayList<>()))
+        .toList();
 
     return new EventResponseDTO(
         event.getId(),
@@ -28,7 +39,7 @@ public record EventResponseDTO(
         event.getLocation(),
         event.getImgURL(),
         event.getEventStatus(),
-        dayDTOs);
+        eventDays);
   }
 
   public record DayDTO(
