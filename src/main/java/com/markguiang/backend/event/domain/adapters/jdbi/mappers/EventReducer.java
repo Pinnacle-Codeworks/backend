@@ -45,7 +45,7 @@ public class EventReducer implements LinkedHashMapRowReducer<UUID, Event> {
                         .toInstant()
                         .atOffset(ZoneOffset.UTC),
                     new ArrayList<>(),
-                    rowView.getColumn("description", String.class));
+                    rowView.getColumn("day_description", String.class));
                 event.getDays().add(newDay);
                 return newDay;
               });

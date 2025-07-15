@@ -29,7 +29,7 @@ public interface EventDao {
   @SqlQuery("""
           SELECT
             e.id AS event_id, e.name, e.has_multiple_location, e.description, e.location, e.img_url, e.status,
-            d.id AS day_id, d.location AS day_location, d.date AS day_date,
+            d.id AS day_id, d.location AS day_location, d.date AS day_date, d.description as day_description,
             a.start_date AS agenda_start, a.end_date AS agenda_end, a.location AS agenda_location
           FROM events e
           LEFT JOIN days d ON d.event_id = e.id
