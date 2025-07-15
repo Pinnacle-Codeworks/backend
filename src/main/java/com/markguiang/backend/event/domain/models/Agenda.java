@@ -54,7 +54,7 @@ public class Agenda implements ValueObject {
     Objects.requireNonNull(startDate);
     Objects.requireNonNull(endDate);
 
-    if (startDate.isBefore(endDate)) {
+    if (startDate.isAfter(endDate)) {
       throw new InvalidDateRangeException();
     }
   }
