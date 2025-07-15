@@ -53,26 +53,32 @@ public class EventController {
     return events.map(EventResponseWithoutDaysDTO::fromEvent);
   }
 
-  @GetMapping("/{id}")
-  public EventResponseDTO getEvent(@PathVariable UUID id) {
-    Event event = this.eventService.getEvent(id);
+  @GetMapping("/{eventId}")
+  public EventResponseDTO getEvent(@PathVariable UUID eventId) {
+    Event event = this.eventService.getEvent(eventId);
     return EventResponseDTO.fromEvent(event);
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
-  @PostMapping("/agenda/{d}")
+  @PostMapping("/agenda/{eventId}")
   public void addAgenda(@PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
     eventService.addAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
-  @DeleteMapping("/agenda/{id}")
+  @PatchMapping("/agenda/{eventId}")
+  public void updateAgenda(@PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
+    eventService.updateAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
+  }
+
+  @PreAuthorize("hasAuthority('permission:write')")
+  @DeleteMapping("/agenda/{eventId}")
   public void deleteAgenda(@PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
     eventService.removeAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
-  @PatchMapping("/day/{id}")
+  @PatchMapping("/day/{eventId}")
   public void updateDay(@PathVariable UUID eventId, @Valid @RequestBody CreateUpdateDayDTO dayDTO) {
     eventService.updateDay(eventId, CreateUpdateDayDTO.fromDTO(dayDTO));
   }
