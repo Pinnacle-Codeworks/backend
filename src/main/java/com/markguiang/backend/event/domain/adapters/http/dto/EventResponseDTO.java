@@ -1,6 +1,5 @@
 package com.markguiang.backend.event.domain.adapters.http.dto;
 
-import com.markguiang.backend.event.domain.models.Agenda;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import java.time.OffsetDateTime;
@@ -43,18 +42,12 @@ public record EventResponseDTO(
   }
 
   public record DayDTO(
-      UUID id, OffsetDateTime date, String location, String description, List<AgendaDTO> agendas) {
+      UUID id, OffsetDateTime date, String location, String description, List<CreateUpdateAgendaDTO> agendas) {
     public static DayDTO fromDay(Day day) {
-      List<AgendaDTO> agendaDTOs = day.getAgendas().stream().map(AgendaDTO::fromAgenda).toList();
+      List<CreateUpdateAgendaDTO> agendaDTOs = day.getAgendas().stream().map(CreateUpdateAgendaDTO::fromAgenda).toList();
 
       return new DayDTO(
           day.getId(), day.getDate(), day.getLocation(), day.getDescription(), agendaDTOs);
-    }
-  }
-
-  public record AgendaDTO(OffsetDateTime startDate, OffsetDateTime endDate, String location) {
-    public static AgendaDTO fromAgenda(Agenda agenda) {
-      return new AgendaDTO(agenda.getStartDate(), agenda.getEndDate(), agenda.getLocation());
     }
   }
 }

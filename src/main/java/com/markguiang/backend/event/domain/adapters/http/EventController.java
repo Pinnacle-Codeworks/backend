@@ -1,5 +1,7 @@
 package com.markguiang.backend.event.domain.adapters.http;
 
+import com.markguiang.backend.event.domain.adapters.http.dto.CreateUpdateAgendaDTO;
+import com.markguiang.backend.event.domain.adapters.http.dto.CreateUpdateDayDTO;
 import com.markguiang.backend.event.domain.adapters.http.dto.CreateEventDTO;
 import com.markguiang.backend.event.domain.adapters.http.dto.EventResponseDTO;
 import com.markguiang.backend.event.domain.adapters.http.dto.EventResponseWithoutDaysDTO;
@@ -10,11 +12,10 @@ import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.domain.ports.EventRepository;
 import com.markguiang.backend.event.domain.ports.EventService;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/event")
@@ -56,5 +57,23 @@ public class EventController {
   public EventResponseDTO getEvent(@PathVariable UUID id) {
     Event event = this.eventService.getEvent(id);
     return EventResponseDTO.fromEvent(event);
+  }
+
+  @PreAuthorize("hasAuthority('permission:write')")
+  @PostMapping("/agenda/{d}")
+  public void addAgenda(@PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
+    eventService.addAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
+  }
+
+  @PreAuthorize("hasAuthority('permission:write')")
+  @DeleteMapping("/agenda/{id}")
+  public void deleteAgenda(@PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
+    eventService.removeAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
+  }
+
+  @PreAuthorize("hasAuthority('permission:write')")
+  @PatchMapping("/day/{id}")
+  public void updateDay(@PathVariable UUID eventId, @Valid @RequestBody CreateUpdateDayDTO dayDTO) {
+    eventService.updateDay(eventId, CreateUpdateDayDTO.fromDTO(dayDTO));
   }
 }

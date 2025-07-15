@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 public record UpdateEventDTO(
-    UUID id,
+    @NotNull UUID id,
     @NotNull String name,
     String description,
     String location,
