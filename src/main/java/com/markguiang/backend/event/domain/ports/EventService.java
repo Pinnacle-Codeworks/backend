@@ -7,12 +7,11 @@ import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.exceptions.DuplicateNameException;
 import com.markguiang.backend.event.exceptions.EventDoesNotExistException;
+import java.util.List;
+import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-
-import java.util.List;
-import java.util.UUID;
 
 public class EventService {
   private final EventRepository er;

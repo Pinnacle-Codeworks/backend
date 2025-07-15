@@ -16,14 +16,15 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/event")
 public class EventController {
   private final EventService eventService;
 
-  public EventController(EventRepository eventRepository) {
-    this.eventService = new EventService(eventRepository);
+  public EventController(EventService eventService) {
+    this.eventService = eventService;
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
