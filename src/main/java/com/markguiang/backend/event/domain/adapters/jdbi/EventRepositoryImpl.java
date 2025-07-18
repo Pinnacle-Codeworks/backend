@@ -7,13 +7,12 @@ import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.domain.ports.EventRepository;
 import com.markguiang.backend.tenant.TenantContext;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class EventRepositoryImpl implements EventRepository {
@@ -37,6 +36,11 @@ public class EventRepositoryImpl implements EventRepository {
   }
 
   @Override
+  public void updateImage(UUID eventId, URI image) {
+    dao.updateImage(tenantId, eventId, image);
+  }
+
+  @Override
   @Transactional
   // List<Day> -> List<Agenda> not included
   public UUID save(Event event) {
@@ -44,7 +48,12 @@ public class EventRepositoryImpl implements EventRepository {
 
     for (Day day : event.getDays()) {
       dao.insertDay(
-          tenantId, day.getId(), event.getId(), day.getLocation(), day.getDate(), day.getDescription());
+          tenantId,
+          day.getId(),
+          event.getId(),
+          day.getLocation(),
+          day.getDate(),
+          day.getDescription());
     }
 
     return event.getId();

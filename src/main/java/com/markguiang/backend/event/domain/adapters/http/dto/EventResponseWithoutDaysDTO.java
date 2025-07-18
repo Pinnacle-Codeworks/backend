@@ -1,6 +1,7 @@
 package com.markguiang.backend.event.domain.adapters.http.dto;
 
 import com.markguiang.backend.event.domain.models.Event;
+import java.net.URI;
 import java.util.UUID;
 
 public record EventResponseWithoutDaysDTO(
@@ -9,7 +10,7 @@ public record EventResponseWithoutDaysDTO(
     Boolean hasMultipleLocation,
     String description,
     String location,
-    String imgURL,
+    URI imgURL,
     Event.EventStatus eventStatus) {
 
   public static EventResponseWithoutDaysDTO fromEvent(Event event) {

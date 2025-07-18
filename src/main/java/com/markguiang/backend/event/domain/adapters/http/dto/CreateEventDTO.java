@@ -5,7 +5,6 @@ import com.markguiang.backend.annotation.ValidRequired;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import jakarta.validation.constraints.NotNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +14,6 @@ public record CreateEventDTO(
     @NotNull String name,
     String description,
     String location,
-    String imgURL,
     Event.EventStatus eventStatus,
     Boolean hasMultipleLocation,
     @JsonProperty("days") @ValidRequired List<CreateUpdateDayDTO> days) {
@@ -32,7 +30,7 @@ public record CreateEventDTO(
         dto.hasMultipleLocation(),
         dto.description(),
         dto.location(),
-        dto.imgURL(),
+        null,
         dto.eventStatus(),
         eventDays);
   }

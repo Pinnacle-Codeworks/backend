@@ -1,7 +1,6 @@
 package com.markguiang.backend.form.service;
 
 import com.markguiang.backend.event.domain.models.Event;
-import com.markguiang.backend.event.domain.ports.EventRepository;
 import com.markguiang.backend.event.domain.ports.EventService;
 import com.markguiang.backend.form.model.Field;
 import com.markguiang.backend.form.model.Form;
@@ -20,10 +19,10 @@ public class FormService {
   private final EventService eventService;
 
   public FormService(
-      FormRepository formRepository, FieldService fieldService, EventRepository eventRepository) {
+      FormRepository formRepository, FieldService fieldService, EventService eventService) {
     this.formRepository = formRepository;
     this.fieldService = fieldService;
-    this.eventService = new EventService(eventRepository);
+    this.eventService = eventService;
   }
 
   // TODO: broken

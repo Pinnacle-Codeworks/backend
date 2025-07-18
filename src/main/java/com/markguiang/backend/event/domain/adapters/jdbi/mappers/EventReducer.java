@@ -4,6 +4,7 @@ import com.markguiang.backend.event.domain.models.Agenda;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.domain.models.Event.EventStatus;
+import java.net.URI;
 import java.sql.Timestamp;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class EventReducer implements LinkedHashMapRowReducer<UUID, Event> {
             rowView.getColumn("has_multiple_location", Boolean.class),
             rowView.getColumn("description", String.class),
             rowView.getColumn("location", String.class),
-            rowView.getColumn("img_url", String.class),
+            rowView.getColumn("img_url", URI.class),
             EventStatus.valueOf(rowView.getColumn("status", String.class)),
             new ArrayList<>()));
 

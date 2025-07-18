@@ -4,18 +4,18 @@ import com.markguiang.backend.base.AggregateRoot;
 import com.markguiang.backend.event.exceptions.AgendasOnDifferentDateException;
 import com.markguiang.backend.event.exceptions.DaysOnSameDateException;
 import com.markguiang.backend.event.utils.DateUtils;
+import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-// tenant-name unique constraint
 public class Event extends AggregateRoot {
   private final String name;
   private final Boolean hasMultipleLocation;
   private String description;
   private String location;
-  private String imgURL;
+  private URI imgURL;
   private EventStatus eventStatus;
   private List<Day> days;
 
@@ -25,7 +25,7 @@ public class Event extends AggregateRoot {
       Boolean hasMultipleLocation,
       String description,
       String location,
-      String imgURL,
+      URI imgURL,
       EventStatus eventStatus,
       List<Day> days) {
     super(id);
@@ -44,7 +44,7 @@ public class Event extends AggregateRoot {
       Boolean hasMultipleLocation,
       String description,
       String location,
-      String imgURL,
+      URI imgURL,
       EventStatus eventStatus,
       List<Day> days) {
     this(null, name, hasMultipleLocation, description, location, imgURL, eventStatus, days);
@@ -72,12 +72,12 @@ public class Event extends AggregateRoot {
   }
 
   public void updateDay(Day day) {
-      for (Day value : days) {
-          if (value.getDate().equals(day.getDate())) {
-              value.updateData(day.getLocation(), day.getDescription());
-              return;
-          }
+    for (Day value : days) {
+      if (value.getDate().equals(day.getDate())) {
+        value.updateData(day.getLocation(), day.getDescription());
+        return;
       }
+    }
   }
 
   private String validateName(String name) {
@@ -116,7 +116,7 @@ public class Event extends AggregateRoot {
     this.location = location;
   }
 
-  public void setImgURL(String imgURL) {
+  public void setImgURL(URI imgURL) {
     this.imgURL = imgURL;
   }
 
@@ -140,7 +140,7 @@ public class Event extends AggregateRoot {
     return hasMultipleLocation;
   }
 
-  public String getImgURL() {
+  public URI getImgURL() {
     return imgURL;
   }
 

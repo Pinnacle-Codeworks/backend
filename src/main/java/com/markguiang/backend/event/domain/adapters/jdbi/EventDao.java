@@ -12,6 +12,7 @@ import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 import org.jdbi.v3.sqlobject.statement.UseRowReducer;
 
+import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -83,6 +84,13 @@ public interface EventDao {
   void updateEvent(@Bind("tenantId") Long tenantId, @BindBean Event event);
 
   @SqlUpdate("""
+      UPDATE events
+      SET img_url = :imgURL
+      WHERE id = :id AND tenant_id = :tenantId
+      """)
+  void updateImage(@Bind("tenantId") Long tenantId, @Bind("id") UUID id, @Bind("imgURL") URI imgURL);
+
+  @SqlUpdate("""
           INSERT INTO days (id, tenant_id, event_id, location, date, description)
           VALUES (:id, :tenantId, :eventId, :location, :date, :description)
       """)
@@ -124,4 +132,5 @@ public interface EventDao {
       @Bind("id") UUID id,
       @Bind("location") String location,
       @Bind("description") String description);
+
 }

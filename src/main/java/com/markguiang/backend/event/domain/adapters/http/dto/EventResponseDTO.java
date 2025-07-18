@@ -2,6 +2,7 @@ package com.markguiang.backend.event.domain.adapters.http.dto;
 
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
+import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +16,7 @@ public record EventResponseDTO(
     Boolean hasMultipleLocation,
     String description,
     String location,
-    String imgURL,
+    URI imgURL,
     Event.EventStatus eventStatus,
     List<DayDTO> days) {
 
@@ -42,9 +43,14 @@ public record EventResponseDTO(
   }
 
   public record DayDTO(
-      UUID id, OffsetDateTime date, String location, String description, List<CreateUpdateAgendaDTO> agendas) {
+      UUID id,
+      OffsetDateTime date,
+      String location,
+      String description,
+      List<CreateUpdateAgendaDTO> agendas) {
     public static DayDTO fromDay(Day day) {
-      List<CreateUpdateAgendaDTO> agendaDTOs = day.getAgendas().stream().map(CreateUpdateAgendaDTO::fromAgenda).toList();
+      List<CreateUpdateAgendaDTO> agendaDTOs = day.getAgendas().stream().map(CreateUpdateAgendaDTO::fromAgenda)
+          .toList();
 
       return new DayDTO(
           day.getId(), day.getDate(), day.getLocation(), day.getDescription(), agendaDTOs);

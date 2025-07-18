@@ -2,6 +2,7 @@ package com.markguiang.backend.event.domain.adapters.http.dto;
 
 import com.markguiang.backend.event.domain.models.Event;
 import jakarta.validation.constraints.NotNull;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -10,7 +11,7 @@ public record UpdateEventDTO(
     @NotNull String name,
     String description,
     String location,
-    String imgURL,
+    URI imgURL,
     Event.EventStatus eventStatus,
     Boolean hasMultipleLocation) {
 
