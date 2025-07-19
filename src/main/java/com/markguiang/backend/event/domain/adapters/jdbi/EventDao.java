@@ -88,7 +88,7 @@ public interface EventDao {
       SET img_url = :imgURL
       WHERE id = :id AND tenant_id = :tenantId
       """)
-  void updateImage(@Bind("tenantId") Long tenantId, @Bind("id") UUID id, @Bind("imgURL") URI imgURL);
+  void updateImageUrl(@Bind("tenantId") Long tenantId, @Bind("id") UUID id, @Bind("imgURL") URI imgURL);
 
   @SqlUpdate("""
           INSERT INTO days (id, tenant_id, event_id, location, date, description)

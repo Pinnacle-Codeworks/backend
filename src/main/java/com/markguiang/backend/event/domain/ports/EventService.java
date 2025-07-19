@@ -7,7 +7,6 @@ import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.exceptions.DuplicateNameException;
 import com.markguiang.backend.event.exceptions.EventDoesNotExistException;
-import com.markguiang.backend.infrastructure.storage.StorageService;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -15,15 +14,12 @@ import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.web.multipart.MultipartFile;
 
 public class EventService {
   private final EventRepository er;
-  private final StorageService ss;
 
-  public EventService(EventRepository er, StorageService ss) {
+  public EventService(EventRepository er) {
     this.er = er;
-    this.ss = ss;
   }
 
   private Event getEventOrThrow(UUID eventID) {
@@ -90,10 +86,9 @@ public class EventService {
     er.updateDay(day);
   }
 
-  public void updateImage(UUID eventID, MultipartFile image) throws IOException {
+  public void updateImageUrl(UUID eventID, URI url) throws IOException {
     getEventOrThrow(eventID);
 
-    URI uri = ss.store(image);
-    er.updateImage(eventID, uri);
+    er.updateImageUrl(eventID, url);
   }
 }

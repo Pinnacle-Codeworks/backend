@@ -36,8 +36,8 @@ public class EventRepositoryImpl implements EventRepository {
   }
 
   @Override
-  public void updateImage(UUID eventId, URI image) {
-    dao.updateImage(tenantId, eventId, image);
+  public void updateImageUrl(UUID eventId, URI image) {
+    dao.updateImageUrl(tenantId, eventId, image);
   }
 
   @Override

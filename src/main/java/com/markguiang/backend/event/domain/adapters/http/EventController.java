@@ -12,11 +12,11 @@ import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.domain.ports.EventService;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.net.URI;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/event")
@@ -88,8 +88,8 @@ public class EventController {
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
-  @PostMapping("/image/{eventId}")
-  public void addImage(@PathVariable UUID eventId, MultipartFile image) throws IOException {
-    eventService.updateImage(eventId, image);
+  @PostMapping("/image-url/{eventId}")
+  public void updateImageUrl(@PathVariable UUID eventId, URI imageUrl) throws IOException {
+    eventService.updateImageUrl(eventId, imageUrl);
   }
 }
