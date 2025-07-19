@@ -1,8 +1,11 @@
 package com.markguiang.backend.auth.controller;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseToken;
 import com.markguiang.backend.auth.config.enum_.RoleType;
 import com.markguiang.backend.auth.dto.mapper.UserRequestMapper;
 import com.markguiang.backend.auth.dto.mapper.UserResponseMapper;
+import com.markguiang.backend.auth.dto.request.OAuthDTO;
 import com.markguiang.backend.auth.dto.request.RegisterUserDTO;
 import com.markguiang.backend.auth.dto.response.LoginResponseDTO;
 import com.markguiang.backend.auth.dto.response.UserResponseDTO;
@@ -10,6 +13,7 @@ import com.markguiang.backend.auth.role.Role;
 import com.markguiang.backend.auth.role.RoleService;
 import com.markguiang.backend.user.User;
 import com.markguiang.backend.user.UserContext;
+import com.markguiang.backend.user.UserRepository;
 import com.markguiang.backend.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,23 +21,26 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -47,11 +54,15 @@ public class AuthenticationController {
     private final RoleService roleService;
     private final UserRequestMapper userRequestMapper;
     private final UserResponseMapper userResponseMapper;
+    private final CsrfTokenRepository csrfTokenRepository;
+    private final UserRepository userRepository;
+
+
 
     public AuthenticationController(UserService userService, AuthenticationManager authenticationManager,
             SecurityContextLogoutHandler securityContextLogoutHandler,
             DelegatingSecurityContextRepository delegatingSecurityContextRepository, RoleService roleService,
-            UserRequestMapper userRequestMapper, UserResponseMapper userResponseMapper) {
+            UserRequestMapper userRequestMapper, UserResponseMapper userResponseMapper, UserRepository userRepository, CsrfTokenRepository csrfTokenRepository) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
         this.securityContextLogoutHandler = securityContextLogoutHandler;
@@ -59,6 +70,8 @@ public class AuthenticationController {
         this.roleService = roleService;
         this.userRequestMapper = userRequestMapper;
         this.userResponseMapper = userResponseMapper;
+        this.userRepository = userRepository;
+        this.csrfTokenRepository = csrfTokenRepository;
     }
 
     @Operation(summary = "Login user", description = "Requires Basic Authorization header (Base64 encoded 'username:password')", security = @SecurityRequirement(name = "basicAuth"))
@@ -126,4 +139,73 @@ public class AuthenticationController {
 
         return values;
     }
+
+    @GetMapping("/csrf")
+    public ResponseEntity<CsrfToken> getCsrfToken(HttpServletRequest request, HttpServletResponse response) {
+        CsrfToken csrfToken = csrfTokenRepository.loadToken(request);
+
+        if (csrfToken == null) {
+            csrfToken = csrfTokenRepository.generateToken(request);
+            csrfTokenRepository.saveToken(csrfToken, request, response);
+        }
+
+        response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
+        return ResponseEntity.ok(csrfToken);
+    }
+
+    @PostMapping("/oauth")
+    public ResponseEntity<Object> verifyToken(
+            @RequestBody OAuthDTO request,
+            HttpServletRequest httpRequest,
+            HttpServletResponse httpResponse
+    ) {
+        String idToken = request.getToken();
+        String emailFromClient = request.getEmail();
+
+        try {
+            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
+            String emailFromFirebase = decodedToken.getEmail();
+
+            if (!emailFromFirebase.equals(emailFromClient)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Collections.singletonMap("error", "Email mismatch between token and request"));
+            }
+
+            boolean isAuthorized = userRepository.existsByEmail(emailFromFirebase);
+            if (!isAuthorized) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Collections.singletonMap("error", "Email not authorized"));
+            }
+
+            Authentication authentication = new UsernamePasswordAuthenticationToken(emailFromFirebase, null,
+                    List.of(new SimpleGrantedAuthority("ROLE_USER")));
+
+            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+            securityContext.setAuthentication(authentication);
+            SecurityContextHolder.setContext(securityContext);
+
+            new HttpSessionSecurityContextRepository()
+                    .saveContext(securityContext, httpRequest, httpResponse);
+
+            CsrfToken csrfToken = csrfTokenRepository.loadToken(httpRequest);
+            if (csrfToken == null) {
+                csrfToken = csrfTokenRepository.generateToken(httpRequest);
+                csrfTokenRepository.saveToken(csrfToken, httpRequest, httpResponse);
+            }
+
+            httpResponse.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
+
+            Map<String, Object> responseBody = new HashMap<>();
+            responseBody.put("status", "authorized");
+            responseBody.put("csrf", csrfToken);
+            responseBody.put("email", emailFromFirebase);
+
+            return ResponseEntity.ok(responseBody);
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Collections.singletonMap("error", "Invalid token"));
+        }
+    }
+
 }

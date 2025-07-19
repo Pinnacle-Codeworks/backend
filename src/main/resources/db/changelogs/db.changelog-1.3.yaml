@@ -1,0 +1,47 @@
+databaseChangeLog:
+  - changeSet:
+      id: adding-users-renamed-table
+      author: joshmonleon
+      changes:
+        - insert:
+            tableName: user_
+            columns:
+              - column:
+                  name: tenant_id
+                  value: 1
+              - column:
+                  name: email
+                  value: monleonjoshuaa6516@gmail.com
+              - column:
+                  name: first_name
+                  value: Joshua
+              - column:
+                  name: last_name
+                  value: Joshua
+              - column:
+                  name: password
+                  value: test
+              - column:
+                  name: username
+                  value: joshua
+        - insert:
+            tableName: user_
+            columns:
+              - column:
+                  name: tenant_id
+                  value: 1
+              - column:
+                  name: email
+                  value: julianarolluqui@gmail.com
+              - column:
+                  name: first_name
+                  value: Juliana
+              - column:
+                  name: last_name
+                  value: Rolluqui
+              - column:
+                  name: password
+                  value: test
+              - column:
+                  name: username
+                  value: juju
