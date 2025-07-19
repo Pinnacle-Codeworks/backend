@@ -1,15 +1,15 @@
 databaseChangeLog:
   - changeSet:
-      id: create-user-table
+      id: create-user-table-update
       author: joshmonleon
       preConditions:
         onFail: MARK_RAN
         not:
           tableExists:
-            tableName: users
+            tableName: user_
       changes:
         - createTable:
-            tableName: users
+            tableName: user_
             columns:
               - column:
                   name: user_id
