@@ -1,8 +1,10 @@
 package com.markguiang.backend.base.model;
 
 import com.fasterxml.uuid.Generators;
-
-import java.util.Objects;
+import com.markguiang.backend.base.exceptions.DuplicateIdInCollectionException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public abstract class IdentifiableDomainObject implements DomainObject {
@@ -20,18 +22,12 @@ public abstract class IdentifiableDomainObject implements DomainObject {
     return this.id;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-    IdentifiableDomainObject entity = (IdentifiableDomainObject) o;
-    return Objects.equals(id, entity.getId());
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(id);
+  public static void validateForDuplicateKeys(Collection<? extends IdentifiableDomainObject> idos) {
+    Set<UUID> ids = new HashSet<>();
+    for (IdentifiableDomainObject ido : idos) {
+      if (!ids.add(ido.id)) {
+        throw new DuplicateIdInCollectionException();
+      }
+    }
   }
 }

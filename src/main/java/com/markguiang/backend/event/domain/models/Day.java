@@ -22,11 +22,15 @@ public class Day extends LocalEntity {
   private final OffsetDateTime date;
   private final List<Agenda> agendas;
 
+  public Day(Day day) {
+    this(day.getId(), day.getLocation(), day.getDate(), day.getAgendas(), day.getDescription());
+  }
+
   public Day(
       UUID ID, String location, OffsetDateTime date, List<Agenda> agendas, String description) {
     super(ID);
-    this.date = validateDate(date);
-    this.agendas = new ArrayList<>(validateAgendas(agendas));
+    this.date = prepareDate(date);
+    this.agendas = prepareAgendas(agendas);
     this.location = location;
     this.description = description;
   }
@@ -87,16 +91,20 @@ public class Day extends LocalEntity {
     return true;
   }
 
-  private OffsetDateTime validateDate(OffsetDateTime date) {
+  private void validateDate(OffsetDateTime date) {
     requireNonNull(date, "date");
     OffsetDateTime dateOnly = date.withHour(0).withMinute(0).withSecond(0).withNano(0);
     if (!date.equals(dateOnly)) {
       throw new DateHasTimeException();
     }
+  }
+
+  private OffsetDateTime prepareDate(OffsetDateTime date) {
+    validateDate(date);
     return date;
   }
 
-  private List<Agenda> validateAgendas(List<Agenda> agendas) {
+  private void validateAgendas(List<Agenda> agendas) {
     requireNonNull(agendas, "agendas");
     for (Agenda agenda : agendas) {
       Objects.requireNonNull(agenda);
@@ -107,7 +115,16 @@ public class Day extends LocalEntity {
     if (Agenda.hasOverlappingTimes(agendas)) {
       throw new OverlappingAgendaTimeException();
     }
-    return agendas;
+  }
+
+  private List<Agenda> prepareAgendas(List<Agenda> agendas) {
+    validateAgendas(agendas);
+    List<Agenda> copy = new ArrayList<>();
+    for (Agenda agenda : agendas) {
+      copy.add(new Agenda(agenda));
+    }
+
+    return copy;
   }
 
   private void sortAgendas() {

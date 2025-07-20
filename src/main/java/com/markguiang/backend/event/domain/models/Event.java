@@ -1,11 +1,13 @@
 package com.markguiang.backend.event.domain.models;
 
 import com.markguiang.backend.base.model.AggregateRoot;
+import com.markguiang.backend.base.model.IdentifiableDomainObject;
 import com.markguiang.backend.event.exceptions.AgendasOnDifferentDateException;
 import com.markguiang.backend.event.exceptions.DaysOnSameDateException;
 import com.markguiang.backend.event.utils.DateUtils;
 import java.net.URI;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -30,14 +32,14 @@ public class Event extends AggregateRoot {
       EventStatus eventStatus,
       List<Day> days) {
     super(id);
-    this.name = validateName(name);
+    this.name = prepareName(name);
     this.hasMultipleLocation = hasMultipleLocation;
-    setDescription(description);
-    setLocation(location);
-    setImgURL(imgURL);
-    setEventStatus(eventStatus);
+    this.description = description;
+    this.location = location;
+    this.imgURL = imgURL;
+    this.eventStatus = eventStatus;
 
-    this.days = validateDays(days);
+    this.days = prepareDays(days);
   }
 
   public Event(
@@ -81,21 +83,30 @@ public class Event extends AggregateRoot {
     }
   }
 
-  private String validateName(String name) {
+  private String prepareName(String name) {
     requireNonNull(name, "name");
     return name;
   }
 
-  private List<Day> validateDays(List<Day> days) {
+  private void validateDays(List<Day> days) {
     requireNonNull(days, "days");
     for (Day day : days) {
       Objects.requireNonNull(day);
     }
+    IdentifiableDomainObject.validateForDuplicateKeys(days);
+
     if (!Day.allOnDifferentDates(days)) {
       throw new DaysOnSameDateException();
     }
+  }
 
-    return Collections.unmodifiableList(days);
+  private List<Day> prepareDays(List<Day> days) {
+    validateDays(days);
+    List<Day> copy = new ArrayList<>();
+    for (Day day : days) {
+      copy.add(new Day(day));
+    }
+    return copy;
   }
 
   public enum EventStatus {
@@ -107,22 +118,6 @@ public class Event extends AggregateRoot {
     COMPLETED,
     CANCELLED,
     POSTPONED
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  public void setLocation(String location) {
-    this.location = location;
-  }
-
-  public void setImgURL(URI imgURL) {
-    this.imgURL = imgURL;
-  }
-
-  public void setEventStatus(EventStatus eventStatus) {
-    this.eventStatus = eventStatus;
   }
 
   public String getName() {

@@ -1,8 +1,8 @@
 package com.markguiang.backend.event.domain.models;
 
+import com.markguiang.backend.base.exceptions.InvalidDateRangeException;
 import com.markguiang.backend.base.model.ValueObject;
 import com.markguiang.backend.event.utils.DateUtils;
-import com.markguiang.backend.base.exceptions.InvalidDateRangeException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,6 +13,10 @@ public class Agenda implements ValueObject {
   private final OffsetDateTime startDate;
   private final OffsetDateTime endDate;
   private final String location;
+
+  public Agenda(Agenda agenda) {
+    this(agenda.getStartDate(), agenda.getEndDate(), agenda.getLocation());
+  }
 
   public Agenda(OffsetDateTime startDate, OffsetDateTime endDate, String location) {
     super();
@@ -57,21 +61,6 @@ public class Agenda implements ValueObject {
     if (startDate.isAfter(endDate)) {
       throw new InvalidDateRangeException();
     }
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o)
-      return true;
-    if (o == null || getClass() != o.getClass())
-      return false;
-    Agenda other = (Agenda) o;
-    return Objects.equals(startDate, other.startDate) && Objects.equals(endDate, other.endDate);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(startDate, endDate);
   }
 
   public OffsetDateTime getStartDate() {
