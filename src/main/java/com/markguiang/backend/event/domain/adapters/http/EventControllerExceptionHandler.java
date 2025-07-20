@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
+@ControllerAdvice(assignableTypes = { EventController.class })
 public class EventControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler({
