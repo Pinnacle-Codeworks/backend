@@ -1,4 +1,4 @@
-package com.markguiang.backend.annotation;
+package com.markguiang.backend.base.annotation;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;

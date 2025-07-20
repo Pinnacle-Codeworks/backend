@@ -1,6 +1,6 @@
 package com.markguiang.backend.form.model;
 
-import com.markguiang.backend.base.AbstractBaseEntity;
+import com.markguiang.backend.base.model.AbstractBaseEntity;
 import jakarta.persistence.*;
 import java.util.List;
 

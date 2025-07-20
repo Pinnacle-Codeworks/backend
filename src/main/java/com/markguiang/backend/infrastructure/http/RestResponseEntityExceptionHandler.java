@@ -1,5 +1,7 @@
-package com.markguiang.backend.exceptions;
+package com.markguiang.backend.infrastructure.http;
 
+import com.markguiang.backend.base.exceptions.FieldMismatchException;
+import com.markguiang.backend.base.exceptions.UniqueConstraintViolationException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

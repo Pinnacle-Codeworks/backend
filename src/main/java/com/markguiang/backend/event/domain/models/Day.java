@@ -1,6 +1,6 @@
 package com.markguiang.backend.event.domain.models;
 
-import com.markguiang.backend.base.LocalEntity;
+import com.markguiang.backend.base.model.LocalEntity;
 import com.markguiang.backend.event.exceptions.AgendaNotFoundException;
 import com.markguiang.backend.event.exceptions.AgendasOnDifferentDateException;
 import com.markguiang.backend.event.exceptions.DateHasTimeException;

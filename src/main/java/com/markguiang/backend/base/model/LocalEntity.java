@@ -1,4 +1,4 @@
-package com.markguiang.backend.base;
+package com.markguiang.backend.base.model;
 
 import java.util.UUID;
 

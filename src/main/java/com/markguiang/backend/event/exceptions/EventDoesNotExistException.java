@@ -1,6 +1,6 @@
 package com.markguiang.backend.event.exceptions;
 
-import com.markguiang.backend.exceptions.DomainException;
+import com.markguiang.backend.base.exceptions.DomainException;
 import java.util.UUID;
 
 public class EventDoesNotExistException extends DomainException {

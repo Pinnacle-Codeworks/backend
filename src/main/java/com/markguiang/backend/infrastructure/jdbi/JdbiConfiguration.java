@@ -1,4 +1,4 @@
-package com.markguiang.backend.config;
+package com.markguiang.backend.infrastructure.jdbi;
 
 import com.markguiang.backend.event.domain.adapters.jdbi.EventDao;
 import org.jdbi.v3.core.Jdbi;

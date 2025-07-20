@@ -1,8 +1,8 @@
 package com.markguiang.backend.event.domain.models;
 
-import com.markguiang.backend.base.ValueObject;
+import com.markguiang.backend.base.model.ValueObject;
 import com.markguiang.backend.event.utils.DateUtils;
-import com.markguiang.backend.exceptions.InvalidDateRangeException;
+import com.markguiang.backend.base.exceptions.InvalidDateRangeException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;

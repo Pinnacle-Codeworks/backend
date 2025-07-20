@@ -1,6 +1,6 @@
 package com.markguiang.backend.event.domain.ports;
 
-import com.markguiang.backend.base.Repository;
+import com.markguiang.backend.base.model.Repository;
 import com.markguiang.backend.event.domain.models.Agenda;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;

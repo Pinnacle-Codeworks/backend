@@ -1,4 +1,4 @@
-package com.markguiang.backend.exceptions;
+package com.markguiang.backend.base.exceptions;
 
 public class InvalidDateRangeException extends ValidationException {
   public InvalidDateRangeException() {

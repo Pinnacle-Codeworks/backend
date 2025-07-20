@@ -8,9 +8,10 @@ import com.markguiang.backend.tenant.TenantRepository;
 import com.markguiang.backend.user.User;
 import com.markguiang.backend.user.UserService;
 import jakarta.annotation.PostConstruct;
-import java.util.List;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Profile("dev")

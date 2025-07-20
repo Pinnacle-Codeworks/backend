@@ -1,6 +1,6 @@
 package com.markguiang.backend.user;
 
-import com.markguiang.backend.exceptions.UniqueConstraintViolationException;
+import com.markguiang.backend.base.exceptions.UniqueConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

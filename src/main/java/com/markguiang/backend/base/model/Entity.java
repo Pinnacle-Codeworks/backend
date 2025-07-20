@@ -1,6 +1,6 @@
-package com.markguiang.backend.base;
+package com.markguiang.backend.base.model;
 
-import com.markguiang.backend.exceptions.MissingFieldException;
+import com.markguiang.backend.base.exceptions.MissingFieldException;
 import java.util.Objects;
 import java.util.UUID;
 

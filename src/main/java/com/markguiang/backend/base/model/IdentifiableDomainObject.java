@@ -1,6 +1,7 @@
-package com.markguiang.backend.base;
+package com.markguiang.backend.base.model;
 
 import com.fasterxml.uuid.Generators;
+
 import java.util.Objects;
 import java.util.UUID;
 

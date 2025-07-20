@@ -1,4 +1,4 @@
-package com.markguiang.backend.base;
+package com.markguiang.backend.base.model;
 
 import com.markguiang.backend.tenant.TenantAware;
 import com.markguiang.backend.tenant.TenantListener;

@@ -1,7 +1,7 @@
 package com.markguiang.backend.event.domain.adapters.http.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.markguiang.backend.annotation.ValidRequired;
+import com.markguiang.backend.base.annotation.ValidRequired;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import jakarta.validation.constraints.NotNull;
