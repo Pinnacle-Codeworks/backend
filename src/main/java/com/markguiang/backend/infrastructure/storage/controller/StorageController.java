@@ -1,5 +1,6 @@
-package com.markguiang.backend.infrastructure.storage;
+package com.markguiang.backend.infrastructure.storage.controller;
 
+import com.markguiang.backend.infrastructure.storage.StorageService;
 import java.net.URI;
 import java.util.UUID;
 import org.springframework.context.annotation.Profile;
@@ -7,9 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @RequestMapping("/storage")
 @Profile("!dev")
 public class StorageController {

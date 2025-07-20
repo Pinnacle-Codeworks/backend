@@ -1,9 +1,10 @@
-package com.markguiang.backend.infrastructure.storage;
+package com.markguiang.backend.infrastructure.storage.controller;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 
+import com.markguiang.backend.infrastructure.storage.StorageService;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.InputStreamResource;
@@ -16,10 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-@RestController
 @RequestMapping("/storage")
 @Profile("dev")
 public class DevStorageController {

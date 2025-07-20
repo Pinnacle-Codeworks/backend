@@ -1,6 +1,8 @@
 package com.markguiang.backend.infrastructure.storage;
 
 import com.markguiang.backend.infrastructure.storage.base.DirectObjectStore;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -8,7 +10,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import org.springframework.stereotype.Component;
 
 @Component
 public class LocalObjectStore implements DirectObjectStore {
