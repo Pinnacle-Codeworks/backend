@@ -95,7 +95,7 @@ public class Event extends AggregateRoot {
       throw new DaysOnSameDateException();
     }
 
-    return days;
+    return Collections.unmodifiableList(days);
   }
 
   public enum EventStatus {
