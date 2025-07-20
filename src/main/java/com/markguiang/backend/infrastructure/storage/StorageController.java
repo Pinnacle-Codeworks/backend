@@ -1,15 +1,13 @@
 package com.markguiang.backend.infrastructure.storage;
 
-import java.io.IOException;
 import java.net.URI;
+import java.util.UUID;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/storage")
@@ -22,19 +20,13 @@ public class StorageController {
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
-  @GetMapping("/presigned-url")
-  public URI generatePresignedUrl() {
-    return ss.generatePresignedUrl();
+  @GetMapping("/presigned-url/{eventId}")
+  public URI generatePresignedUrlForUpload(@PathVariable UUID eventId) {
+    return ss.generatePresignedUrlForUpload(eventId.toString());
   }
 
-  // i dont know what to do with this
-  // i dont want to expose this endpoint because whats the point
-  // maybe i can enable this only on dev environment or something
-  @PreAuthorize("hasAuthority('permission:write')")
-  @PostMapping("/object/{presignedUrl}")
-  public URI uploadObject(MultipartFile object, @PathVariable URI presignedUrl) throws IOException {
-    // check if not logcal signedURL (aws)
-    // redirect if aws
-    return ss.store(object, presignedUrl);
+  @GetMapping("/presigned-url/{eventId}")
+  public URI generatePresignedUrlForDownload(@PathVariable UUID eventId) {
+    return ss.generatePresignedUrlForDownload(eventId.toString());
   }
 }

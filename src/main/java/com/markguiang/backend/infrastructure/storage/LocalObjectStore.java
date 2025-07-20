@@ -1,6 +1,5 @@
 package com.markguiang.backend.infrastructure.storage;
 
-import com.fasterxml.uuid.Generators;
 import com.markguiang.backend.infrastructure.storage.base.DirectObjectStore;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +25,17 @@ public class LocalObjectStore implements DirectObjectStore {
     return target.toUri();
   }
 
-  public URI generatePresignedUrl() {
-    return URI.create(Generators.timeBasedEpochGenerator().generate().toString());
+  public InputStream fetch(URI presignedUrl) throws IOException {
+    Path filename = Paths.get(presignedUrl.toString());
+    Path source = storagePath.resolve(filename);
+    return Files.newInputStream(source);
+  }
+
+  public URI generatePresignedUrlForDownload(String key) {
+    return URI.create(key);
+  }
+
+  public URI generatePresignedUrlForUpload(String key) {
+    return URI.create(key);
   }
 }

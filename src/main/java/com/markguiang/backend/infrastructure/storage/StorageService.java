@@ -27,7 +27,18 @@ public class StorageService {
     return this.store(mf.getInputStream(), presignedUrl);
   }
 
-  public URI generatePresignedUrl() {
-    return os.generatePresignedUrl();
+  public InputStream fetch(URI presignedUrl) throws IOException {
+    if (os instanceof DirectObjectStore dos) {
+      return dos.fetch(presignedUrl);
+    }
+    throw new UnsupportedOperationException("direct-storage-not-supported-by-this-implementation");
+  }
+
+  public URI generatePresignedUrlForUpload(String key) {
+    return os.generatePresignedUrlForUpload(key);
+  }
+
+  public URI generatePresignedUrlForDownload(String key) {
+    return os.generatePresignedUrlForDownload(key);
   }
 }
