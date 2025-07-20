@@ -6,6 +6,7 @@ import com.markguiang.backend.event.exceptions.DaysOnSameDateException;
 import com.markguiang.backend.event.utils.DateUtils;
 import java.net.URI;
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -149,6 +150,6 @@ public class Event extends AggregateRoot {
   }
 
   public List<Day> getDays() {
-    return days;
+    return Collections.unmodifiableList(days);
   }
 }
