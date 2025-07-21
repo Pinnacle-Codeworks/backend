@@ -15,11 +15,27 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Day extends LocalEntity {
+  public static boolean allOnDifferentDates(List<Day> days) {
+    if (days == null || days.isEmpty()) {
+      return true;
+    }
+    Set<LocalDate> uniqueDays = new HashSet<>();
+    for (Day day : days) {
+      if (!uniqueDays.add(day.getDate().toLocalDate())) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   private String description;
   private String location;
   private final OffsetDateTime date;
+
   private final List<Agenda> agendas;
 
   public Day(Day day) {
@@ -41,20 +57,17 @@ public class Day extends LocalEntity {
 
   public void addAgenda(Agenda agenda) {
     Objects.requireNonNull(agenda);
-
-    List<Agenda> tempList = new ArrayList<>(agendas);
-    tempList.add(agenda);
-    validateAgendas(tempList);
-
-    agendas.add(agenda);
-    sortAgendas();
+    mutateAgendas(list -> list.add(agenda));
   }
 
   public void removeAgenda(Agenda agenda) {
     Objects.requireNonNull(agenda);
-    if (!agendas.remove(agenda)) {
-      throw new AgendaNotFoundException(agenda.getStartDate());
-    }
+    mutateAgendas(list -> {
+      if (!list.remove(agenda)) {
+        throw new AgendaNotFoundException(agenda.getStartDate());
+      }
+      return true;
+    });
   }
 
   public String getLocation() {
@@ -78,17 +91,19 @@ public class Day extends LocalEntity {
     this.description = description;
   }
 
-  public static boolean allOnDifferentDates(List<Day> days) {
-    if (days == null || days.isEmpty()) {
-      return true;
-    }
-    Set<LocalDate> uniqueDays = new HashSet<>();
-    for (Day day : days) {
-      if (!uniqueDays.add(day.getDate().toLocalDate())) {
-        return false;
-      }
-    }
-    return true;
+  private void mutateAgendas(Function<List<Agenda>, Boolean> mutator) {
+    List<Agenda> copy = agendas.stream()
+        .map(Agenda::new)
+        .collect(Collectors.toList());
+
+    boolean changed = mutator.apply(copy);
+    if (!changed)
+      return;
+
+    validateAgendas(copy);
+    agendas.clear();
+    agendas.addAll(copy);
+    sortAgendas();
   }
 
   private void validateDate(OffsetDateTime date) {
@@ -119,12 +134,11 @@ public class Day extends LocalEntity {
 
   private List<Agenda> prepareAgendas(List<Agenda> agendas) {
     validateAgendas(agendas);
-    List<Agenda> copy = new ArrayList<>();
-    for (Agenda agenda : agendas) {
-      copy.add(new Agenda(agenda));
-    }
-
-    return copy;
+    return new ArrayList<>(
+        agendas.stream()
+            .map(Agenda::new)
+            .sorted(Comparator.comparing(Agenda::getStartDate))
+            .collect(Collectors.toList()));
   }
 
   private void sortAgendas() {

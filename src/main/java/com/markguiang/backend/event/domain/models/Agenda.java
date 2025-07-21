@@ -10,8 +10,42 @@ import java.util.List;
 import java.util.Objects;
 
 public class Agenda implements ValueObject {
+  public static boolean hasOverlappingTimes(List<Agenda> agendaList) {
+    if (agendaList == null || agendaList.isEmpty()) {
+      return false;
+    }
+
+    List<Agenda> copy = new ArrayList<>(List.copyOf(agendaList));
+    copy.sort(Comparator.comparing(Agenda::getStartDate));
+
+    for (int i = 1; i < copy.size(); i++) {
+      Agenda current = copy.get(i);
+      Agenda before = copy.get(i - 1);
+
+      if (before.getEndDate().isAfter(current.getStartDate())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean allOnDate(List<Agenda> agendaList, OffsetDateTime date) {
+    if (agendaList == null || date == null) {
+      return false;
+    }
+    for (Agenda agenda : agendaList) {
+      if (!DateUtils.onSameDate(agenda.getStartDate(), date)
+          || !DateUtils.onSameDate(agenda.getEndDate(), date)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   private final OffsetDateTime startDate;
+
   private final OffsetDateTime endDate;
+
   private final String location;
 
   public Agenda(Agenda agenda) {
@@ -27,42 +61,6 @@ public class Agenda implements ValueObject {
     this.location = location;
   }
 
-  // TODO: add unit test
-  public static boolean hasOverlappingTimes(List<Agenda> agendaList) {
-    List<Agenda> copy = new ArrayList<>(agendaList);
-    copy.sort(Comparator.comparing(Agenda::getStartDate));
-
-    for (int i = 1; i < copy.size(); i++) {
-      Agenda current = copy.get(i);
-      Agenda before = copy.get(i - 1);
-
-      if (before.getEndDate().isAfter(current.getStartDate())) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // TODO add unit test
-  public static boolean allOnDate(List<Agenda> agendaList, OffsetDateTime date) {
-    for (Agenda agenda : agendaList) {
-      if (!DateUtils.onSameDate(agenda.getStartDate(), date)
-          || !DateUtils.onSameDate(agenda.getEndDate(), date)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  private void validateDates(OffsetDateTime startDate, OffsetDateTime endDate) {
-    Objects.requireNonNull(startDate);
-    Objects.requireNonNull(endDate);
-
-    if (startDate.isAfter(endDate)) {
-      throw new InvalidDateRangeException();
-    }
-  }
-
   public OffsetDateTime getStartDate() {
     return startDate;
   }
@@ -73,5 +71,14 @@ public class Agenda implements ValueObject {
 
   public String getLocation() {
     return location;
+  }
+
+  private void validateDates(OffsetDateTime startDate, OffsetDateTime endDate) {
+    Objects.requireNonNull(startDate);
+    Objects.requireNonNull(endDate);
+
+    if (startDate.isAfter(endDate)) {
+      throw new InvalidDateRangeException();
+    }
   }
 }
