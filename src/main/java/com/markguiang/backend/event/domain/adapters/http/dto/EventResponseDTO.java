@@ -21,15 +21,17 @@ public record EventResponseDTO(
     List<DayDTO> days) {
 
   public static EventResponseDTO fromEvent(Event event) {
-    List<DayDTO> eventDays = Optional.ofNullable(event.getDays()).orElse(Collections.emptyList()).stream()
-        .map(
-            day -> new DayDTO(
-                day.getId(),
-                day.getDate(),
-                day.getLocation(),
-                day.getDescription(),
-                new ArrayList<>()))
-        .toList();
+    List<DayDTO> eventDays =
+        Optional.ofNullable(event.getDays()).orElse(Collections.emptyList()).stream()
+            .map(
+                day ->
+                    new DayDTO(
+                        day.getId(),
+                        day.getDate(),
+                        day.getLocation(),
+                        day.getDescription(),
+                        new ArrayList<>()))
+            .toList();
 
     return new EventResponseDTO(
         event.getId(),
@@ -38,7 +40,7 @@ public record EventResponseDTO(
         event.getDescription(),
         event.getLocation(),
         event.getImgURL(),
-        event.getEventStatus(),
+        event.getStatus(),
         eventDays);
   }
 
@@ -49,8 +51,8 @@ public record EventResponseDTO(
       String description,
       List<CreateUpdateAgendaDTO> agendas) {
     public static DayDTO fromDay(Day day) {
-      List<CreateUpdateAgendaDTO> agendaDTOs = day.getAgendas().stream().map(CreateUpdateAgendaDTO::fromAgenda)
-          .toList();
+      List<CreateUpdateAgendaDTO> agendaDTOs =
+          day.getAgendas().stream().map(CreateUpdateAgendaDTO::fromAgenda).toList();
 
       return new DayDTO(
           day.getId(), day.getDate(), day.getLocation(), day.getDescription(), agendaDTOs);

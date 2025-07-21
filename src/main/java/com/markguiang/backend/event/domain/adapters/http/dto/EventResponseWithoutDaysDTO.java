@@ -21,6 +21,6 @@ public record EventResponseWithoutDaysDTO(
         event.getDescription(),
         event.getLocation(),
         event.getImgURL(),
-        event.getEventStatus());
+        event.getStatus());
   }
 }

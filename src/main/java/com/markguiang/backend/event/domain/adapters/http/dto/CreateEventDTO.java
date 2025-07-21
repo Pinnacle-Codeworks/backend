@@ -19,11 +19,13 @@ public record CreateEventDTO(
     @JsonProperty("days") @ValidRequired List<CreateUpdateDayDTO> days) {
 
   public static Event fromDTO(CreateEventDTO dto) {
-    List<Day> eventDays = Optional.ofNullable(dto.days()).orElse(Collections.emptyList()).stream()
-        .map(
-            dayDTO -> new Day(
-                dayDTO.location(), dayDTO.date(), new ArrayList<>(), dayDTO.description()))
-        .toList();
+    List<Day> eventDays =
+        Optional.ofNullable(dto.days()).orElse(Collections.emptyList()).stream()
+            .map(
+                dayDTO ->
+                    new Day(
+                        dayDTO.location(), dayDTO.date(), new ArrayList<>(), dayDTO.description()))
+            .toList();
 
     return new Event(
         dto.name(),
