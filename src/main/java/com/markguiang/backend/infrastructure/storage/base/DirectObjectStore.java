@@ -7,5 +7,5 @@ import java.net.URI;
 public interface DirectObjectStore extends ObjectStore {
   public URI store(InputStream inputStream, URI presignedUrl) throws IOException;
 
-  public InputStream fetch(URI presigendUrl) throws IOException;
+  public InputStream fetch(URI presignedUrl) throws IOException;
 }

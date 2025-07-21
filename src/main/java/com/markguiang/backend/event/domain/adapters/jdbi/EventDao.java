@@ -33,8 +33,8 @@ public interface EventDao {
             d.id AS day_id, d.location AS day_location, d.date AS day_date, d.description as day_description,
             a.start_date AS agenda_start, a.end_date AS agenda_end, a.location AS agenda_location
           FROM event e
-          LEFT JOIN days d ON d.event_id = e.id
-          LEFT JOIN agendas a ON a.day_id = d.id
+          LEFT JOIN day d ON d.event_id = e.id
+          LEFT JOIN agenda a ON a.day_id = d.id
           WHERE e.id = :id AND e.tenant_id = :tenantId
       """)
   @UseRowReducer(EventReducer.class)
@@ -91,7 +91,7 @@ public interface EventDao {
   void updateImageUrl(@Bind("tenantId") Long tenantId, @Bind("id") UUID id, @Bind("imgURL") URI imgURL);
 
   @SqlUpdate("""
-          INSERT INTO days (id, tenant_id, event_id, location, date, description)
+          INSERT INTO day (id, tenant_id, event_id, location, date, description)
           VALUES (:id, :tenantId, :eventId, :location, :date, :description)
       """)
   void insertDay(
@@ -103,13 +103,13 @@ public interface EventDao {
       @Bind("description") String description);
 
   @SqlUpdate("""
-          INSERT INTO agendas (id, tenant_id, day_id, start_date, end_date, location)
+          INSERT INTO agenda (id, tenant_id, day_id, start_date, end_date, location)
           VALUES (:id, :tenantId, :dayId, :startDate, :endDate, :location)
       """)
   void insertAgenda(@Bind("tenantId") Long tenantId, @BindBean AgendaInsertDto agenda);
 
   @SqlUpdate("""
-          DELETE FROM agendas
+          DELETE FROM agenda
           WHERE day_id = :dayId
           AND start_date = :startDate
           AND end_date = :endDate
@@ -122,7 +122,7 @@ public interface EventDao {
       @Bind("endDate") OffsetDateTime endDate);
 
   @SqlUpdate("""
-          UPDATE days
+          UPDATE day
           SET location = :location,
               description = :description
           WHERE id = :id AND tenant_id = :tenantId

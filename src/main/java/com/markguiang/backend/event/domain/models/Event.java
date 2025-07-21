@@ -74,6 +74,17 @@ public class Event extends AggregateRoot {
     throw new AgendasOnDifferentDateException();
   }
 
+  public void addDay(Day newDay) {
+    List<Day> copy = new ArrayList<>();
+    for (Day day : days) {
+      copy.add(new Day(day));
+    }
+    copy.add(new Day(newDay));
+
+    validateDays(copy);
+    this.days.add(new Day(newDay));
+  }
+
   public void updateDay(Day day) {
     for (Day value : days) {
       if (value.getDate().equals(day.getDate())) {
