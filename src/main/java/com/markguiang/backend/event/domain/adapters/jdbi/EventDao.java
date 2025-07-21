@@ -22,7 +22,7 @@ import java.util.UUID;
 public interface EventDao {
   @SqlQuery("""
           SELECT EXISTS (
-            SELECT 1 FROM events WHERE name = :name AND tenant_id = :tenantId
+            SELECT 1 FROM event WHERE name = :name AND tenant_id = :tenantId
           )
       """)
   boolean existsByName(@Bind("tenantId") Long tenantId, @Bind("name") String name);
@@ -32,7 +32,7 @@ public interface EventDao {
             e.id AS event_id, e.name, e.has_multiple_location, e.description, e.location, e.img_url, e.status,
             d.id AS day_id, d.location AS day_location, d.date AS day_date, d.description as day_description,
             a.start_date AS agenda_start, a.end_date AS agenda_end, a.location AS agenda_location
-          FROM events e
+          FROM event e
           LEFT JOIN days d ON d.event_id = e.id
           LEFT JOIN agendas a ON a.day_id = d.id
           WHERE e.id = :id AND e.tenant_id = :tenantId
@@ -49,7 +49,7 @@ public interface EventDao {
               e.location,
               e.img_url,
               e.status
-          FROM events e
+          FROM event e
           WHERE e.tenant_id = :tenantId
           ORDER BY e.<sortColumn> <sortDirection>
           LIMIT :size OFFSET :offset
@@ -62,17 +62,17 @@ public interface EventDao {
       @Define("sortColumn") String sortColumn,
       @Define("sortDirection") String sortDirection);
 
-  @SqlQuery("SELECT COUNT(*) FROM events e WHERE e.tenant_id = :tenantId")
+  @SqlQuery("SELECT COUNT(*) FROM event e WHERE e.tenant_id = :tenantId")
   int countEvents(@Bind("tenantId") Long tenantId);
 
   @SqlUpdate("""
-          INSERT INTO events (id, tenant_id, name, has_multiple_location, description, location, img_url, status)
+          INSERT INTO event (id, tenant_id, name, has_multiple_location, description, location, img_url, status)
           VALUES (:id, :tenantId, :name, :hasMultipleLocation, :description, :location, :imgURL, :status)
       """)
   void insertEvent(@Bind("tenantId") Long tenantId, @BindBean Event event);
 
   @SqlUpdate("""
-          UPDATE events
+          UPDATE event
           SET name = :name,
               has_multiple_location = :hasMultipleLocation,
               description = :description,
@@ -84,7 +84,7 @@ public interface EventDao {
   void updateEvent(@Bind("tenantId") Long tenantId, @BindBean Event event);
 
   @SqlUpdate("""
-      UPDATE events
+      UPDATE event
       SET img_url = :imgURL
       WHERE id = :id AND tenant_id = :tenantId
       """)
