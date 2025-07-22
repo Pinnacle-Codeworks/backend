@@ -19,13 +19,13 @@ public class StorageController {
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
-  @GetMapping("/presigned-url/{eventId}")
-  public URI generatePresignedUrlForUpload(@PathVariable UUID eventId) {
-    return ss.generatePresignedUrlForUpload(eventId.toString());
+  @GetMapping("/presigned-url/upload/{key}")
+  public URI generatePresignedUrlForUpload(@PathVariable UUID key) {
+    return ss.generatePresignedUrlForUpload(key.toString());
   }
 
-  @GetMapping("/presigned-url/{eventId}")
-  public URI generatePresignedUrlForDownload(@PathVariable UUID eventId) {
-    return ss.generatePresignedUrlForDownload(eventId.toString());
+  @GetMapping("/presigned-url/dowload/{key}")
+  public URI generatePresignedUrlForDownload(@PathVariable UUID key) {
+    return ss.generatePresignedUrlForDownload(key.toString());
   }
 }
