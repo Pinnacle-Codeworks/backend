@@ -74,7 +74,7 @@ public interface EventDao {
   @SqlUpdate("""
           UPDATE event
           SET location = :location,
-              description = :description,
+              description = :description
           WHERE id = :id AND tenant_id = :tenantId
       """)
   void updateEventDetails(@Bind("tenantId") Long tenantId, @Bind("id") UUID id, @Bind("location") String location,
