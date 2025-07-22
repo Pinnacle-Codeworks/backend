@@ -81,4 +81,19 @@ public class Agenda implements ValueObject {
       throw new InvalidDateRangeException();
     }
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == null)
+      return false;
+    if (!(other instanceof Agenda))
+      return false;
+    Agenda oAgenda = (Agenda) other;
+    if (this.startDate != oAgenda.getStartDate() || this.endDate != oAgenda.getEndDate()
+        || this.location != oAgenda.getLocation())
+      return false;
+    return true;
+
+  }
+
 }
