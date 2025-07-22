@@ -31,6 +31,11 @@ public class EventRepositoryImpl implements EventRepository {
   }
 
   @Override
+  public void updateEventDetails(UUID eventId, String description, String location) {
+    dao.updateEventDetails(tenantId, eventId, description, location);
+  }
+
+  @Override
   public int countEvents() {
     return dao.countEvents(tenantId);
   }
@@ -57,11 +62,6 @@ public class EventRepositoryImpl implements EventRepository {
     }
 
     return event.getId();
-  }
-
-  @Override
-  public void update(Event event) {
-    dao.updateEvent(tenantId, event);
   }
 
   @Override
@@ -104,7 +104,7 @@ public class EventRepositoryImpl implements EventRepository {
   }
 
   @Override
-  public void updateDay(Day day) {
-    dao.updateDay(tenantId, day.getId(), day.getLocation(), day.getDescription());
+  public void updateDayDetails(UUID dayId, String location, String description) {
+    dao.updateDayDetails(tenantId, dayId, location, description);
   }
 }

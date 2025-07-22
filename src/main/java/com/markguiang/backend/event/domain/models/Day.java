@@ -19,6 +19,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Day extends LocalEntity {
+
   public static boolean allOnDifferentDates(List<Day> days) {
     if (days == null || days.isEmpty()) {
       return true;
@@ -35,14 +36,26 @@ public class Day extends LocalEntity {
   private String description;
   private String location;
   private final OffsetDateTime date;
-
   private final List<Agenda> agendas;
 
-  public Day(Day day) {
+  public static Day createEmpty(String location, OffsetDateTime date, String description) {
+    return new Day(location, date, new ArrayList<>(), description);
+  }
+
+  public static Day loadFromPersistence(UUID id, String location, OffsetDateTime date, String description,
+      List<Agenda> agendas) {
+    return new Day(id, location, date, agendas, description);
+  }
+
+  public static Day copyFrom(Day day) {
+    return new Day(day);
+  }
+
+  private Day(Day day) {
     this(day.getId(), day.getLocation(), day.getDate(), day.getAgendas(), day.getDescription());
   }
 
-  public Day(
+  private Day(
       UUID ID, String location, OffsetDateTime date, List<Agenda> agendas, String description) {
     super(ID);
     this.date = prepareDate(date);
@@ -51,23 +64,28 @@ public class Day extends LocalEntity {
     this.description = description;
   }
 
-  public Day(String location, OffsetDateTime date, List<Agenda> agendas, String description) {
+  private Day(String location, OffsetDateTime date, List<Agenda> agendas, String description) {
     this(null, location, date, agendas, description);
   }
 
   public void addAgenda(Agenda agenda) {
     Objects.requireNonNull(agenda);
-    mutateAgendas(list -> list.add(agenda));
+    applyAgendaMutation(list -> list.add(agenda));
   }
 
   public void removeAgenda(Agenda agenda) {
     Objects.requireNonNull(agenda);
-    mutateAgendas(list -> {
+    applyAgendaMutation(list -> {
       if (!list.remove(agenda)) {
         throw new AgendaNotFoundException(agenda.getStartDate());
       }
       return true;
     });
+  }
+
+  public void updateDetails(String location, String description) {
+    this.location = location;
+    this.description = description;
   }
 
   public String getLocation() {
@@ -86,12 +104,7 @@ public class Day extends LocalEntity {
     return Collections.unmodifiableList(agendas);
   }
 
-  public void updateData(String location, String description) {
-    this.location = location;
-    this.description = description;
-  }
-
-  private void mutateAgendas(Function<List<Agenda>, Boolean> mutator) {
+  private void applyAgendaMutation(Function<List<Agenda>, Boolean> mutator) {
     List<Agenda> copy = agendas.stream()
         .map(Agenda::new)
         .collect(Collectors.toList());

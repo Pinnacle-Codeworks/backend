@@ -73,15 +73,12 @@ public interface EventDao {
 
   @SqlUpdate("""
           UPDATE event
-          SET name = :name,
-              has_multiple_location = :hasMultipleLocation,
+          SET location = :location,
               description = :description,
-              location = :location,
-              img_url = :imgURL,
-              status = :status
           WHERE id = :id AND tenant_id = :tenantId
       """)
-  void updateEvent(@Bind("tenantId") Long tenantId, @BindBean Event event);
+  void updateEventDetails(@Bind("tenantId") Long tenantId, @Bind("id") UUID id, @Bind("location") String location,
+      @Bind("description") String description);
 
   @SqlUpdate("""
       UPDATE event
@@ -127,7 +124,7 @@ public interface EventDao {
               description = :description
           WHERE id = :id AND tenant_id = :tenantId
       """)
-  void updateDay(
+  void updateDayDetails(
       @Bind("tenantId") Long tenantId,
       @Bind("id") UUID id,
       @Bind("location") String location,

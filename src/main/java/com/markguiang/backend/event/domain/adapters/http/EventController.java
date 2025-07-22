@@ -9,6 +9,7 @@ import com.markguiang.backend.event.domain.adapters.http.dto.UpdateEventDTO;
 import com.markguiang.backend.event.domain.enums.EventSortBy;
 import com.markguiang.backend.event.domain.enums.SortDirection;
 import com.markguiang.backend.event.domain.models.Event;
+import com.markguiang.backend.event.domain.ports.DayService;
 import com.markguiang.backend.event.domain.ports.EventService;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -22,9 +23,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/event")
 public class EventController {
   private final EventService eventService;
+  private final DayService dayService;
 
-  public EventController(EventService eventService) {
+  public EventController(EventService eventService, DayService dayService) {
     this.eventService = eventService;
+    this.dayService = dayService;
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
@@ -35,10 +38,10 @@ public class EventController {
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
-  @PatchMapping("")
-  public void updateEvent(@Valid @RequestBody UpdateEventDTO updateEventDTO) {
-    Event event = UpdateEventDTO.fromDTO(updateEventDTO);
-    eventService.updateEvent(event);
+  @PutMapping("")
+  public void updateEventDetails(@Valid @RequestBody UpdateEventDTO updateEventDTO) {
+    eventService.updateEventDetails(
+        updateEventDTO.id(), updateEventDTO.description(), updateEventDTO.location());
   }
 
   @GetMapping("")
@@ -64,32 +67,33 @@ public class EventController {
   @PostMapping("/agenda/{eventId}")
   public void addAgenda(
       @PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
-    eventService.addAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
+    dayService.addAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
-  @PatchMapping("/agenda/{eventId}")
+  @PutMapping("/agenda/{eventId}")
   public void updateAgenda(
       @PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
-    eventService.updateAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
+    dayService.updateAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
   @DeleteMapping("/agenda/{eventId}")
   public void deleteAgenda(
       @PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
-    eventService.removeAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
+    dayService.removeAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
-  @PatchMapping("/day/{eventId}")
-  public void updateDay(@PathVariable UUID eventId, @Valid @RequestBody CreateUpdateDayDTO dayDTO) {
-    eventService.updateDay(eventId, CreateUpdateDayDTO.fromDTO(dayDTO));
+  @PutMapping("/day/{eventId}")
+  public void updateDayDetails(
+      @PathVariable UUID eventId, @Valid @RequestBody CreateUpdateDayDTO dayDTO) {
+    dayService.updateDayDetails(eventId, CreateUpdateDayDTO.fromDTO(dayDTO));
   }
 
   @PreAuthorize("hasAuthority('permission:write')")
-  @PostMapping("/image-url/{eventId}")
+  @PutMapping("/image-url/{eventId}")
   public void updateImageUrl(@PathVariable UUID eventId, URI imageUrl) throws IOException {
-    eventService.updateImageUrl(eventId, imageUrl);
+    eventService.updateEventImage(eventId, imageUrl);
   }
 }

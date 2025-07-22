@@ -23,7 +23,7 @@ public class EventReducer implements LinkedHashMapRowReducer<UUID, Event> {
         map.computeIfAbsent(
             eventId,
             id ->
-                new Event(
+                Event.loadFromPersistence(
                     id,
                     rowView.getColumn("name", String.class),
                     rowView.getColumn("has_multiple_location", Boolean.class),
@@ -42,15 +42,15 @@ public class EventReducer implements LinkedHashMapRowReducer<UUID, Event> {
               .orElseGet(
                   () -> {
                     Day newDay =
-                        new Day(
+                        Day.loadFromPersistence(
                             dayId,
                             rowView.getColumn("day_location", String.class),
                             rowView
                                 .getColumn("day_date", Timestamp.class)
                                 .toInstant()
                                 .atOffset(ZoneOffset.UTC),
-                            new ArrayList<>(),
-                            rowView.getColumn("day_description", String.class));
+                            rowView.getColumn("day_description", String.class),
+                            new ArrayList<Agenda>());
                     event.addDay(newDay);
                     return newDay;
                   });

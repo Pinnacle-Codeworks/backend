@@ -2,7 +2,6 @@ package com.markguiang.backend.event.domain.ports;
 
 import com.markguiang.backend.base.model.Repository;
 import com.markguiang.backend.event.domain.models.Agenda;
-import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import java.net.URI;
 import java.util.List;
@@ -12,6 +11,8 @@ public interface EventRepository extends Repository<Event> {
   Boolean existsByName(String name);
 
   List<Event> findEventsWithPagination(int page, int size, String sortBy, String direction);
+
+  void updateEventDetails(UUID eventId, String description, String location);
 
   int countEvents();
 
@@ -23,5 +24,5 @@ public interface EventRepository extends Repository<Event> {
 
   void updateAgenda(UUID dayId, Agenda agenda);
 
-  void updateDay(Day day);
+  void updateDayDetails(UUID dayId, String location, String description);
 }

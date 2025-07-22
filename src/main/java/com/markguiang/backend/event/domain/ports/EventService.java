@@ -2,8 +2,6 @@ package com.markguiang.backend.event.domain.ports;
 
 import com.markguiang.backend.event.domain.enums.EventSortBy;
 import com.markguiang.backend.event.domain.enums.SortDirection;
-import com.markguiang.backend.event.domain.models.Agenda;
-import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.exceptions.DuplicateNameException;
 import com.markguiang.backend.event.exceptions.EventDoesNotExistException;
@@ -22,7 +20,7 @@ public class EventService {
     this.er = er;
   }
 
-  private Event getEventOrThrow(UUID eventID) {
+  public Event getEventOrThrow(UUID eventID) {
     return er.findByID(eventID).orElseThrow(() -> new EventDoesNotExistException(eventID));
   }
 
@@ -51,44 +49,17 @@ public class EventService {
     return er.save(event);
   }
 
-  public void updateEvent(Event event) {
-    getEventOrThrow(event.getId());
+  public void updateEventDetails(UUID eventId, String description, String location) {
+    Event event = getEventOrThrow(eventId);
 
-    er.update(event);
+    event.updateDetails(description, location);
+    er.updateEventDetails(eventId, event.getDescription(), event.getLocation());
   }
 
-  public void addAgenda(UUID eventID, Agenda agenda) {
+  public void updateEventImage(UUID eventID, URI imgUrl) throws IOException {
     Event event = getEventOrThrow(eventID);
 
-    Day day = event.addAgendaToDay(agenda);
-    er.addAgenda(day.getId(), agenda);
-  }
-
-  public void removeAgenda(UUID eventID, Agenda agenda) {
-    Event event = getEventOrThrow(eventID);
-
-    Day day = event.removeAgendaFromDay(agenda);
-    er.removeAgenda(day.getId(), agenda);
-  }
-
-  public void updateAgenda(UUID eventID, Agenda agenda) {
-    Event event = getEventOrThrow(eventID);
-
-    Day day = event.removeAgendaFromDay(agenda);
-    event.addAgendaToDay(agenda);
-    er.updateAgenda(day.getId(), agenda);
-  }
-
-  public void updateDay(UUID eventID, Day day) {
-    Event event = getEventOrThrow(eventID);
-
-    event.updateDay(day);
-    er.updateDay(day);
-  }
-
-  public void updateImageUrl(UUID eventID, URI url) throws IOException {
-    getEventOrThrow(eventID);
-
-    er.updateImageUrl(eventID, url);
+    event.updateImage(imgUrl);
+    er.updateImageUrl(eventID, event.getImgURL());
   }
 }
