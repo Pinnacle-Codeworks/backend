@@ -30,9 +30,7 @@ public class Agenda implements ValueObject {
   }
 
   public static boolean allOnDate(List<Agenda> agendaList, OffsetDateTime date) {
-    if (agendaList == null || date == null) {
-      return false;
-    }
+    Objects.requireNonNull(date);
     for (Agenda agenda : agendaList) {
       if (!DateUtils.onSameDate(agenda.getStartDate(), date)
           || !DateUtils.onSameDate(agenda.getEndDate(), date)) {
