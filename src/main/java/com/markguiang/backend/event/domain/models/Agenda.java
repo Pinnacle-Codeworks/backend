@@ -84,16 +84,12 @@ public class Agenda implements ValueObject {
 
   @Override
   public boolean equals(Object other) {
-    if (other == null)
-      return false;
-    if (!(other instanceof Agenda))
-      return false;
+    if (other == null) return false;
+    if (!(other instanceof Agenda)) return false;
     Agenda oAgenda = (Agenda) other;
-    if (this.startDate != oAgenda.getStartDate() || this.endDate != oAgenda.getEndDate()
-        || this.location != oAgenda.getLocation())
-      return false;
+    if (!Objects.equals(this.startDate, oAgenda.getStartDate())
+        || !Objects.equals(this.endDate, oAgenda.getEndDate())
+        || !Objects.equals(this.location, oAgenda.getLocation())) return false;
     return true;
-
   }
-
 }
