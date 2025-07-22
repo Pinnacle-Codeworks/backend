@@ -1,7 +1,7 @@
 package com.markguiang.backend.form.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.markguiang.backend.annotation.ValidRequired;
+import com.markguiang.backend.base.annotation.ValidRequired;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
