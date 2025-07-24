@@ -1,6 +1,6 @@
 package com.markguiang.backend.auth.config;
 
-import com.markguiang.backend.role.domain.RoleService;
+import com.markguiang.backend.role.domain.adapter.GrantedAuthorityImpl;
 import com.markguiang.backend.user.domain.User;
 import com.markguiang.backend.user.domain.UserService;
 import java.util.List;
@@ -10,18 +10,19 @@ import org.springframework.security.core.GrantedAuthority;
 
 public class UserAuthenticationProvider implements AuthenticationProvider {
   private final UserService us;
-  private final RoleService rs;
 
-  public UserAuthenticationProvider(UserService us, RoleService rs) {
+  public UserAuthenticationProvider(UserService us) {
     this.us = us;
-    this.rs = rs;
   }
 
   @Override
   public Authentication authenticate(Authentication authentication) {
     if (authentication instanceof UserAuthenticationToken uat) {
       User user = us.login(uat.getAuthId());
-      List<? extends GrantedAuthority> authorities = rs.getGrantedAuthoritiesFromRole(user.getRole());
+      List<? extends GrantedAuthority> authorities =
+          user.getRole().getAuthorities().stream()
+              .map(authority -> new GrantedAuthorityImpl(authority))
+              .toList();
       return UserAuthenticationToken.authenticated(user, uat.getAuthId(), authorities);
     }
     return null;

@@ -1,6 +1,5 @@
 package com.markguiang.backend.auth.config;
 
-import com.markguiang.backend.role.domain.RoleService;
 import com.markguiang.backend.user.domain.UserService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -29,33 +28,29 @@ public class SecurityConfig {
     if ("dev".equals(activeProfile)) {
       http.csrf().disable();
     } else {
-      XorCsrfTokenRequestAttributeHandler requestHandler =
-          new XorCsrfTokenRequestAttributeHandler();
+      XorCsrfTokenRequestAttributeHandler requestHandler = new XorCsrfTokenRequestAttributeHandler();
       requestHandler.setCsrfRequestAttributeName("_csrf");
       http.csrf(
-          csrf ->
-              csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/auth/user"));
+          csrf -> csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/auth/user"));
     }
 
     http.authorizeHttpRequests(
-            authorize ->
-                authorize
-                    .requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated())
+        authorize -> authorize
+            .requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui/**")
+            .permitAll()
+            .anyRequest()
+            .authenticated())
         .securityContext(
-            (securityContext) ->
-                securityContext.securityContextRepository(
-                    new DelegatingSecurityContextRepository(
-                        new RequestAttributeSecurityContextRepository(),
-                        new HttpSessionSecurityContextRepository())));
+            (securityContext) -> securityContext.securityContextRepository(
+                new DelegatingSecurityContextRepository(
+                    new RequestAttributeSecurityContextRepository(),
+                    new HttpSessionSecurityContextRepository())));
     return http.build();
   }
 
   @Bean
-  public AuthenticationManager authenticationManager(UserService us, RoleService rs) {
-    AuthenticationProvider uAuthenticationProvider = new UserAuthenticationProvider(us, rs);
+  public AuthenticationManager authenticationManager(UserService us) {
+    AuthenticationProvider uAuthenticationProvider = new UserAuthenticationProvider(us);
 
     ProviderManager providerManager = new ProviderManager(uAuthenticationProvider);
     return providerManager;

@@ -1,6 +1,6 @@
 package com.markguiang.backend;
 
-import com.markguiang.backend.role.domain.Roles.Role;
+import com.markguiang.backend.role.domain.Role;
 import com.markguiang.backend.tenant.Tenant;
 import com.markguiang.backend.tenant.TenantRepository;
 import com.markguiang.backend.user.domain.UserService;

@@ -1,6 +1,6 @@
 package com.markguiang.backend.user.domain;
 
-import com.markguiang.backend.role.domain.Roles.Role;
+import com.markguiang.backend.role.domain.Role;
 import com.markguiang.backend.user.exception.UserNotFound;
 import java.util.Optional;
 

@@ -1,7 +1,7 @@
 package com.markguiang.backend.user.domain;
 
 import com.markguiang.backend.base.model.AggregateRoot;
-import com.markguiang.backend.role.domain.Roles.Role;
+import com.markguiang.backend.role.domain.Role;
 import java.util.UUID;
 
 public class User extends AggregateRoot {

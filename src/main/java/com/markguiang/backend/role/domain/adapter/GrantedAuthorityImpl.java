@@ -1,14 +1,13 @@
 package com.markguiang.backend.role.domain.adapter;
 
-import com.markguiang.backend.role.domain.Roles;
-import com.markguiang.backend.role.domain.Roles.Authority;
-import com.markguiang.backend.role.domain.Roles.Role;
+import com.markguiang.backend.role.domain.Role;
+import com.markguiang.backend.role.domain.Role.Authority;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 
 public class GrantedAuthorityImpl implements GrantedAuthority {
   public static List<? extends GrantedAuthority> getGrantedAuthoritiesFromRole(Role role) {
-    List<Authority> authorities = Roles.getAuthoritiesFromRole(role);
+    List<Authority> authorities = role.getAuthorities();
     return fromAuthorities(authorities);
   }
 
