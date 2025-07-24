@@ -51,6 +51,7 @@ public class EventRepositoryImpl implements EventRepository {
   public UUID save(Event event) {
     dao.insertEvent(tenantId, event);
 
+    // batch this
     for (Day day : event.getDays()) {
       dao.insertDay(
           tenantId,

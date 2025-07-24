@@ -1,46 +1,49 @@
 databaseChangeLog:
   - changeSet:
       id: create-user-table
-      author: joshmonleon
+      author: mguiang
       preConditions:
         onFail: MARK_RAN
         not:
           tableExists:
-            tableName: users
+            tableName: user
       changes:
         - createTable:
-            tableName: users
+            tableName: user
             columns:
               - column:
-                  name: user_id
-                  type: VARCHAR(36)
+                  name: id
+                  type: UUID
                   constraints:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: first_name
-                  type: VARCHAR(255)
+                  name: tenant_id
+                  type: BIGINT
                   constraints:
                     nullable: false
               - column:
-                  name: last_name
-                  type: VARCHAR(255)
+                  name: auth_id
+                  type: VARCHAR(64)
                   constraints:
                     nullable: false
-              - column:
-                  name: username
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-                    unique: true
               - column:
                   name: email
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
-                    unique: true
               - column:
-                  name: password
-                  type: VARCHAR(255)
+                  name: role
+                  type: VARCHAR(50)
                   constraints:
                     nullable: false
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+        - addUniqueConstraint:
+            tableName: user
+            columnNames: tenant_id, email
+            constraintName: uq_user_tenant_email
