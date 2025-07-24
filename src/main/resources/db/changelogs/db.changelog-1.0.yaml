@@ -47,3 +47,7 @@ databaseChangeLog:
             tableName: user_
             columnNames: tenant_id, email
             constraintName: uq_user_tenant_email
+        - addUniqueConstraint:
+            tableName: user_
+            columnNames: auth_id
+            constraintName: uq_user_auth_id

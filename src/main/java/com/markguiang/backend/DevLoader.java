@@ -21,9 +21,9 @@ public class DevLoader {
 
   @PostConstruct
   private void setup() {
-    Tenant tenant = new Tenant();
-    tenant.setName("NOT_INFOR");
-    tenantRepository.save(tenant);
+    Tenant tenant1 = new Tenant();
+    tenant1.setName("NOT_INFOR");
+    tenantRepository.save(tenant1);
 
     Tenant tenant2 = new Tenant();
     tenant2.setName("INFOR");
@@ -31,10 +31,10 @@ public class DevLoader {
 
     String authId1 = "1";
     String authId2 = "2";
-    if (userService.isRegistered(authId1)) {
-      userService.register("mark@gmail.com", authId1, Role.ORGANIZER, tenant.getTenantId());
+    if (!userService.isRegistered(authId1)) {
+      userService.register("mark@gmail.com", authId1, Role.ORGANIZER, tenant1.getTenantId());
     }
-    if (userService.isRegistered(authId1)) {
+    if (!userService.isRegistered(authId2)) {
       userService.register("admin@gmail.com", authId2, Role.ORGANIZER, tenant2.getTenantId());
     }
   }
