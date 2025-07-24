@@ -21,8 +21,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
   public Authentication authenticate(Authentication authentication) {
     if (authentication instanceof UserAuthenticationToken uat) {
       User user = us.login(uat.getAuthId());
-      List<? extends GrantedAuthority> authorities =
-          rs.getGrantedAuthoritiesFromRole(user.getRole());
+      List<? extends GrantedAuthority> authorities = rs.getGrantedAuthoritiesFromRole(user.getRole());
       return UserAuthenticationToken.authenticated(user, uat.getAuthId(), authorities);
     }
     return null;

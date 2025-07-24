@@ -3,7 +3,6 @@ package com.markguiang.backend.auth.config;
 import com.markguiang.backend.user.domain.User;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.UUID;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
@@ -40,8 +39,8 @@ public class UserAuthenticationToken extends AbstractAuthenticationToken {
     return principal;
   }
 
-  public UUID getCredentials() {
-    return this.getCredentials();
+  public String getCredentials() {
+    return getAuthId();
   }
 
   public String getAuthId() {
