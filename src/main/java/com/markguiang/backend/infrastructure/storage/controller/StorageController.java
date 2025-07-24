@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/storage")
+@PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).WRITE.name())")
 @Profile("!dev")
 public class StorageController {
   private final StorageService ss;
@@ -18,7 +19,6 @@ public class StorageController {
     this.ss = ss;
   }
 
-  @PreAuthorize("hasAuthority('permission:write')")
   @GetMapping("/presigned-url/upload/{key}")
   public URI generatePresignedUrlForUpload(@PathVariable UUID key) {
     return ss.generatePresignedUrlForUpload(key.toString());

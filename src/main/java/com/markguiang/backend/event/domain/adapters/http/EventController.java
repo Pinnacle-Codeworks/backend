@@ -30,20 +30,21 @@ public class EventController {
     this.dayService = dayService;
   }
 
-  @PreAuthorize("hasAuthority('permission:write')")
+  @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).WRITE.name())")
   @PostMapping("")
   public UUID createEvent(@Valid @RequestBody CreateEventDTO createEventDTO) {
     Event event = CreateEventDTO.fromDTO(createEventDTO);
     return eventService.createEvent(event);
   }
 
-  @PreAuthorize("hasAuthority('permission:write')")
+  @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).WRITE.name())")
   @PutMapping("")
   public void updateEventDetails(@Valid @RequestBody UpdateEventDTO updateEventDTO) {
     eventService.updateEventDetails(
         updateEventDTO.id(), updateEventDTO.description(), updateEventDTO.location());
   }
 
+  @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).READ.name())")
   @GetMapping("")
   public Page<EventResponseWithoutDaysDTO> getEvents(
       @RequestParam(required = false) EventSortBy sortBy,
@@ -57,41 +58,42 @@ public class EventController {
     return events.map(EventResponseWithoutDaysDTO::fromEvent);
   }
 
+  @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).READ.name())")
   @GetMapping("/{eventId}")
   public EventResponseDTO getEvent(@PathVariable UUID eventId) {
     Event event = this.eventService.getEvent(eventId);
     return EventResponseDTO.fromEvent(event);
   }
 
-  @PreAuthorize("hasAuthority('permission:write')")
+  @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).WRITE.name())")
   @PostMapping("/agenda/{eventId}")
   public void addAgenda(
       @PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
     dayService.addAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
   }
 
-  @PreAuthorize("hasAuthority('permission:write')")
+  @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).WRITE.name())")
   @PutMapping("/agenda/{eventId}")
   public void updateAgenda(
       @PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
     dayService.updateAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
   }
 
-  @PreAuthorize("hasAuthority('permission:write')")
+  @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).WRITE.name())")
   @DeleteMapping("/agenda/{eventId}")
   public void deleteAgenda(
       @PathVariable UUID eventId, @Valid @RequestBody CreateUpdateAgendaDTO agendaDTO) {
     dayService.removeAgenda(eventId, CreateUpdateAgendaDTO.fromDTO(agendaDTO));
   }
 
-  @PreAuthorize("hasAuthority('permission:write')")
+  @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).WRITE.name())")
   @PutMapping("/day/{eventId}")
   public void updateDayDetails(
       @PathVariable UUID eventId, @Valid @RequestBody CreateUpdateDayDTO dayDTO) {
     dayService.updateDayDetails(eventId, CreateUpdateDayDTO.fromDTO(dayDTO));
   }
 
-  @PreAuthorize("hasAuthority('permission:write')")
+  @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).WRITE.name())")
   @PutMapping("/image-url/{eventId}")
   public void updateImageUrl(@PathVariable UUID eventId, URI imageUrl) throws IOException {
     eventService.updateEventImage(eventId, imageUrl);
