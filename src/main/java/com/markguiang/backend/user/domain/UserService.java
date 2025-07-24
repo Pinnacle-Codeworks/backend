@@ -14,7 +14,7 @@ public class UserService {
   public User login(String authId) {
     Optional<User> user = ur.findByAuthId(authId);
     if (!user.isPresent()) {
-      throw new UserNotFound(authId.toString());
+      throw new UserNotFound();
     }
     return user.get();
   }
@@ -23,5 +23,9 @@ public class UserService {
     User user = User.register(email, authId, role, tenantId);
     ur.save(user);
     return user;
+  }
+
+  public boolean isRegistered(String authId) {
+    return ur.existsByAuthId(authId);
   }
 }

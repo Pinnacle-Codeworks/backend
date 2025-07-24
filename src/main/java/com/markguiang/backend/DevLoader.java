@@ -24,11 +24,18 @@ public class DevLoader {
     Tenant tenant = new Tenant();
     tenant.setName("NOT_INFOR");
     tenantRepository.save(tenant);
-    userService.register("mark@gmail.com", "1", Role.ORGANIZER, tenant.getTenantId());
 
     Tenant tenant2 = new Tenant();
     tenant2.setName("INFOR");
     tenantRepository.save(tenant2);
-    userService.register("admin@gmail.com", "2", Role.ORGANIZER, tenant2.getTenantId());
+
+    String authId1 = "1";
+    String authId2 = "2";
+    if (userService.isRegistered(authId1)) {
+      userService.register("mark@gmail.com", authId1, Role.ORGANIZER, tenant.getTenantId());
+    }
+    if (userService.isRegistered(authId1)) {
+      userService.register("admin@gmail.com", authId2, Role.ORGANIZER, tenant2.getTenantId());
+    }
   }
 }

@@ -6,10 +6,10 @@ databaseChangeLog:
         onFail: MARK_RAN
         not:
           tableExists:
-            tableName: user
+            tableName: user_
       changes:
         - createTable:
-            tableName: user
+            tableName: user_
             columns:
               - column:
                   name: id
@@ -44,6 +44,6 @@ databaseChangeLog:
                   name: last_name
                   type: VARCHAR(255)
         - addUniqueConstraint:
-            tableName: user
+            tableName: user_
             columnNames: tenant_id, email
             constraintName: uq_user_tenant_email

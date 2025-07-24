@@ -33,4 +33,9 @@ public class UserRepositoryImpl implements UserRepository {
     Optional<UserBean> userBean = userDao.findById(tenantId, id);
     return userBean.map(UserBean::toUser);
   }
+
+  @Override
+  public boolean existsByAuthId(String authId) {
+    return userDao.existsByAuthId(tenantId, authId);
+  }
 }
