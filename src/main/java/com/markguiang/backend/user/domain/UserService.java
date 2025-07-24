@@ -13,7 +13,7 @@ public class UserService {
 
   public User login(String authId) {
     Optional<User> user = ur.findByAuthId(authId);
-    if (!user.isPresent()) {
+    if (user.isEmpty()) {
       throw new UserNotFound();
     }
     return user.get();
