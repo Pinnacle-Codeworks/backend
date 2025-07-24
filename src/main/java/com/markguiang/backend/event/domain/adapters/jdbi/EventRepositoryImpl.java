@@ -25,9 +25,9 @@ public class EventRepositoryImpl implements EventRepository {
   }
 
   @Override
-  public List<Event> findEventsWithPagination(
+  public List<Event> findEventsWithoutDaysWithPagination(
       int size, int offset, String sortColumn, String sortDirection) {
-    return dao.findEventsWithPagination(tenantId, size, offset, sortColumn, sortDirection);
+    return dao.findEventsWithoutDaysWithPagination(tenantId, size, offset, sortColumn, sortDirection);
   }
 
   @Override

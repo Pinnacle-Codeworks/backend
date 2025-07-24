@@ -28,14 +28,14 @@ public class EventService {
     return getEventOrThrow(eventID);
   }
 
-  public Page<Event> getEvents(int page, int size, EventSortBy sortBy, SortDirection direction) {
+  public Page<Event> getEventsWithoutDays(int page, int size, EventSortBy sortBy, SortDirection direction) {
     String sortColumn = sortBy.getColumnName();
     String sortDirectionSql = direction.getSql();
 
     long totalCount = er.countEvents();
     int offset = page * size;
 
-    List<Event> events = er.findEventsWithPagination(size, offset, sortColumn, sortDirectionSql);
+    List<Event> events = er.findEventsWithoutDaysWithPagination(size, offset, sortColumn, sortDirectionSql);
 
     return new PageImpl<>(events, PageRequest.of(page, size), totalCount);
   }

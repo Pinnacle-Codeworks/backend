@@ -53,7 +53,7 @@ public class EventController {
     EventSortBy eventSortBy = sortBy != null ? sortBy : EventSortBy.ID;
     SortDirection sortDirection = direction != null ? direction : SortDirection.ASC;
 
-    Page<Event> events = this.eventService.getEvents(page, size, eventSortBy, sortDirection);
+    Page<Event> events = this.eventService.getEventsWithoutDays(page, size, eventSortBy, sortDirection);
     return events.map(EventResponseWithoutDaysDTO::fromEvent);
   }
 

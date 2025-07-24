@@ -10,7 +10,7 @@ import java.util.UUID;
 public interface EventRepository extends Repository<Event> {
   Boolean existsByName(String name);
 
-  List<Event> findEventsWithPagination(int page, int size, String sortBy, String direction);
+  List<Event> findEventsWithoutDaysWithPagination(int page, int size, String sortBy, String direction);
 
   void updateEventDetails(UUID eventId, String description, String location);
 

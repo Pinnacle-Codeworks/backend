@@ -2,9 +2,7 @@ package com.markguiang.backend.event.domain.adapters.jdbi;
 
 import com.markguiang.backend.event.domain.adapters.jdbi.mappers.AgendaInsertDto;
 import com.markguiang.backend.event.domain.adapters.jdbi.mappers.EventReducer;
-import com.markguiang.backend.event.domain.adapters.jdbi.mappers.EventRow;
 import com.markguiang.backend.event.domain.models.Event;
-import org.jdbi.v3.sqlobject.config.RegisterConstructorMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.customizer.Define;
@@ -18,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RegisterConstructorMapper(EventRow.class)
 public interface EventDao {
   @SqlQuery("""
           SELECT EXISTS (
@@ -55,7 +52,7 @@ public interface EventDao {
           LIMIT :size OFFSET :offset
       """)
   @UseRowReducer(EventReducer.class)
-  List<Event> findEventsWithPagination(
+  List<Event> findEventsWithoutDaysWithPagination(
       @Bind("tenantId") Long tenantId,
       @Bind("size") int size,
       @Bind("offset") int offset,
