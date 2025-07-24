@@ -1,4 +1,4 @@
-package com.markguiang.backend.auth.config;
+package com.markguiang.backend.infrastructure.auth.config;
 
 import com.markguiang.backend.user.domain.UserService;
 import org.springframework.beans.factory.annotation.Value;

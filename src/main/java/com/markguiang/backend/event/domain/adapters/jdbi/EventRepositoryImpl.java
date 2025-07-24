@@ -6,7 +6,7 @@ import com.markguiang.backend.event.domain.models.Agenda;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.domain.ports.EventRepository;
-import com.markguiang.backend.tenant.TenantContext;
+import com.markguiang.backend.infrastructure.auth.TenantContext;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;

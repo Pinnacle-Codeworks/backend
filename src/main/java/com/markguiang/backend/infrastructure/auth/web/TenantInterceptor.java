@@ -1,7 +1,7 @@
-package com.markguiang.backend.tenant.web;
+package com.markguiang.backend.infrastructure.auth.web;
 
 import com.markguiang.backend.infrastructure.auth.UserContext;
-import com.markguiang.backend.tenant.TenantContext;
+import com.markguiang.backend.infrastructure.auth.TenantContext;
 import com.markguiang.backend.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,4 +1,4 @@
-package com.markguiang.backend.auth.config;
+package com.markguiang.backend.infrastructure.auth.config;
 
 import com.markguiang.backend.role.domain.adapter.GrantedAuthorityImpl;
 import com.markguiang.backend.user.domain.User;

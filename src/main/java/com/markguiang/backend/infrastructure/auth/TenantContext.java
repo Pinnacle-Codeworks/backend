@@ -1,4 +1,4 @@
-package com.markguiang.backend.tenant;
+package com.markguiang.backend.infrastructure.auth;
 
 public final class TenantContext {
 
