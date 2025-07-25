@@ -12,39 +12,46 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
   @Bean
   public SecurityFilterChain securityFilterChain(
-      HttpSecurity http, @Value("${spring.profiles.active}") String activeProfile)
+      HttpSecurity http,
+      SecurityContextRepository securityContextRepository,
+      @Value("${spring.profiles.active}") String activeProfile)
       throws Exception {
+
     if ("dev".equals(activeProfile)) {
       http.csrf().disable();
     } else {
-      XorCsrfTokenRequestAttributeHandler requestHandler = new XorCsrfTokenRequestAttributeHandler();
+      XorCsrfTokenRequestAttributeHandler requestHandler =
+          new XorCsrfTokenRequestAttributeHandler();
       requestHandler.setCsrfRequestAttributeName("_csrf");
       http.csrf(
-          csrf -> csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/auth/user"));
+          csrf ->
+              csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/auth/csrf"));
     }
 
     http.authorizeHttpRequests(
-        authorize -> authorize
-            .requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui/**")
-            .permitAll()
-            .anyRequest()
-            .authenticated())
+            authorize ->
+                authorize
+                    .requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
         .securityContext(
-            (securityContext) -> securityContext.securityContextRepository(
-                new DelegatingSecurityContextRepository(
-                    new RequestAttributeSecurityContextRepository(),
-                    new HttpSessionSecurityContextRepository())));
+            securityContext ->
+                securityContext.securityContextRepository(securityContextRepository));
+
     return http.build();
   }
 
@@ -57,14 +64,19 @@ public class SecurityConfig {
   }
 
   @Bean
-  public DelegatingSecurityContextRepository delegatingSecurityContextRepository() {
-    return new DelegatingSecurityContextRepository(
-        new HttpSessionSecurityContextRepository(),
-        new RequestAttributeSecurityContextRepository());
+  public SecurityContextRepository securityContextRepository() {
+    return new HttpSessionSecurityContextRepository();
   }
 
   @Bean
   public SecurityContextLogoutHandler securityContextLogoutHandler() {
     return new SecurityContextLogoutHandler();
+  }
+
+  @Bean
+  public CsrfTokenRepository csrfTokenRepository() {
+    HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+    repository.setSessionAttributeName("_csrf");
+    return repository;
   }
 }

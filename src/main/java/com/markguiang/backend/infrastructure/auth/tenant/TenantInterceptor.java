@@ -1,7 +1,7 @@
-package com.markguiang.backend.infrastructure.auth.web;
+package com.markguiang.backend.infrastructure.auth.tenant;
 
-import com.markguiang.backend.infrastructure.auth.UserContext;
-import com.markguiang.backend.infrastructure.auth.TenantContext;
+import com.markguiang.backend.infrastructure.auth.context.TenantContext;
+import com.markguiang.backend.infrastructure.auth.context.UserContext;
 import com.markguiang.backend.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,19 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 @Component
 public class TenantInterceptor implements HandlerInterceptor {
 
-  private final UserContext userContext;
-
-  public TenantInterceptor(UserContext userContext) {
-    this.userContext = userContext;
-  }
+  public TenantInterceptor() {}
 
   @Override
   public boolean preHandle(
       HttpServletRequest request, HttpServletResponse response, Object handler) {
 
-    userContext.getAuthenticatedUser()
-        .map(User::getTenantId)
-        .ifPresent(TenantContext::setTenantId);
+    UserContext.getAuthenticatedUser().map(User::getTenantId).ifPresent(TenantContext::setTenantId);
 
     return true;
   }
@@ -41,7 +35,5 @@ public class TenantInterceptor implements HandlerInterceptor {
   @Override
   public void afterCompletion(
       HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-      throws Exception {
-  }
-
+      throws Exception {}
 }

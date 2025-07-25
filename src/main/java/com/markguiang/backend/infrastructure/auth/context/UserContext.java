@@ -1,4 +1,4 @@
-package com.markguiang.backend.infrastructure.auth;
+package com.markguiang.backend.infrastructure.auth.context;
 
 import com.markguiang.backend.user.domain.User;
 import java.util.Optional;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserContext {
 
-  public Optional<User> getAuthenticatedUser() {
+  public static Optional<User> getAuthenticatedUser() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     if (auth != null && auth.getPrincipal() instanceof User user) {
       return Optional.of(user);
