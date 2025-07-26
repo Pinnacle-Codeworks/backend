@@ -1,5 +1,34 @@
 databaseChangeLog:
   - changeSet:
+      id: create-tenant-table
+      author: mguiang
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: tenant
+      changes:
+        - createTable:
+            tableName: tenant
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+        - addUniqueConstraint:
+            tableName: tenant
+            columnNames: name
+            constraintName: uq_tenant_name
+
+  - changeSet:
       id: create-user-table
       author: mguiang
       preConditions:
@@ -51,3 +80,9 @@ databaseChangeLog:
             tableName: user_
             columnNames: auth_id
             constraintName: uq_user_auth_id
+        - addForeignKeyConstraint:
+            baseTableName: user_
+            baseColumnNames: tenant_id
+            referencedTableName: tenant
+            referencedColumnNames: id
+            constraintName: fk_user_tenant
