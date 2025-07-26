@@ -9,16 +9,16 @@ import jakarta.persistence.Id;
 public class Tenant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tenantId;
+    private Long id;
 
     private String name;
 
-    public Long getTenantId() {
-        return tenantId;
+    public Long getId() {
+        return id;
     }
 
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

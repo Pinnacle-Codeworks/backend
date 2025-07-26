@@ -32,10 +32,10 @@ public class DevLoader {
     String authId1 = "1";
     String authId2 = "2";
     if (!userService.isRegistered(authId1)) {
-      userService.register("mark@gmail.com", authId1, Role.ORGANIZER, tenant1.getTenantId());
+      userService.register("mark@gmail.com", authId1, Role.ORGANIZER, tenant1.getId());
     }
     if (!userService.isRegistered(authId2)) {
-      userService.register("admin@gmail.com", authId2, Role.ORGANIZER, tenant2.getTenantId());
+      userService.register("admin@gmail.com", authId2, Role.ORGANIZER, tenant2.getId());
     }
   }
 }
