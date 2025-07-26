@@ -12,7 +12,7 @@ databaseChangeLog:
             tableName: tenant
             columns:
               - column:
-                  name: id
+                  name: tenant_id
                   type: BIGINT
                   autoIncrement: true
                   constraints:
@@ -84,5 +84,5 @@ databaseChangeLog:
             baseTableName: user_
             baseColumnNames: tenant_id
             referencedTableName: tenant
-            referencedColumnNames: id
+            referencedColumnNames: tenant_id
             constraintName: fk_user_tenant

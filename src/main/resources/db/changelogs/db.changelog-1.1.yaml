@@ -52,7 +52,7 @@ databaseChangeLog:
             baseTableName: event
             baseColumnNames: tenant_id
             referencedTableName: tenant
-            referencedColumnNames: id
+            referencedColumnNames: tenant_id
             constraintName: fk_event_tenant
 
   - changeSet:
@@ -106,7 +106,7 @@ databaseChangeLog:
             baseTableName: day
             baseColumnNames: tenant_id
             referencedTableName: tenant
-            referencedColumnNames: id
+            referencedColumnNames: tenant_id
             constraintName: fk_day_tenant
 
         - addUniqueConstraint:
@@ -167,5 +167,5 @@ databaseChangeLog:
             baseTableName: agenda
             baseColumnNames: tenant_id
             referencedTableName: tenant
-            referencedColumnNames: id
+            referencedColumnNames: tenant_id
             constraintName: fk_agenda_tenant
