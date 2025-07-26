@@ -6,6 +6,7 @@ import com.markguiang.backend.event.domain.models.Event;
 import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.customizer.Define;
+import org.jdbi.v3.sqlobject.statement.SqlBatch;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 import org.jdbi.v3.sqlobject.statement.UseRowReducer;
@@ -84,17 +85,17 @@ public interface EventDao {
       """)
   void updateImageUrl(@Bind("tenantId") Long tenantId, @Bind("id") UUID id, @Bind("imgURL") URI imgURL);
 
-  @SqlUpdate("""
+  @SqlBatch("""
           INSERT INTO day (id, tenant_id, event_id, location, date, description)
           VALUES (:id, :tenantId, :eventId, :location, :date, :description)
       """)
   void insertDay(
       @Bind("tenantId") Long tenantId,
-      @Bind("id") UUID id,
+      @Bind("id") List<UUID> id,
       @Bind("eventId") UUID eventId,
-      @Bind("location") String location,
-      @Bind("date") OffsetDateTime date,
-      @Bind("description") String description);
+      @Bind("location") List<String> location,
+      @Bind("date") List<OffsetDateTime> date,
+      @Bind("description") List<String> description);
 
   @SqlUpdate("""
           INSERT INTO agenda (id, tenant_id, day_id, start_date, end_date, location)
