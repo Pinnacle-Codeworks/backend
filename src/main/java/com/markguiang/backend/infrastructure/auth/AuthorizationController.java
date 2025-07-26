@@ -5,6 +5,9 @@ import com.google.firebase.auth.FirebaseToken;
 import com.markguiang.backend.infrastructure.auth.config.UserAuthenticationToken;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,17 +23,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-
 @Controller
 @RequestMapping("/auth")
 public class AuthorizationController {
   private final AuthenticationManager authenticationManager;
   private final CsrfTokenRepository csrfTokenRepository;
-  private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder
-      .getContextHolderStrategy();
+  private final SecurityContextHolderStrategy securityContextHolderStrategy =
+      SecurityContextHolder.getContextHolderStrategy();
   private final SecurityContextRepository securityContextRepository;
 
   public AuthorizationController(
@@ -44,14 +43,22 @@ public class AuthorizationController {
 
   @GetMapping("/login")
   public ResponseEntity<Object> verifyToken(
-      @RequestHeader("Authorization") String idToken,
+      @RequestHeader("Authorization") String authorizationHeader,
       HttpServletRequest httpRequest,
       HttpServletResponse httpResponse) {
 
     try {
+
+      if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Collections.singletonMap("error", "Missing or invalid Authorization header"));
+      }
+
+      String idToken = authorizationHeader.substring(7);
       FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
 
-      Authentication unauthenticated = UserAuthenticationToken.unauthenticated(decodedToken.getUid());
+      Authentication unauthenticated =
+          UserAuthenticationToken.unauthenticated(decodedToken.getUid());
       Authentication authenticated = authenticationManager.authenticate(unauthenticated);
 
       SecurityContext securityContext = securityContextHolderStrategy.createEmptyContext();
