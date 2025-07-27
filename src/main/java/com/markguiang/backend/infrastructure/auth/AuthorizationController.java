@@ -79,7 +79,7 @@ public class AuthorizationController {
 
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-          .body(Collections.singletonMap("error", "Invalid token"));
+          .body(Collections.singletonMap("error", e));
     }
   }
 }
