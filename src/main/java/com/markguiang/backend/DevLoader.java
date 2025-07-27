@@ -21,19 +21,28 @@ public class DevLoader {
 
   @PostConstruct
   private void setup() {
-    Tenant tenant1 = new Tenant();
-    tenant1.setName("NOT_INFOR");
-    tenantRepository.save(tenant1);
 
-    Tenant tenant2 = new Tenant();
-    tenant2.setName("INFOR");
-    tenantRepository.save(tenant2);
+    Tenant tenant1 = tenantRepository.findByName("NOT_INFOR")
+            .orElseGet(() -> {
+              Tenant newTenant = new Tenant();
+              newTenant.setName("NOT_INFOR");
+              return tenantRepository.save(newTenant);
+            });
+
+    Tenant tenant2 = tenantRepository.findByName("INFOR")
+            .orElseGet(() -> {
+              Tenant newTenant = new Tenant();
+              newTenant.setName("INFOR");
+              return tenantRepository.save(newTenant);
+            });
 
     String authId1 = "1";
     String authId2 = "2";
+
     if (!userService.isRegistered(authId1)) {
       userService.register("mark@gmail.com", authId1, Role.ORGANIZER, tenant1.getTenantId());
     }
+
     if (!userService.isRegistered(authId2)) {
       userService.register("admin@gmail.com", authId2, Role.ORGANIZER, tenant2.getTenantId());
     }
