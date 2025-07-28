@@ -1,150 +1,53 @@
 databaseChangeLog:
   - changeSet:
-      id: 001b-create-event-table
+      id: adding-users-renamed-table
       author: joshmonleon
-      preconditions:
-        - onFail: MARK_RAN
-        - not:
-            - tableExists:
-                tableName: event
       changes:
-        - createTable:
-            tableName: event
+        - insert:
+            tableName: user_
             columns:
               - column:
                   name: id
-                  type: UUID
-                  constraints:
-                    primaryKey: true
-                    nullable: false
+                  value: 3cb5a4b8-6762-4ef8-a06e-01ce1fc3eaa6
               - column:
                   name: tenant_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
+                  value: 1
               - column:
-                  name: name
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
+                  name: auth_id
+                  value: 3
               - column:
-                  name: has_multiple_location
-                  type: BOOLEAN
+                  name: role
+                  value: ORGANIZER
               - column:
-                  name: description
-                  type: VARCHAR(1000)
+                  name: email
+                  value: monleonjoshuaa6516@gmail.com
               - column:
-                  name: location
-                  type: VARCHAR(255)
+                  name: first_name
+                  value: Joshua
               - column:
-                  name: img_url
-                  type: VARCHAR(500)
-              - column:
-                  name: status
-                  type: VARCHAR(50)
-
-        - addUniqueConstraint:
-            columnNames: tenant_id, name
-            constraintName: uc_event_tenantid_name
-            tableName: event
-
-  - changeSet:
-      id: 002-create-day-table
-      author: joshmonleon
-      preconditions:
-        - onFail: MARK_RAN
-        - not:
-            - tableExists:
-                tableName: day
-      changes:
-        - createTable:
-            tableName: day
+                  name: last_name
+                  value: Joshua
+        - insert:
+            tableName: user_
             columns:
               - column:
-                  name: id
-                  type: UUID
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
                   name: tenant_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
+                  value: 1
               - column:
-                  name: event_id
-                  type: UUID
-                  constraints:
-                    nullable: false
+                  name: auth_id
+                  value: 4
               - column:
-                  name: date
-                  type: TIMESTAMP WITH TIME ZONE
-                  constraints:
-                    nullable: false
-              - column:
-                  name: description
-                  type: VARCHAR(1000)
-              - column:
-                  name: location
-                  type: VARCHAR(255)
-
-        - addForeignKeyConstraint:
-            baseTableName: day
-            baseColumnNames: event_id
-            referencedTableName: event
-            referencedColumnNames: id
-            constraintName: fk_day_event
-
-        - addUniqueConstraint:
-            columnNames: event_id, date
-            tableName: day
-            constraintName: uc_day_eventid_date
-
-  - changeSet:
-      id: 003-create-agenda-table
-      author: joshmonleon
-      preconditions:
-        - onFail: MARK_RAN
-        - not:
-            - tableExists:
-                tableName: agenda
-      changes:
-        - createTable:
-            tableName: agenda
-            columns:
+                  name: role
+                  value: ORGANIZER
               - column:
                   name: id
-                  type: UUID
-                  constraints:
-                    primaryKey: true
-                    nullable: false
+                  value: 869dc0cc-717c-44d0-93e8-6b7c0e061c17
               - column:
-                  name: tenant_id
-                  type: BIGINT
-                  constraints:
-                    nullable: false
+                  name: email
+                  value: julianarolluqui@gmail.com
               - column:
-                  name: day_id
-                  type: UUID
-                  constraints:
-                    nullable: false
+                  name: first_name
+                  value: Juliana
               - column:
-                  name: start_date
-                  type: TIMESTAMP WITH TIME ZONE
-                  constraints:
-                    nullable: false
-              - column:
-                  name: end_date
-                  type: TIMESTAMP WITH TIME ZONE
-                  constraints:
-                    nullable: false
-              - column:
-                  name: location
-                  type: VARCHAR(255)
-
-        - addForeignKeyConstraint:
-            baseTableName: agenda
-            baseColumnNames: day_id
-            referencedTableName: day
-            referencedColumnNames: id
-            constraintName: fk_agenda_day
+                  name: last_name
+                  value: Rolluqui

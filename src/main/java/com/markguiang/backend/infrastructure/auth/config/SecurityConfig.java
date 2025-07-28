@@ -1,0 +1,82 @@
+package com.markguiang.backend.infrastructure.auth.config;
+
+import com.markguiang.backend.user.domain.UserService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.csrf.XorCsrfTokenRequestAttributeHandler;
+
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class SecurityConfig {
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(
+      HttpSecurity http,
+      SecurityContextRepository securityContextRepository,
+      @Value("${spring.profiles.active}") String activeProfile)
+      throws Exception {
+
+    if ("dev".equals(activeProfile)) {
+      http.csrf().disable();
+    } else {
+      XorCsrfTokenRequestAttributeHandler requestHandler =
+          new XorCsrfTokenRequestAttributeHandler();
+      requestHandler.setCsrfRequestAttributeName("_csrf");
+      http.csrf(
+          csrf ->
+              csrf.csrfTokenRequestHandler(requestHandler).ignoringRequestMatchers("/auth/csrf"));
+    }
+
+    http.authorizeHttpRequests(
+            authorize ->
+                authorize
+                    .requestMatchers("/auth/**", "/v3/api-docs/**", "/swagger-ui/**")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated())
+        .securityContext(
+            securityContext ->
+                securityContext.securityContextRepository(securityContextRepository));
+
+    return http.build();
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(UserService us) {
+    AuthenticationProvider uAuthenticationProvider = new UserAuthenticationProvider(us);
+
+    ProviderManager providerManager = new ProviderManager(uAuthenticationProvider);
+    return providerManager;
+  }
+
+  @Bean
+  public SecurityContextRepository securityContextRepository() {
+    return new HttpSessionSecurityContextRepository();
+  }
+
+  @Bean
+  public SecurityContextLogoutHandler securityContextLogoutHandler() {
+    return new SecurityContextLogoutHandler();
+  }
+
+  @Bean
+  public CsrfTokenRepository csrfTokenRepository() {
+    HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+    repository.setSessionAttributeName("_csrf");
+    return repository;
+  }
+}

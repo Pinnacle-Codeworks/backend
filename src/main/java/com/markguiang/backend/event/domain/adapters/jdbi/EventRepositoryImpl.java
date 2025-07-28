@@ -6,8 +6,9 @@ import com.markguiang.backend.event.domain.models.Agenda;
 import com.markguiang.backend.event.domain.models.Day;
 import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.domain.ports.EventRepository;
-import com.markguiang.backend.tenant.TenantContext;
+import com.markguiang.backend.infrastructure.auth.context.TenantContext;
 import java.net.URI;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,9 +26,9 @@ public class EventRepositoryImpl implements EventRepository {
   }
 
   @Override
-  public List<Event> findEventsWithPagination(
+  public List<Event> findEventsWithoutDaysWithPagination(
       int size, int offset, String sortColumn, String sortDirection) {
-    return dao.findEventsWithPagination(tenantId, size, offset, sortColumn, sortDirection);
+    return dao.findEventsWithoutDaysWithPagination(tenantId, size, offset, sortColumn, sortDirection);
   }
 
   @Override
@@ -51,15 +52,13 @@ public class EventRepositoryImpl implements EventRepository {
   public UUID save(Event event) {
     dao.insertEvent(tenantId, event);
 
-    for (Day day : event.getDays()) {
-      dao.insertDay(
-          tenantId,
-          day.getId(),
-          event.getId(),
-          day.getLocation(),
-          day.getDate(),
-          day.getDescription());
-    }
+    List<Day> days = event.getDays();
+    List<UUID> dayIds = days.stream().map(Day::getId).toList();
+    List<String> locations = days.stream().map(Day::getLocation).toList();
+    List<OffsetDateTime> dates = days.stream().map(Day::getDate).toList();
+    List<String> descriptions = days.stream().map(Day::getDescription).toList();
+
+    dao.insertDay(tenantId, dayIds, event.getId(), locations, dates, descriptions);
 
     return event.getId();
   }

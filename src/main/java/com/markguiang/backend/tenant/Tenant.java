@@ -1,24 +1,22 @@
 package com.markguiang.backend.tenant;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class Tenant {
     @Id
+    @Column(name = "tenant_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tenantId;
+    private Long id;
 
     private String name;
 
-    public Long getTenantId() {
-        return tenantId;
+    public Long getId() {
+        return id;
     }
 
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {

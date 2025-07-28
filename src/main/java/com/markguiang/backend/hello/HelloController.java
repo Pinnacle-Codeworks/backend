@@ -11,18 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/hello")
 public class HelloController {
 
-    @GetMapping("/")
-    public String hello() {
-        return "Hello";
-    }
-    @PreAuthorize("hasAuthority('permission:read')")
-    @GetMapping("/read")
-    public ResponseEntity<String> grantAuthorization() {
-        return ResponseEntity.status(200).body("authorized");
-    }
+  @GetMapping("/")
+  public String hello() {
+    return "Hello";
+  }
 
-    @PostMapping("/csrfTest")
-    public ResponseEntity<String> csrfTest() {
-        return ResponseEntity.status(200).body("CSRF GOODS");
-    }
+  @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).READ.name())")
+  @GetMapping("/read")
+  public ResponseEntity<String> grantAuthorization() {
+    return ResponseEntity.status(200).body("authorized");
+  }
+
+  @PostMapping("/csrfTest")
+  public ResponseEntity<String> csrfTest() {
+    return ResponseEntity.status(200).body("CSRF GOODS");
+  }
 }
