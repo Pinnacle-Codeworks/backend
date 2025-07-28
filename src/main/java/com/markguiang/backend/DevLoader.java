@@ -1,7 +1,7 @@
 package com.markguiang.backend;
 
 import com.markguiang.backend.role.domain.Role;
-import com.markguiang.backend.tenant.TenantService;
+import com.markguiang.backend.tenant.domain.TenantService;
 import com.markguiang.backend.user.domain.UserService;
 import jakarta.annotation.PostConstruct;
 import java.util.UUID;

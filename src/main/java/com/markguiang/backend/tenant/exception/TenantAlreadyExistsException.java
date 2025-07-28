@@ -1,4 +1,4 @@
-package com.markguiang.backend.tenant;
+package com.markguiang.backend.tenant.exception;
 
 import com.markguiang.backend.base.exceptions.DomainException;
 

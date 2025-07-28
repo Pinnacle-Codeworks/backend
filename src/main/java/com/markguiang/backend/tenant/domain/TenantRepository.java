@@ -1,6 +1,7 @@
-package com.markguiang.backend.tenant;
+package com.markguiang.backend.tenant.domain;
 
 import com.markguiang.backend.base.model.Repository;
+
 import java.util.Optional;
 import java.util.UUID;
 

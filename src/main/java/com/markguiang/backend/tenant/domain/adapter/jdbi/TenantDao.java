@@ -1,6 +1,6 @@
 package com.markguiang.backend.tenant.domain.adapter.jdbi;
 
-import com.markguiang.backend.tenant.Tenant;
+import com.markguiang.backend.tenant.domain.Tenant;
 import java.util.Optional;
 import java.util.UUID;
 import org.jdbi.v3.sqlobject.customizer.Bind;

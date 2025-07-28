@@ -1,4 +1,4 @@
-package com.markguiang.backend.tenant;
+package com.markguiang.backend.tenant.domain;
 
 import com.markguiang.backend.base.model.Entity;
 import java.util.UUID;

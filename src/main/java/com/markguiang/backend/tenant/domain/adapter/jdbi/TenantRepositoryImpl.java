@@ -1,7 +1,7 @@
 package com.markguiang.backend.tenant.domain.adapter.jdbi;
 
-import com.markguiang.backend.tenant.Tenant;
-import com.markguiang.backend.tenant.TenantRepository;
+import com.markguiang.backend.tenant.domain.Tenant;
+import com.markguiang.backend.tenant.domain.TenantRepository;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.stereotype.Repository;

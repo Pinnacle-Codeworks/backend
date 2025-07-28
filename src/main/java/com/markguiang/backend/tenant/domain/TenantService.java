@@ -1,5 +1,6 @@
-package com.markguiang.backend.tenant;
+package com.markguiang.backend.tenant.domain;
 
+import com.markguiang.backend.tenant.exception.TenantAlreadyExistsException;
 import com.markguiang.backend.tenant.exception.TenantDoesNotExistException;
 import java.util.UUID;
 
