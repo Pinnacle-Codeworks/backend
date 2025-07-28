@@ -9,7 +9,6 @@ import com.markguiang.backend.event.domain.ports.EventRepository;
 import com.markguiang.backend.infrastructure.auth.context.TenantContext;
 import java.net.URI;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
