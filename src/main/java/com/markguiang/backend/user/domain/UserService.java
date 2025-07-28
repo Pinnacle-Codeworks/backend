@@ -21,7 +21,6 @@ public class UserService {
   }
 
   public User register(String email, String authId, Role role, UUID tenantId) {
-    // need checks here
     User user = User.register(email, authId, role, tenantId);
     ur.save(user);
     return user;
