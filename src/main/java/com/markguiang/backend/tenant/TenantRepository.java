@@ -1,9 +1,11 @@
 package com.markguiang.backend.tenant;
 
-import org.springframework.data.repository.CrudRepository;
-
+import com.markguiang.backend.base.model.Repository;
 import java.util.Optional;
+import java.util.UUID;
 
-public interface TenantRepository extends CrudRepository<Tenant, Long> {
-    Optional<Tenant> findByName(String name);
+public interface TenantRepository extends Repository<Tenant> {
+  boolean existsByName(String name);
+
+  Optional<UUID> getIdByName(String name);
 }

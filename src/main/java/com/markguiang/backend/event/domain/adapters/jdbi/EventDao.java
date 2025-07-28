@@ -23,7 +23,7 @@ public interface EventDao {
             SELECT 1 FROM event WHERE name = :name AND tenant_id = :tenantId
           )
       """)
-  boolean existsByName(@Bind("tenantId") Long tenantId, @Bind("name") String name);
+  boolean existsByName(@Bind("tenantId") UUID tenantId, @Bind("name") String name);
 
   @SqlQuery("""
           SELECT
@@ -36,7 +36,7 @@ public interface EventDao {
           WHERE e.id = :id AND e.tenant_id = :tenantId
       """)
   @UseRowReducer(EventReducer.class)
-  Optional<Event> findEventAggregate(@Bind("tenantId") Long tenantId, @Bind("id") UUID id);
+  Optional<Event> findEventAggregate(@Bind("tenantId") UUID tenantId, @Bind("id") UUID id);
 
   @SqlQuery("""
           SELECT
@@ -54,20 +54,20 @@ public interface EventDao {
       """)
   @UseRowReducer(EventReducer.class)
   List<Event> findEventsWithoutDaysWithPagination(
-      @Bind("tenantId") Long tenantId,
+      @Bind("tenantId") UUID tenantId,
       @Bind("size") int size,
       @Bind("offset") int offset,
       @Define("sortColumn") String sortColumn,
       @Define("sortDirection") String sortDirection);
 
   @SqlQuery("SELECT COUNT(*) FROM event e WHERE e.tenant_id = :tenantId")
-  int countEvents(@Bind("tenantId") Long tenantId);
+  int countEvents(@Bind("tenantId") UUID tenantId);
 
   @SqlUpdate("""
           INSERT INTO event (id, tenant_id, name, has_multiple_location, description, location, img_url, status)
           VALUES (:id, :tenantId, :name, :hasMultipleLocation, :description, :location, :imgURL, :status)
       """)
-  void insertEvent(@Bind("tenantId") Long tenantId, @BindBean Event event);
+  void insertEvent(@Bind("tenantId") UUID tenantId, @BindBean Event event);
 
   @SqlUpdate("""
           UPDATE event
@@ -75,7 +75,7 @@ public interface EventDao {
               description = :description
           WHERE id = :id AND tenant_id = :tenantId
       """)
-  void updateEventDetails(@Bind("tenantId") Long tenantId, @Bind("id") UUID id, @Bind("location") String location,
+  void updateEventDetails(@Bind("tenantId") UUID tenantId, @Bind("id") UUID id, @Bind("location") String location,
       @Bind("description") String description);
 
   @SqlUpdate("""
@@ -83,14 +83,14 @@ public interface EventDao {
       SET img_url = :imgURL
       WHERE id = :id AND tenant_id = :tenantId
       """)
-  void updateImageUrl(@Bind("tenantId") Long tenantId, @Bind("id") UUID id, @Bind("imgURL") URI imgURL);
+  void updateImageUrl(@Bind("tenantId") UUID tenantId, @Bind("id") UUID id, @Bind("imgURL") URI imgURL);
 
   @SqlBatch("""
           INSERT INTO day (id, tenant_id, event_id, location, date, description)
           VALUES (:id, :tenantId, :eventId, :location, :date, :description)
       """)
   void insertDay(
-      @Bind("tenantId") Long tenantId,
+      @Bind("tenantId") UUID tenantId,
       @Bind("id") List<UUID> id,
       @Bind("eventId") UUID eventId,
       @Bind("location") List<String> location,
@@ -101,7 +101,7 @@ public interface EventDao {
           INSERT INTO agenda (id, tenant_id, day_id, start_date, end_date, location)
           VALUES (:id, :tenantId, :dayId, :startDate, :endDate, :location)
       """)
-  void insertAgenda(@Bind("tenantId") Long tenantId, @BindBean AgendaInsertDto agenda);
+  void insertAgenda(@Bind("tenantId") UUID tenantId, @BindBean AgendaInsertDto agenda);
 
   @SqlUpdate("""
           DELETE FROM agenda
@@ -111,7 +111,7 @@ public interface EventDao {
           AND tenant_id = :tenantId
       """)
   void removeAgenda(
-      @Bind("tenantId") Long tenantId,
+      @Bind("tenantId") UUID tenantId,
       @Bind("dayId") UUID dayId,
       @Bind("startDate") OffsetDateTime startDate,
       @Bind("endDate") OffsetDateTime endDate);
@@ -123,7 +123,7 @@ public interface EventDao {
           WHERE id = :id AND tenant_id = :tenantId
       """)
   void updateDayDetails(
-      @Bind("tenantId") Long tenantId,
+      @Bind("tenantId") UUID tenantId,
       @Bind("id") UUID id,
       @Bind("location") String location,
       @Bind("description") String description);

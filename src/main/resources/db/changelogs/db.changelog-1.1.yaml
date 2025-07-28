@@ -19,7 +19,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: tenant_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: false
               - column:
@@ -52,7 +52,7 @@ databaseChangeLog:
             baseTableName: event
             baseColumnNames: tenant_id
             referencedTableName: tenant
-            referencedColumnNames: tenant_id
+            referencedColumnNames: id
             constraintName: fk_event_tenant
 
   - changeSet:
@@ -75,7 +75,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: tenant_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: false
               - column:
@@ -106,7 +106,7 @@ databaseChangeLog:
             baseTableName: day
             baseColumnNames: tenant_id
             referencedTableName: tenant
-            referencedColumnNames: tenant_id
+            referencedColumnNames: id
             constraintName: fk_day_tenant
 
         - addUniqueConstraint:
@@ -134,7 +134,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: tenant_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: false
               - column:
@@ -167,5 +167,5 @@ databaseChangeLog:
             baseTableName: agenda
             baseColumnNames: tenant_id
             referencedTableName: tenant
-            referencedColumnNames: tenant_id
+            referencedColumnNames: id
             constraintName: fk_agenda_tenant

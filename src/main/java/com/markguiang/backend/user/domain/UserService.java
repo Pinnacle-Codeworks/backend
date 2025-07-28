@@ -3,6 +3,7 @@ package com.markguiang.backend.user.domain;
 import com.markguiang.backend.role.domain.Role;
 import com.markguiang.backend.user.exception.UserNotFound;
 import java.util.Optional;
+import java.util.UUID;
 
 public class UserService {
   private final UserRepository ur;
@@ -19,7 +20,8 @@ public class UserService {
     return user.get();
   }
 
-  public User register(String email, String authId, Role role, Long tenantId) {
+  public User register(String email, String authId, Role role, UUID tenantId) {
+    // need checks here
     User user = User.register(email, authId, role, tenantId);
     ur.save(user);
     return user;

@@ -1,29 +1,25 @@
 package com.markguiang.backend.tenant;
 
-import jakarta.persistence.*;
+import com.markguiang.backend.base.model.Entity;
+import java.util.UUID;
 
-@Entity
-public class Tenant {
-    @Id
-    @Column(name = "tenant_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Tenant extends Entity {
+  public static Tenant register(String name) {
+      return new Tenant(name);
+  }
 
-    private String name;
+  private final String name;
 
-    public Long getId() {
-        return id;
-    }
+  private Tenant(String name) {
+    this(null, name);
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  private Tenant(UUID id, String name) {
+    super(id);
+    this.name = name;
+  }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+  public String getName() {
+    return name;
+  }
 }

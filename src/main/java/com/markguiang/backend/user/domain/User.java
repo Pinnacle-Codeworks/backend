@@ -6,27 +6,27 @@ import java.util.UUID;
 
 public class User extends AggregateRoot {
 
-  public static User register(String email, String authId, Role role, Long tenantId) {
+  public static User register(String email, String authId, Role role, UUID tenantId) {
     return new User(email, authId, role, tenantId);
   }
 
   public static User loadFromPersistence(
-      UUID id, String email, String authId, Role role, Long tenantId) {
+          UUID id, String email, String authId, Role role, UUID tenantId) {
     return new User(id, email, authId, role, tenantId);
   }
 
-  private Long tenantId;
+  private UUID tenantId;
   private final String authId;
   private String email;
   private Role role;
   private String firstName;
   private String lastName;
 
-  private User(String email, String authId, Role role, Long tenantId) {
+  private User(String email, String authId, Role role, UUID tenantId) {
     this(null, email, authId, role, tenantId);
   }
 
-  private User(UUID id, String email, String authId, Role role, Long tenantId) {
+  private User(UUID id, String email, String authId, Role role, UUID tenantId) {
     super(id);
     this.email = email;
     this.authId = authId;
@@ -54,7 +54,7 @@ public class User extends AggregateRoot {
     return lastName;
   }
 
-  public Long getTenantId() {
+  public UUID getTenantId() {
     return tenantId;
   }
 }
