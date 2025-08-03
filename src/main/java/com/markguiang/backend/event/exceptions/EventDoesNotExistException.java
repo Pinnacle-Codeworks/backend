@@ -5,6 +5,6 @@ import java.util.UUID;
 
 public class EventDoesNotExistException extends EntityDoesNotExistException {
   public EventDoesNotExistException(UUID ID) {
-    super("event", ID);
+    super("event", "id", ID.toString());
   }
 }

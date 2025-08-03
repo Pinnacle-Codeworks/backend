@@ -1,50 +1,54 @@
 package com.markguiang.backend;
 
 import com.markguiang.backend.role.domain.Role;
-import com.markguiang.backend.tenant.Tenant;
-import com.markguiang.backend.tenant.TenantRepository;
+import com.markguiang.backend.tenant.domain.TenantService;
 import com.markguiang.backend.user.domain.UserService;
 import jakarta.annotation.PostConstruct;
+import java.util.UUID;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
 @Profile("dev")
 public class DevLoader {
-  private final TenantRepository tenantRepository;
-  private final com.markguiang.backend.user.domain.UserService userService;
+  private final TenantService tenantService;
+  private final UserService userService;
 
-  public DevLoader(TenantRepository tenantRepository, UserService userService) {
-    this.tenantRepository = tenantRepository;
+  public DevLoader(TenantService tenantService, UserService userService) {
+    this.tenantService = tenantService;
+
     this.userService = userService;
   }
 
   @PostConstruct
   private void setup() {
 
-    Tenant tenant1 = tenantRepository.findByName("NOT_INFOR")
-            .orElseGet(() -> {
-              Tenant newTenant = new Tenant();
-              newTenant.setName("NOT_INFOR");
-              return tenantRepository.save(newTenant);
-            });
+    String name1 = "NOT_INFOR";
+    String name2 = "INFOR";
 
-    Tenant tenant2 = tenantRepository.findByName("INFOR")
-            .orElseGet(() -> {
-              Tenant newTenant = new Tenant();
-              newTenant.setName("INFOR");
-              return tenantRepository.save(newTenant);
-            });
+    UUID tenant1Id;
+    if (!tenantService.isRegistered(name1)) {
+      tenant1Id = tenantService.register(name1);
+    } else {
+      tenant1Id = tenantService.resolveId(name1);
+    }
+
+    UUID tenant2Id;
+    if (!tenantService.isRegistered(name2)) {
+      tenant2Id = tenantService.register(name2);
+    } else {
+      tenant2Id = tenantService.resolveId(name2);
+    }
 
     String authId1 = "1";
     String authId2 = "2";
 
     if (!userService.isRegistered(authId1)) {
-      userService.register("mark@gmail.com", authId1, Role.ORGANIZER, tenant1.getId());
+      userService.register("mark@gmail.com", authId1, Role.ORGANIZER, tenant1Id);
     }
 
     if (!userService.isRegistered(authId2)) {
-      userService.register("admin@gmail.com", authId2, Role.ORGANIZER, tenant2.getId());
+      userService.register("admin@gmail.com", authId2, Role.ORGANIZER, tenant2Id);
     }
   }
 }

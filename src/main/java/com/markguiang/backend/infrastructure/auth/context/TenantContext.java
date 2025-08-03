@@ -1,21 +1,20 @@
 package com.markguiang.backend.infrastructure.auth.context;
 
-public final class TenantContext {
+import java.util.UUID;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.RequestScope;
 
-    private TenantContext() {
-    };
+@Component
+@RequestScope
+public class TenantContext {
 
-    private static ThreadLocal<Long> currentTenantId = ThreadLocal.withInitial(() -> 0L);
+  private UUID tenantId;
 
-    public static void setTenantId(Long tenantId) {
-        currentTenantId.set(tenantId);
-    }
+  public UUID getTenantId() {
+    return tenantId;
+  }
 
-    public static Long getTenantId() {
-        return currentTenantId.get();
-    }
-
-    public static void clearTenantId() {
-        currentTenantId.remove();
-    }
+  public void setTenantId(UUID tenantId) {
+    this.tenantId = tenantId;
+  }
 }

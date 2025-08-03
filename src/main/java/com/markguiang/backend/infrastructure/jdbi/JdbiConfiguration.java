@@ -1,6 +1,7 @@
 package com.markguiang.backend.infrastructure.jdbi;
 
 import com.markguiang.backend.event.domain.adapters.jdbi.EventDao;
+import com.markguiang.backend.tenant.domain.adapter.jdbi.TenantDao;
 import com.markguiang.backend.user.domain.adapter.UserDao;
 import javax.sql.DataSource;
 import org.jdbi.v3.core.Jdbi;
@@ -30,5 +31,10 @@ public class JdbiConfiguration {
   @Bean
   public UserDao userDao(Jdbi jdbi) {
     return jdbi.onDemand(UserDao.class);
+  }
+
+  @Bean
+  public TenantDao tenantDao(Jdbi jdbi) {
+    return jdbi.onDemand(TenantDao.class);
   }
 }

@@ -5,7 +5,7 @@ import com.markguiang.backend.user.domain.User;
 import java.util.UUID;
 
 public class UserBean {
-  private Long tenant_id;
+  private UUID tenant_id;
   private UUID id;
   private String auth_id;
   private String email;
@@ -17,11 +17,11 @@ public class UserBean {
     return User.loadFromPersistence(id, email, auth_id, role, tenant_id);
   }
 
-  public Long getTenant_id() {
+  public UUID getTenant_id() {
     return tenant_id;
   }
 
-  public void setTenant_id(Long tenant_id) {
+  public void setTenant_id(UUID tenant_id) {
     this.tenant_id = tenant_id;
   }
 

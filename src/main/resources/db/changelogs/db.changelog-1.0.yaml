@@ -12,9 +12,8 @@ databaseChangeLog:
             tableName: tenant
             columns:
               - column:
-                  name: tenant_id
-                  type: BIGINT
-                  autoIncrement: true
+                  name: id
+                  type: UUID
                   constraints:
                     primaryKey: true
                     nullable: false
@@ -48,7 +47,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: tenant_id
-                  type: BIGINT
+                  type: UUID
                   constraints:
                     nullable: false
               - column:
@@ -84,5 +83,5 @@ databaseChangeLog:
             baseTableName: user_
             baseColumnNames: tenant_id
             referencedTableName: tenant
-            referencedColumnNames: tenant_id
+            referencedColumnNames: id
             constraintName: fk_user_tenant

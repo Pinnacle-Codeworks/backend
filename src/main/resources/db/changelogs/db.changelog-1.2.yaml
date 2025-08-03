@@ -1,5 +1,18 @@
 databaseChangeLog:
   - changeSet:
+      id: adding-tenant
+      author: mguiang
+      changes:
+        - insert:
+            tableName: tenant
+            columns:
+              - column:
+                  name: id
+                  value: 01985247-6e9b-74a9-9bdc-7b39a233eaaa
+              - column:
+                  name: name
+                  value: devs
+  - changeSet:
       id: adding-users-renamed-table
       author: joshmonleon
       changes:
@@ -11,7 +24,7 @@ databaseChangeLog:
                   value: 3cb5a4b8-6762-4ef8-a06e-01ce1fc3eaa6
               - column:
                   name: tenant_id
-                  value: 1
+                  value: 01985247-6e9b-74a9-9bdc-7b39a233eaaa
               - column:
                   name: auth_id
                   value: 3
@@ -32,7 +45,7 @@ databaseChangeLog:
             columns:
               - column:
                   name: tenant_id
-                  value: 1
+                  value: 01985247-6e9b-74a9-9bdc-7b39a233eaaa
               - column:
                   name: auth_id
                   value: 4
