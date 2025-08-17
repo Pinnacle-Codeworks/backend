@@ -16,7 +16,7 @@ public record EventResponseDTO(
     Boolean hasMultipleLocation,
     String description,
     String location,
-    URI imgURL,
+    String imgURL,
     Event.EventStatus eventStatus,
     List<DayDTO> days) {
 

@@ -29,6 +29,7 @@ public record CreateEventDTO(
         dto.description(),
         dto.location(),
         null,
+        null,
         dto.status(),
         days);
   }

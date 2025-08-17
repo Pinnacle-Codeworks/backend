@@ -6,7 +6,6 @@ import com.markguiang.backend.event.domain.models.Event;
 import com.markguiang.backend.event.exceptions.DuplicateNameException;
 import com.markguiang.backend.event.exceptions.EventDoesNotExistException;
 import java.io.IOException;
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -56,10 +55,19 @@ public class EventService {
     er.updateEventDetails(eventId, event.getDescription(), event.getLocation());
   }
 
-  public void updateEventImage(UUID eventID, URI imgUrl) throws IOException {
+  public void updateEventImage(UUID eventID, String imgUrl, String imgPath) throws IOException {
     Event event = getEventOrThrow(eventID);
 
     event.updateImage(imgUrl);
+    event.updateImagePath(imgPath);
     er.updateImageUrl(eventID, event.getImgURL());
+    er.updateImagePath(eventID, event.getImgPath());
+  }
+
+  public void updateEventImagePath(UUID eventID, String imgPath) throws IOException {
+    Event event = getEventOrThrow(eventID);
+
+    event.updateImagePath(imgPath);
+    er.updateImagePath(eventID, event.getImgPath());
   }
 }

@@ -27,7 +27,7 @@ public interface EventDao {
 
   @SqlQuery("""
           SELECT
-            e.id AS event_id, e.name, e.has_multiple_location, e.description, e.location, e.img_url, e.status,
+            e.id AS event_id, e.name, e.has_multiple_location, e.description, e.location, e.img_url, e.img_path, e.status,
             d.id AS day_id, d.location AS day_location, d.date AS day_date, d.description as day_description,
             a.start_date AS agenda_start, a.end_date AS agenda_end, a.location AS agenda_location
           FROM event e
@@ -46,6 +46,7 @@ public interface EventDao {
               e.description,
               e.location,
               e.img_url,
+              e.img_path,
               e.status
           FROM event e
           WHERE e.tenant_id = :tenantId
@@ -64,8 +65,8 @@ public interface EventDao {
   int countEvents(@Bind("tenantId") UUID tenantId);
 
   @SqlUpdate("""
-          INSERT INTO event (id, tenant_id, name, has_multiple_location, description, location, img_url, status)
-          VALUES (:id, :tenantId, :name, :hasMultipleLocation, :description, :location, :imgURL, :status)
+          INSERT INTO event (id, tenant_id, name, has_multiple_location, description, location, img_url, img_path, status)
+          VALUES (:id, :tenantId, :name, :hasMultipleLocation, :description, :location, :imgURL, :imgPath, :status)
       """)
   void insertEvent(@Bind("tenantId") UUID tenantId, @BindBean Event event);
 
@@ -83,7 +84,14 @@ public interface EventDao {
       SET img_url = :imgURL
       WHERE id = :id AND tenant_id = :tenantId
       """)
-  void updateImageUrl(@Bind("tenantId") UUID tenantId, @Bind("id") UUID id, @Bind("imgURL") URI imgURL);
+  void updateImageUrl(@Bind("tenantId") UUID tenantId, @Bind("id") UUID id, @Bind("imgURL") String imgURL);
+
+  @SqlUpdate("""
+      UPDATE event
+      SET img_path = :imgPath
+      WHERE id = :id AND tenant_id = :tenantId
+      """)
+  void updateImagePath(@Bind("tenantId") UUID tenantId, @Bind("id") UUID id, @Bind("imgPath") String imgPath);
 
   @SqlBatch("""
           INSERT INTO day (id, tenant_id, event_id, location, date, description)

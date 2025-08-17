@@ -4,14 +4,14 @@ import com.markguiang.backend.base.model.AggregateRoot;
 import com.markguiang.backend.base.model.IdentifiableDomainObject;
 import com.markguiang.backend.event.exceptions.DayNotFoundException;
 import com.markguiang.backend.event.exceptions.DaysOnSameDateException;
-import com.markguiang.backend.event.utils.DateUtils;
-import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.markguiang.backend.utils.Utils.onSameDate;
 
 public class Event extends AggregateRoot {
 
@@ -31,10 +31,11 @@ public class Event extends AggregateRoot {
       Boolean hasMultipleLocation,
       String description,
       String location,
-      URI imgURL,
+      String imgURL,
+      String imgPath,
       EventStatus status,
       List<Day> days) {
-    return new Event(null, name, hasMultipleLocation, description, location, imgURL, status, days);
+    return new Event(null, name, hasMultipleLocation, description, location, imgURL, imgPath, status, days);
   }
 
   public static Event loadFromPersistence(
@@ -43,10 +44,11 @@ public class Event extends AggregateRoot {
       Boolean hasMultipleLocation,
       String description,
       String location,
-      URI imgURL,
+      String imgURL,
+      String imgPath,
       EventStatus status,
       List<Day> days) {
-    return new Event(id, name, hasMultipleLocation, description, location, imgURL, status, days);
+    return new Event(id, name, hasMultipleLocation, description, location, imgURL, imgPath, status, days);
   }
 
   private final String name;
@@ -54,7 +56,9 @@ public class Event extends AggregateRoot {
   private String description;
   private String location;
 
-  private URI imgURL;
+  private String imgURL;
+
+  private String imgPath;
 
   private EventStatus status;
 
@@ -66,7 +70,8 @@ public class Event extends AggregateRoot {
       Boolean hasMultipleLocation,
       String description,
       String location,
-      URI imgURL,
+      String imgURL,
+      String imgPath,
       EventStatus status,
       List<Day> days) {
     super(id);
@@ -76,6 +81,7 @@ public class Event extends AggregateRoot {
     this.location = location;
     this.imgURL = imgURL;
     this.status = status;
+    this.imgPath = imgPath;
 
     this.days = copyAndValidateDays(days);
   }
@@ -121,8 +127,12 @@ public class Event extends AggregateRoot {
     this.location = location;
   }
 
-  public void updateImage(URI imgUrl) {
+  public void updateImage(String imgUrl) {
     this.imgURL = imgUrl;
+  }
+
+  public void updateImagePath(String imgPath) {
+    this.imgPath = imgPath;
   }
 
   public String getName() {
@@ -141,8 +151,12 @@ public class Event extends AggregateRoot {
     return hasMultipleLocation;
   }
 
-  public URI getImgURL() {
+  public String getImgURL() {
     return imgURL;
+  }
+
+  public String getImgPath() {
+    return imgPath;
   }
 
   public EventStatus getStatus() {
@@ -155,7 +169,7 @@ public class Event extends AggregateRoot {
 
   private Day getDayWithDate(OffsetDateTime date) {
     for (Day day : days) {
-      if (DateUtils.onSameDate(day.getDate(), date)) {
+      if (onSameDate(day.getDate(), date)) {
         return day;
       }
     }
