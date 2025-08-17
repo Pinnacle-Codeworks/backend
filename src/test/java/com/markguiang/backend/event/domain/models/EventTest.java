@@ -27,7 +27,8 @@ class EventTest {
         false,
         "desc",
         "location",
-        URI.create("https://img"),
+        "https://img",
+        "path",
         Event.EventStatus.DRAFT,
         Arrays.asList(days));
   }
@@ -167,7 +168,7 @@ class EventTest {
     @DisplayName("when updated then url is changed")
     void whenUpdateImage_thenUrlChanged() {
       Event event = createEventWithDays(day("loc", DATE, "desc"));
-      URI newUri = URI.create("https://new");
+      String newUri = "test";
       event.updateImage(newUri);
 
       assertEquals(newUri, event.getImgURL());
@@ -190,7 +191,7 @@ class EventTest {
     @DisplayName("given invalid day list when creating then throws")
     void givenInvalidDays_whenCreate_thenThrows(List<Day> badDays) {
       assertThrows(RuntimeException.class,
-          () -> Event.create("x", false, "x", "x", URI.create("https://x"), Event.EventStatus.DRAFT, badDays));
+          () -> Event.create("x", false, "x", "x", "https://x", "x", Event.EventStatus.DRAFT, badDays));
     }
   }
 }

@@ -46,9 +46,15 @@ public class EventRepositoryImpl implements EventRepository {
   }
 
   @Override
-  public void updateImageUrl(UUID eventId, URI image) {
+  public void updateImageUrl(UUID eventId, String image) {
     UUID tenantId = tenantContext.getTenantId();
     dao.updateImageUrl(tenantId, eventId, image);
+  }
+
+  @Override
+  public void updateImagePath(UUID eventId, String imagePath) {
+    UUID tenantId = tenantContext.getTenantId();
+    dao.updateImagePath(tenantId, eventId, imagePath);
   }
 
   @Override

@@ -1,5 +1,6 @@
 package com.markguiang.backend.infrastructure.storage.controller;
 
+import com.markguiang.backend.infrastructure.storage.GCSService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -11,13 +12,13 @@ public class ControllerConfig {
 
   @Bean
   @Profile("dev")
-  public DevStorageController devStorageController(StorageService ss) {
-    return new DevStorageController(ss);
+  public DevStorageController devStorageController(StorageService ss, GCSService gcsService) {
+    return new DevStorageController(ss, gcsService);
   }
 
   @Bean
   @Profile("!dev")
-  public StorageController prodStorageController(StorageService ss) {
-    return new StorageController(ss);
+  public StorageController prodStorageController(StorageService ss, GCSService gcsService) {
+    return new StorageController(ss, gcsService);
   }
 }

@@ -16,7 +16,9 @@ public interface EventRepository extends Repository<Event> {
 
   int countEvents();
 
-  void updateImageUrl(UUID eventId, URI image);
+  void updateImageUrl(UUID eventId, String image);
+
+  void updateImagePath(UUID eventId, String imagePath);
 
   void addAgenda(UUID dayId, Agenda agenda);
 

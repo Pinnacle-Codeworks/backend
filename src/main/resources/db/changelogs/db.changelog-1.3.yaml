@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-new-column
+      author: jmonleon
+      changes:
+        - addColumn:
+            tableName: event
+            columns:
+              - column:
+                  name: img_path
+                  type: TEXT
+                  constraints:
+                    nullable: true

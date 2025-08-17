@@ -10,7 +10,7 @@ public record EventResponseWithoutDaysDTO(
     Boolean hasMultipleLocation,
     String description,
     String location,
-    URI imgURL,
+    String imgURL,
     Event.EventStatus eventStatus) {
 
   public static EventResponseWithoutDaysDTO fromEvent(Event event) {

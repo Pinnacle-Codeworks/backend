@@ -15,13 +15,19 @@ import jakarta.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import static com.markguiang.backend.utils.Utils.concatenateStr;
+
 @RestController
 @RequestMapping("/event")
 public class EventController {
+  @Value("${CDN_URL}")
+  private String cdnUrl;
   private final EventService eventService;
   private final DayService dayService;
 
@@ -93,9 +99,11 @@ public class EventController {
     dayService.updateDayDetails(eventId, CreateUpdateDayDTO.fromDTO(dayDTO));
   }
 
+
   @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).WRITE.name())")
   @PutMapping("/image-url/{eventId}")
-  public void updateImageUrl(@PathVariable UUID eventId, URI imageUrl) throws IOException {
-    eventService.updateEventImage(eventId, imageUrl);
+  public void updateGCSImageUrl(@PathVariable UUID eventId, @RequestParam String path) throws IOException {
+    String imageUrl = concatenateStr(cdnUrl, path);
+    eventService.updateEventImage(eventId, imageUrl, path);
   }
 }
