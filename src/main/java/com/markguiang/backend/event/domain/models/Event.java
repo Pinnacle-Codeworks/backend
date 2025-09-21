@@ -4,7 +4,7 @@ import com.markguiang.backend.base.model.AggregateRoot;
 import com.markguiang.backend.base.model.IdentifiableDomainObject;
 import com.markguiang.backend.event.exceptions.DayNotFoundException;
 import com.markguiang.backend.event.exceptions.DaysOnSameDateException;
-import com.markguiang.backend.event.utils.DateUtils;
+import com.markguiang.backend.event.utils.Utils;
 import java.net.URI;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -155,7 +155,7 @@ public class Event extends AggregateRoot {
 
   private Day getDayWithDate(OffsetDateTime date) {
     for (Day day : days) {
-      if (DateUtils.onSameDate(day.getDate(), date)) {
+      if (Utils.onSameDate(day.getDate(), date)) {
         return day;
       }
     }
