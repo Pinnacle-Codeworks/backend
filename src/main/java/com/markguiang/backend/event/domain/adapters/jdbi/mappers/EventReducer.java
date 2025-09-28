@@ -18,8 +18,16 @@ public class EventReducer implements LinkedHashMapRowReducer<UUID, Event> {
   @Override
   public void accumulate(Map<UUID, Event> map, RowView rowView) {
     UUID eventId = rowView.getColumn("event_id", UUID.class);
+    String statusStr = rowView.getColumn("status", String.class);
+    EventStatus status;
 
-    Event event =
+    if (statusStr != null) {
+        status = EventStatus.valueOf(statusStr);
+    } else {
+        status = null;
+    }
+
+      Event event =
         map.computeIfAbsent(
             eventId,
             id ->
@@ -30,7 +38,7 @@ public class EventReducer implements LinkedHashMapRowReducer<UUID, Event> {
                     rowView.getColumn("description", String.class),
                     rowView.getColumn("location", String.class),
                     rowView.getColumn("img_url", URI.class),
-                    EventStatus.valueOf(rowView.getColumn("status", String.class)),
+                    status,
                     new ArrayList<>()));
 
     UUID dayId = rowView.getColumn("day_id", UUID.class);

@@ -95,7 +95,7 @@ public class EventController {
 
   @PreAuthorize("hasAuthority(T(com.markguiang.backend.role.domain.Role.Authority).WRITE.name())")
   @PutMapping("/image-url/{eventId}")
-  public void updateImageUrl(@PathVariable UUID eventId, URI imageUrl) throws IOException {
+  public void updateImageUrl(@PathVariable UUID eventId, @RequestParam("path") URI imageUrl) throws IOException {
     eventService.updateEventImage(eventId, imageUrl);
   }
 }

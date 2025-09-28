@@ -2,7 +2,7 @@ package com.markguiang.backend.event.domain.models;
 
 import com.markguiang.backend.base.exceptions.InvalidDateRangeException;
 import com.markguiang.backend.base.model.ValueObject;
-import com.markguiang.backend.event.utils.DateUtils;
+import com.markguiang.backend.event.utils.Utils;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -32,8 +32,8 @@ public class Agenda implements ValueObject {
   public static boolean allOnDate(List<Agenda> agendaList, OffsetDateTime date) {
     Objects.requireNonNull(date);
     for (Agenda agenda : agendaList) {
-      if (!DateUtils.onSameDate(agenda.getStartDate(), date)
-          || !DateUtils.onSameDate(agenda.getEndDate(), date)) {
+      if (!Utils.onSameDate(agenda.getStartDate(), date)
+          || !Utils.onSameDate(agenda.getEndDate(), date)) {
         return false;
       }
     }

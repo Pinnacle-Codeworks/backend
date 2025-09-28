@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class StorageConfig {
 
   @Bean
-  public StorageService storageService(ObjectStore objectStore) {
-    return new StorageService(objectStore);
+  public StorageService storageService(ObjectStore objectStore, GCPObjectStore gcpObjectStore) {
+    return new StorageService(objectStore, gcpObjectStore);
   }
 }

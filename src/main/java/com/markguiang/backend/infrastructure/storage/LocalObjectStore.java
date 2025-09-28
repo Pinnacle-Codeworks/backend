@@ -1,15 +1,19 @@
 package com.markguiang.backend.infrastructure.storage;
 
 import com.markguiang.backend.infrastructure.storage.base.DirectObjectStore;
+import com.markguiang.backend.infrastructure.storage.base.StorageDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Component
 public class LocalObjectStore implements DirectObjectStore {
@@ -32,11 +36,14 @@ public class LocalObjectStore implements DirectObjectStore {
     return Files.newInputStream(source);
   }
 
-  public URI generatePresignedUrlForDownload(String key) {
-    return URI.create(key);
+  public URL generatePresignedUrlForDownload(String key) throws MalformedURLException {
+      return URI.create(key).toURL();
   }
 
-  public URI generatePresignedUrlForUpload(String key) {
-    return URI.create(key);
+  public StorageDetails generatePresignedUrlForUpload(UUID id, String fileType, String fileExtension, boolean isPublic) throws IOException {
+      String key = "/event/" + id + "/upload." + fileExtension;
+      URL presignedUrl = URI.create(key).toURL();
+
+      return new StorageDetails(key, presignedUrl);
   }
 }

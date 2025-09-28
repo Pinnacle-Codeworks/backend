@@ -21,7 +21,8 @@ public class EventService {
   }
 
   public Event getEventOrThrow(UUID eventID) {
-    return er.findByID(eventID).orElseThrow(() -> new EventDoesNotExistException(eventID));
+    return er.findByID(eventID).orElseThrow(() ->
+            new EventDoesNotExistException(eventID));
   }
 
   public Event getEvent(UUID eventID) {
