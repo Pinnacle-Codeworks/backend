@@ -2,6 +2,5 @@ package com.markguiang.backend.infrastructure.storage.base;
 
 import java.net.URL;
 
-public record StorageDTO(String filePath, URL url) {
-
+public record StorageDetails(String filePath, URL url) {
 }

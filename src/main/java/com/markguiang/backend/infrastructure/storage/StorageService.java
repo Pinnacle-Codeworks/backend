@@ -3,36 +3,24 @@ package com.markguiang.backend.infrastructure.storage;
 import com.markguiang.backend.infrastructure.storage.base.DirectObjectStore;
 import com.markguiang.backend.infrastructure.storage.base.ObjectStore;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
-import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.WriteChannel;
-import com.google.cloud.storage.*;
-
-import com.markguiang.backend.infrastructure.storage.base.StorageDTO;
-import com.markguiang.backend.infrastructure.storage.base.StoreProperties;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.beans.factory.annotation.Value;
+import com.markguiang.backend.infrastructure.storage.base.StorageDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import static com.markguiang.backend.event.utils.Utils.concatenateStr;
 
 @Service
 public class StorageService {
   private final ObjectStore os;
+  private final GCPObjectStore gcpObjectStore;
 
-  public StorageService(ObjectStore os) {
+  public StorageService(ObjectStore os, GCPObjectStore gcpObjectStore) {
     this.os = os;
+    this.gcpObjectStore = gcpObjectStore;
   }
 
   public URI store(InputStream is, URI presignedUrl) throws IOException {
@@ -53,12 +41,12 @@ public class StorageService {
     throw new UnsupportedOperationException("direct-storage-not-supported-by-this-implementation");
   }
 
-  public StorageDTO generatePresignedUrlForUpload(UUID id, String fileType, String fileExtension, Boolean isPublic) throws IOException {
-    return os.generatePresignedUrlForUpload(id, fileType, fileExtension, isPublic);
+  public StorageDetails generatePresignedUrlForUpload(UUID id, String fileType, String fileExtension, Boolean isPublic) throws IOException {
+    return gcpObjectStore.generatePresignedUrlForUpload(id, fileType, fileExtension, isPublic);
   }
 
   public URL generatePresignedUrlForDownload(String key) throws IOException {
-    return os.generatePresignedUrlForDownload(key);
+    return gcpObjectStore.generatePresignedUrlForDownload(key);
   }
 
 }

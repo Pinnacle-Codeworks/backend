@@ -6,7 +6,7 @@ import java.net.URI;
 import java.net.URL;
 
 import com.markguiang.backend.infrastructure.storage.StorageService;
-import com.markguiang.backend.infrastructure.storage.base.StorageDTO;
+import com.markguiang.backend.infrastructure.storage.base.StorageDetails;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.InputStreamResource;
@@ -29,10 +29,10 @@ public class DevStorageController {
 
   @PreAuthorize("permitAll()")
   @PutMapping("/presigned-url/upload/{key}")
-  public StorageDTO generatePresignedUrlForUpload(@PathVariable("key") java.util.UUID id,
-                                                  @RequestParam("fileType") String fileType,
-                                                  @RequestParam("fileExtension") String fileExtension,
-                                                  @RequestParam(name = "public", required = false, defaultValue = "true")  Boolean isPublic) throws IOException {
+  public StorageDetails generatePresignedUrlForUpload(@PathVariable("key") java.util.UUID id,
+                                                      @RequestParam("fileType") String fileType,
+                                                      @RequestParam("fileExtension") String fileExtension,
+                                                      @RequestParam(name = "public", required = false, defaultValue = "true")  Boolean isPublic) throws IOException {
       return ss.generatePresignedUrlForUpload(id, fileType, fileExtension, isPublic);
   }
 
